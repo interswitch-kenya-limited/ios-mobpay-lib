@@ -1,28 +1,49 @@
-
-import Foundation
-
-public class Mobipay {
-    static let shared = Mobipay()
-    //
+//
     //  main.swift
     //  functionTest
     //
     //  Created by interswitchke on 21/05/2019.
     //  Copyright © 2019 interswitchke. All rights reserved.
     //
-    
+
+
+import Foundation
+
+public class Mobipay {
+    static let shared = Mobpay()
     
     //make card token payment
-    func makeCardTokenPayment(){}
+    public func makeCardTokenPayment(){}
     
     //make mobile money payment
-    func makeMobileMoneyPayment(){}
+    public func makeMobileMoneyPayment(){}
     
     //confirm mobile money payment
-    func confirmMobileMoneyPayment(){}
-    
-    
-    
+    public func confirmMobileMoneyPayment(){}
+
+    public func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
+
+        let myPost = PaymentStruct(
+            amount: payment.amount,
+            orderId: payment.orderId,
+            transactionRef: payment.transactionRef,
+            terminalType: payment.terminalType,
+            terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
+            merchantId: merchant.merchantId,
+            authData:
+            "lQVuoq1grpVZeQw7g/ztgiEn+XgmEatIO6tcVNZpP+I2l2fcTw0ZKIhkrxxajaivgY25ljyueNOBzqF/13lLlTKN/KVp4p391bEBsorCesK pxnji1k9GkIaL/QydGA+gC5h4GWtryslvFD/aBLYZ0YLzRIwBbHdK9UzTel2EgP5vjFonoXUngRnT9nIg0iDwBumZPN1hW6hcxflK7W mJ+nAX9oZK0z2Vi6LgIxfmgG2YGo4youb7EILZwh5xMMTiCHjyL7Vi4ZTkyKaJS/Xd1vvF6KJfsy7QER0qfDEo2NjyWBZcQRHsPG5KV WoH4W+mCHe0EpFyNKciBYgrSI8pYw==",
+            customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
+            currency:payment.currency, country:customer.country,
+            city:customer.city,
+            narration: payment.narration, domain: merchant.domain
+        )
+        submitPayment(post: myPost) { (error) in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
+
     struct PaymentStruct: Codable {
         let amount: String
         let orderId: String
@@ -43,7 +64,7 @@ public class Mobipay {
     
     
     
-    func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
+    private func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "testids.interswitch.co.ke"
@@ -88,42 +109,5 @@ public class Mobipay {
             }
         }
         task.resume()
-    }
-    
-    
-    
-    
-    func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
-
-        let myPost = PaymentStruct(
-            amount: payment.amount,
-            orderId: payment.orderId,
-            transactionRef: payment.transactionRef,
-            terminalType: payment.terminalType,
-            terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
-            merchantId: merchant.merchantId,
-            authData:
-            "lQVuoq1grpVZeQw7g/ztgiEn+XgmEatIO6tcVNZpP+I2l2fcTw0ZKIhkrxxajaivgY25ljyueNOBzqF/13lLlTKN/KVp4p391bEBsorCesK pxnji1k9GkIaL/QydGA+gC5h4GWtryslvFD/aBLYZ0YLzRIwBbHdK9UzTel2EgP5vjFonoXUngRnT9nIg0iDwBumZPN1hW6hcxflK7W mJ+nAX9oZK0z2Vi6LgIxfmgG2YGo4youb7EILZwh5xMMTiCHjyL7Vi4ZTkyKaJS/Xd1vvF6KJfsy7QER0qfDEo2NjyWBZcQRHsPG5KV WoH4W+mCHe0EpFyNKciBYgrSI8pYw==",
-            customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
-            currency:payment.currency, country:customer.country,
-            city:customer.city,
-            narration: payment.narration, domain: merchant.domain
-        )
-        submitPayment(post: myPost) { (error) in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
-    
-    var newCard = Card.init(pan: "5061830100001895", cvv: "how", expiryYear: "are", expiryMonth: "you", tokenize: false)
-    var newPayment = Payment.init(amount: "100", transactionRef: "66809285644", orderId: "OID123453", terminalType: "MOBILE", terminalId: "3TLP0001", paymentItem: "CRD", currency: "KES")
-    var newCustomer = Customer.init(customerId: "12", firstName: "Allan", secondName: "Mageto", email: "allanbmageto@gmail.com", mobile: "0713805241", city: "nairobi", country: "meh", postalCode: "12", street: "aa", state: "asd")
-    var merchant = Merchant.init(merchantId: "a", domain: "as")
-    
-    
-//    Mobipay.makeCardPayment()
-//    makeCardPayment(card: newCard, merchant: merchant, payment: newPayment, customer: newCustomer)
-    
-    
+    }    
 }
