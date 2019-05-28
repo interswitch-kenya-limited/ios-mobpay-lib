@@ -10,7 +10,7 @@
 import Foundation
 
 public class Mobpay {
-    static let shared = Mobpay()
+    public static let mobpay = Mobpay()
     
     //make card token payment
     public func makeCardTokenPayment(){}
@@ -41,7 +41,7 @@ public class Mobpay {
     
     
     
-    private func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
+    func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "testids.interswitch.co.ke"
