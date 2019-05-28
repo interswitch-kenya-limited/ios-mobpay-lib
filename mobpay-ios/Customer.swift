@@ -11,7 +11,7 @@ import Foundation
 public class Customer{
     var customerId,firstName,secondName,email,mobile,city,country,postalCode,street,state : String;
     
-    init(customerId: String,firstName : String , secondName : String,email : String,mobile : String, city : String, country : String, postalCode : String, street : String, state : String) {
+    public init(customerId: String,firstName : String , secondName : String,email : String,mobile : String, city : String, country : String, postalCode : String, street : String, state : String) {
         self.customerId = customerId
         self.firstName = firstName
         self.secondName = secondName

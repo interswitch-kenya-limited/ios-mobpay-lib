@@ -10,7 +10,7 @@ import Foundation
 
 public struct Merchant{
     var merchantId,domain:String;
-    init(merchantId: String , domain: String) {
+    public init(merchantId: String , domain: String) {
         self.merchantId = merchantId
         self.domain = domain
     }
