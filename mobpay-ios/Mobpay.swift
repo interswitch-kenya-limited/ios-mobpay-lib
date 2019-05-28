@@ -9,7 +9,7 @@
 
 import Foundation
 
-public class Mobipay {
+public class Mobpay {
     static let shared = Mobpay()
     
     //make card token payment
@@ -20,30 +20,7 @@ public class Mobipay {
     
     //confirm mobile money payment
     public func confirmMobileMoneyPayment(){}
-
-    public func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
-
-        let myPost = PaymentStruct(
-            amount: payment.amount,
-            orderId: payment.orderId,
-            transactionRef: payment.transactionRef,
-            terminalType: payment.terminalType,
-            terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
-            merchantId: merchant.merchantId,
-            authData:
-            "lQVuoq1grpVZeQw7g/ztgiEn+XgmEatIO6tcVNZpP+I2l2fcTw0ZKIhkrxxajaivgY25ljyueNOBzqF/13lLlTKN/KVp4p391bEBsorCesK pxnji1k9GkIaL/QydGA+gC5h4GWtryslvFD/aBLYZ0YLzRIwBbHdK9UzTel2EgP5vjFonoXUngRnT9nIg0iDwBumZPN1hW6hcxflK7W mJ+nAX9oZK0z2Vi6LgIxfmgG2YGo4youb7EILZwh5xMMTiCHjyL7Vi4ZTkyKaJS/Xd1vvF6KJfsy7QER0qfDEo2NjyWBZcQRHsPG5KV WoH4W+mCHe0EpFyNKciBYgrSI8pYw==",
-            customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
-            currency:payment.currency, country:customer.country,
-            city:customer.city,
-            narration: payment.narration, domain: merchant.domain
-        )
-        submitPayment(post: myPost) { (error) in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
-
+    
     struct PaymentStruct: Codable {
         let amount: String
         let orderId: String
@@ -109,5 +86,29 @@ public class Mobipay {
             }
         }
         task.resume()
-    }    
+    }
+    
+    
+    public func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
+
+        let myPost = PaymentStruct(
+            amount: payment.amount,
+            orderId: payment.orderId,
+            transactionRef: payment.transactionRef,
+            terminalType: payment.terminalType,
+            terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
+            merchantId: merchant.merchantId,
+            authData:
+            "lQVuoq1grpVZeQw7g/ztgiEn+XgmEatIO6tcVNZpP+I2l2fcTw0ZKIhkrxxajaivgY25ljyueNOBzqF/13lLlTKN/KVp4p391bEBsorCesK pxnji1k9GkIaL/QydGA+gC5h4GWtryslvFD/aBLYZ0YLzRIwBbHdK9UzTel2EgP5vjFonoXUngRnT9nIg0iDwBumZPN1hW6hcxflK7W mJ+nAX9oZK0z2Vi6LgIxfmgG2YGo4youb7EILZwh5xMMTiCHjyL7Vi4ZTkyKaJS/Xd1vvF6KJfsy7QER0qfDEo2NjyWBZcQRHsPG5KV WoH4W+mCHe0EpFyNKciBYgrSI8pYw==",
+            customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
+            currency:payment.currency, country:customer.country,
+            city:customer.city,
+            narration: payment.narration, domain: merchant.domain
+        )
+        submitPayment(post: myPost) { (error) in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }  
 }
