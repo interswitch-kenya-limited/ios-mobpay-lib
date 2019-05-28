@@ -19,7 +19,7 @@ public class Card{
     let cardRegex = try! NSRegularExpression(pattern: "[^\\d.]", options: NSRegularExpression.Options.caseInsensitive)
     
     
-    init(pan: String,cvv: String, expiryYear: String, expiryMonth: String, tokenize: Bool) {
+    public init(pan: String,cvv: String, expiryYear: String, expiryMonth: String, tokenize: Bool) {
         self.pan = pan;
         self.cvv = cvv;
         self.expiryYear = expiryYear;

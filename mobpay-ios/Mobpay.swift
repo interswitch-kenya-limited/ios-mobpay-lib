@@ -94,11 +94,7 @@ public class Mobipay {
     
     
     func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
-        
-        print(card)
-        print(merchant)
-        print(payment)
-        print(customer)
+
         let myPost = PaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,

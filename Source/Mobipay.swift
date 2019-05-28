@@ -95,10 +95,6 @@ func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
 
 func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
     
-    print(card)
-    print(merchant)
-    print(payment)
-    print(customer)
     let myPost = PaymentStruct(
         amount: payment.amount,
         orderId: payment.orderId,
@@ -119,14 +115,4 @@ func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer:
         }
     }
 }
-
-var newCard = Card.init(pan: "5061830100001895", cvv: "how", expiryYear: "are", expiryMonth: "you", tokenize: false)
-var newPayment = Payment.init(amount: "100", transactionRef: "66809285644", orderId: "OID123453", terminalType: "MOBILE", terminalId: "3TLP0001", paymentItem: "CRD", currency: "KES")
-var newCustomer = Customer.init(customerId: "12", firstName: "Allan", secondName: "Mageto", email: "allanbmageto@gmail.com", mobile: "0713805241", city: "nairobi", country: "meh", postalCode: "12", street: "aa", state: "asd")
-var merchant = Merchant.init(merchantId: "a", domain: "as")
-
-
-makeCardPayment(card: newCard, merchant: merchant, payment: newPayment, customer: newCustomer)
-
-
 }
