@@ -12,4 +12,8 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git"}
   spec.source_files  = "Source/*.swift"
  # spec.exclude_files = "Classes/Exclude"
+  spec.platform     = :ios, "10.0"
+  spec.exclude_files = "Classes/Exclude"
+  spec.swift_version = '5.0'
+  
 end
