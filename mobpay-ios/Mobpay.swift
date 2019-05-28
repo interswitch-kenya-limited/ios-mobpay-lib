@@ -10,7 +10,7 @@
 import Foundation
 
 public class Mobpay {
-    public static let mobpay = Mobpay()
+    public static let instance = Mobpay()
     
     //make card token payment
     public func makeCardTokenPayment(){}
