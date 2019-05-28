@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.license      = "MIT"
   spec.author             = { "Allan Mageto" => "allanbmageto@gmail.com" }
   spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git"}
-  spec.source_files  = "Source/*.swift"
+  spec.source_files  = "mobpay-ios/*.swift"
  # spec.exclude_files = "Classes/Exclude"
   spec.platform     = :ios, "10.0"
   spec.exclude_files = "Classes/Exclude"

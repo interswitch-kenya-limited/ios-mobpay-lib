@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B6E660A229D52C20076822B /* Mobpay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6609229D52C20076822B /* Mobpay.swift */; };
+		3B6E660C229D530E0076822B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660B229D530E0076822B /* Card.swift */; };
+		3B6E660E229D53310076822B /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660D229D53310076822B /* Customer.swift */; };
+		3B6E6610229D53540076822B /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660F229D53540076822B /* Merchant.swift */; };
+		3B6E6612229D53770076822B /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6611229D53770076822B /* Payment.swift */; };
 		3B982CF2229D4AFE00BA2457 /* mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B982CE8229D4AFE00BA2457 /* mobpay_ios.framework */; };
 		3B982CF7229D4AFE00BA2457 /* mobpay_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B982CF6229D4AFE00BA2457 /* mobpay_iosTests.swift */; };
 		3B982CF9229D4AFE00BA2457 /* mobpay_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,6 +28,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B6E6609229D52C20076822B /* Mobpay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobpay.swift; sourceTree = "<group>"; };
+		3B6E660B229D530E0076822B /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		3B6E660D229D53310076822B /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
+		3B6E660F229D53540076822B /* Merchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
+		3B6E6611229D53770076822B /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		3B982CE8229D4AFE00BA2457 /* mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobpay_ios.h; sourceTree = "<group>"; };
 		3B982CEC229D4AFE00BA2457 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,6 +83,11 @@
 			children = (
 				3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */,
 				3B982CEC229D4AFE00BA2457 /* Info.plist */,
+				3B6E6609229D52C20076822B /* Mobpay.swift */,
+				3B6E660B229D530E0076822B /* Card.swift */,
+				3B6E660D229D53310076822B /* Customer.swift */,
+				3B6E660F229D53540076822B /* Merchant.swift */,
+				3B6E6611229D53770076822B /* Payment.swift */,
 			);
 			path = "mobpay-ios";
 			sourceTree = "<group>";
@@ -148,6 +163,7 @@
 				TargetAttributes = {
 					3B982CE7229D4AFE00BA2457 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					3B982CF0229D4AFE00BA2457 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -194,6 +210,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B6E660E229D53310076822B /* Customer.swift in Sources */,
+				3B6E660A229D52C20076822B /* Mobpay.swift in Sources */,
+				3B6E660C229D530E0076822B /* Card.swift in Sources */,
+				3B6E6610229D53540076822B /* Merchant.swift in Sources */,
+				3B6E6612229D53770076822B /* Payment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +362,7 @@
 		3B982CFD229D4AFE00BA2457 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -358,6 +380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "interswitchgroup.mobpay-ios";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -366,6 +389,7 @@
 		3B982CFE229D4AFE00BA2457 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -391,6 +415,7 @@
 		3B982D00229D4AFE00BA2457 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMFP58YH8N;
 				INFOPLIST_FILE = "mobpay-iosTests/Info.plist";
@@ -409,6 +434,7 @@
 		3B982D01229D4AFE00BA2457 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMFP58YH8N;
 				INFOPLIST_FILE = "mobpay-iosTests/Info.plist";

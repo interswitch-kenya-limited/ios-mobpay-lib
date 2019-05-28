@@ -1,9 +1,18 @@
 //
 //  Merchant.swift
-//  mobpay-ios
+//  functionTest
 //
-//  Created by Allan Mageto on 28/05/2019.
-//  Copyright © 2019 Allan Mageto. All rights reserved.
+//  Created by interswitchke on 22/05/2019.
+//  Copyright © 2019 interswitchke. All rights reserved.
 //
 
 import Foundation
+
+public struct Merchant{
+    var merchantId,domain:String;
+    init(merchantId: String , domain: String) {
+        self.merchantId = merchantId
+        self.domain = domain
+    }
+    
+}
