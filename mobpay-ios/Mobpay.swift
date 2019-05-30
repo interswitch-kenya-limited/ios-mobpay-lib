@@ -8,6 +8,8 @@
 
 
 import Foundation
+import CryptoSwift
+import SwiftyRSA
 
 public class Mobpay {
     public static let instance = Mobpay()
@@ -41,7 +43,16 @@ public class Mobpay {
     
     
     
-    func submitPayment(post: PaymentStruct, completion:((Error?) -> Void)?) {
+    func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: PaymentStruct, completion:((Error?) -> Void)?) {
+        let nonceRegex = try! NSRegularExpression(pattern: "-", options: NSRegularExpression.Options.caseInsensitive)
+        
+        let rawNonce = UUID().uuidString
+        let nonce = nonceRegex.stringByReplacingMatches(in: rawNonce, options: [], range: NSMakeRange(0, rawNonce.count), withTemplate: "")
+        let signatureMethod:String = "SHA1";
+        
+        
+        let timestamp = String(Int(NSDate().timeIntervalSince1970/1000))
+        
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "testids.interswitch.co.ke"
@@ -52,20 +63,34 @@ public class Mobpay {
         
         // Specify this request as being a POST method
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        let encodedUrl = try!String(contentsOf: url)
+
+        request.httpMethod = httpRequest
         // Make sure that we include headers specifying that our request's HTTP body
         // will be JSON encoded
+        let signatureItems:Array<String> = [request.httpMethod!,encodedUrl, timestamp, nonce, clientId, clientSecret]
+        let hashedJoinedItems = signatureItems.joined(separator: "&").sha1()
+        let base64HashedjoinedItems = (hashedJoinedItems.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
+        let signature = String(bytes: base64HashedjoinedItems, encoding: .utf8)
+        let encodedClientId = (clientId.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
         var headers = request.allHTTPHeaderFields ?? [:]
         headers["Content-Type"] = "application/json"
+        headers["User-Agent"] = "ios"
+        headers["Accept"] = "application/json"
+        headers["Nonce"] = nonce
+        headers["Timestamp"] = timestamp
+        headers["SignatureMethod"] = signatureMethod
+        headers["Signature"] = signature
+        headers["Authorization"] = "InterswitchAuth" + String(bytes: encodedClientId, encoding: .utf8)!
         request.allHTTPHeaderFields = headers
         
         // Now let's encode out Post struct into JSON data...
         let encoder = JSONEncoder()
         do {
-            let jsonData = try encoder.encode(post)
+            let jsonData = try encoder.encode(payload)
             // ... and set our request's HTTP body
             request.httpBody = jsonData
-            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
+//            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
         } catch {
             completion?(error)
         }
@@ -88,27 +113,26 @@ public class Mobpay {
         task.resume()
     }
     
-    
-    public func makeCardPayment(card: Card, merchant: Merchant, payment: Payment, customer: Customer) {
-
-        let myPost = PaymentStruct(
+    func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,completion: ( _ result: Bool)->())throws{
+        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? 1 : 0 )
+        let cardPaymentPayload:CardPaymentPayload = CardPaymentPayload(Merchant: merchant,Payment: payment,Customer: customer,authData: authData)
+        let payload = PaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
             transactionRef: payment.transactionRef,
             terminalType: payment.terminalType,
             terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
             merchantId: merchant.merchantId,
-            authData:
-            "lQVuoq1grpVZeQw7g/ztgiEn+XgmEatIO6tcVNZpP+I2l2fcTw0ZKIhkrxxajaivgY25ljyueNOBzqF/13lLlTKN/KVp4p391bEBsorCesK pxnji1k9GkIaL/QydGA+gC5h4GWtryslvFD/aBLYZ0YLzRIwBbHdK9UzTel2EgP5vjFonoXUngRnT9nIg0iDwBumZPN1hW6hcxflK7W mJ+nAX9oZK0z2Vi6LgIxfmgG2YGo4youb7EILZwh5xMMTiCHjyL7Vi4ZTkyKaJS/Xd1vvF6KJfsy7QER0qfDEo2NjyWBZcQRHsPG5KV WoH4W+mCHe0EpFyNKciBYgrSI8pYw==",
+            authData: authData,
             customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
             currency:payment.currency, country:customer.country,
             city:customer.city,
             narration: payment.narration, domain: merchant.domain
         )
-        submitPayment(post: myPost) { (error) in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
+        try submitPayment(clientId: "one", clientSecret: "two", httpRequest: "POST", payload: payload){(error) in
+        if let error = error {
+                                fatalError(error.localizedDescription)
+                            }
         }
-    }  
+    }
 }

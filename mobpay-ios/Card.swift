@@ -49,7 +49,6 @@ public class Card{
             return false;
         }
         let modPan = cardRegex.stringByReplacingMatches(in: pan, options: [], range: range, withTemplate: "")
-        //    print(modPan)
         let type = getType(cardNumber: modPan)
         if type != "null" {
             switch type {

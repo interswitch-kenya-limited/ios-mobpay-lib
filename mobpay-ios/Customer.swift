@@ -23,6 +23,7 @@ public class Customer{
         self.street = street
         self.state = state
     }
+
     
 }
 

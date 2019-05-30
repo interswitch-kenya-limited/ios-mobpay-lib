@@ -15,6 +15,14 @@
 		3B982CF2229D4AFE00BA2457 /* mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B982CE8229D4AFE00BA2457 /* mobpay_ios.framework */; };
 		3B982CF7229D4AFE00BA2457 /* mobpay_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B982CF6229D4AFE00BA2457 /* mobpay_iosTests.swift */; };
 		3B982CF9229D4AFE00BA2457 /* mobpay_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3BB84660229FB3BF001C80AD /* TransactionPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */; };
+		3BB84662229FB9C4001C80AD /* CardPaymentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */; };
+		3BB84664229FBC28001C80AD /* MobilePaymentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */; };
+		3BB84666229FBC85001C80AD /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84665229FBC85001C80AD /* Mobile.swift */; };
+		3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84667229FCB53001C80AD /* RSAUtil.swift */; };
+		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
+		5ECCAC5668742BA94312F6A6 /* Pods_mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */; };
+		B44BDFD6F62233063ACC35B6 /* Pods_mobpay_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F1D28852EAB8886F6DC6758 /* Pods-mobpay-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-ios.release.xcconfig"; path = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios.release.xcconfig"; sourceTree = "<group>"; };
+		2D39E0B4C29A4573663675DD /* Pods-mobpay-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.release.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.release.xcconfig"; sourceTree = "<group>"; };
 		3B6E6609229D52C20076822B /* Mobpay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobpay.swift; sourceTree = "<group>"; };
 		3B6E660B229D530E0076822B /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		3B6E660D229D53310076822B /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
@@ -39,6 +49,16 @@
 		3B982CF1229D4AFE00BA2457 /* mobpay-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mobpay-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B982CF6229D4AFE00BA2457 /* mobpay_iosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mobpay_iosTests.swift; sourceTree = "<group>"; };
 		3B982CF8229D4AFE00BA2457 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPayload.swift; sourceTree = "<group>"; };
+		3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPaymentPayload.swift; sourceTree = "<group>"; };
+		3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilePaymentPayload.swift; sourceTree = "<group>"; };
+		3BB84665229FBC85001C80AD /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
+		3BB84667229FCB53001C80AD /* RSAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtil.swift; sourceTree = "<group>"; };
+		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
+		9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D1B304F4916A35EF2E4F96A7 /* Pods-mobpay-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-ios.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECCAC5668742BA94312F6A6 /* Pods_mobpay_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,18 +75,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B982CF2229D4AFE00BA2457 /* mobpay_ios.framework in Frameworks */,
+				B44BDFD6F62233063ACC35B6 /* Pods_mobpay_iosTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33B067B141C63AC222F42AAE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D1B304F4916A35EF2E4F96A7 /* Pods-mobpay-ios.debug.xcconfig */,
+				1F1D28852EAB8886F6DC6758 /* Pods-mobpay-ios.release.xcconfig */,
+				B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */,
+				2D39E0B4C29A4573663675DD /* Pods-mobpay-iosTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		3B982CDE229D4AFE00BA2457 = {
 			isa = PBXGroup;
 			children = (
 				3B982CEA229D4AFE00BA2457 /* mobpay-ios */,
 				3B982CF5229D4AFE00BA2457 /* mobpay-iosTests */,
 				3B982CE9229D4AFE00BA2457 /* Products */,
+				33B067B141C63AC222F42AAE /* Pods */,
+				647351F4EA599B59D260DF39 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,10 +119,16 @@
 				3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */,
 				3B982CEC229D4AFE00BA2457 /* Info.plist */,
 				3B6E6609229D52C20076822B /* Mobpay.swift */,
+				3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */,
 				3B6E660B229D530E0076822B /* Card.swift */,
 				3B6E660D229D53310076822B /* Customer.swift */,
 				3B6E660F229D53540076822B /* Merchant.swift */,
 				3B6E6611229D53770076822B /* Payment.swift */,
+				3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */,
+				3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */,
+				3BB84665229FBC85001C80AD /* Mobile.swift */,
+				3BB84667229FCB53001C80AD /* RSAUtil.swift */,
+				3BB8466922A0343E001C80AD /* CardToken.swift */,
 			);
 			path = "mobpay-ios";
 			sourceTree = "<group>";
@@ -99,6 +140,15 @@
 				3B982CF8229D4AFE00BA2457 /* Info.plist */,
 			);
 			path = "mobpay-iosTests";
+			sourceTree = "<group>";
+		};
+		647351F4EA599B59D260DF39 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */,
+				9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +169,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3B982CFC229D4AFE00BA2457 /* Build configuration list for PBXNativeTarget "mobpay-ios" */;
 			buildPhases = (
+				D3B841488C6BC02166B0CE87 /* [CP] Check Pods Manifest.lock */,
 				3B982CE3229D4AFE00BA2457 /* Headers */,
 				3B982CE4229D4AFE00BA2457 /* Sources */,
 				3B982CE5229D4AFE00BA2457 /* Frameworks */,
@@ -137,6 +188,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3B982CFF229D4AFE00BA2457 /* Build configuration list for PBXNativeTarget "mobpay-iosTests" */;
 			buildPhases = (
+				6781A41AD5592AAD172C9E37 /* [CP] Check Pods Manifest.lock */,
 				3B982CED229D4AFE00BA2457 /* Sources */,
 				3B982CEE229D4AFE00BA2457 /* Frameworks */,
 				3B982CEF229D4AFE00BA2457 /* Resources */,
@@ -205,6 +257,53 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6781A41AD5592AAD172C9E37 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mobpay-iosTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3B841488C6BC02166B0CE87 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mobpay-ios-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3B982CE4229D4AFE00BA2457 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -213,7 +312,13 @@
 				3B6E660E229D53310076822B /* Customer.swift in Sources */,
 				3B6E660A229D52C20076822B /* Mobpay.swift in Sources */,
 				3B6E660C229D530E0076822B /* Card.swift in Sources */,
+				3BB84660229FB3BF001C80AD /* TransactionPayload.swift in Sources */,
+				3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */,
 				3B6E6610229D53540076822B /* Merchant.swift in Sources */,
+				3BB84666229FBC85001C80AD /* Mobile.swift in Sources */,
+				3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */,
+				3BB84662229FB9C4001C80AD /* CardPaymentPayload.swift in Sources */,
+				3BB84664229FBC28001C80AD /* MobilePaymentPayload.swift in Sources */,
 				3B6E6612229D53770076822B /* Payment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +466,7 @@
 		};
 		3B982CFD229D4AFE00BA2457 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1B304F4916A35EF2E4F96A7 /* Pods-mobpay-ios.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -388,6 +494,7 @@
 		};
 		3B982CFE229D4AFE00BA2457 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1F1D28852EAB8886F6DC6758 /* Pods-mobpay-ios.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -414,6 +521,7 @@
 		};
 		3B982D00229D4AFE00BA2457 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -433,6 +541,7 @@
 		};
 		3B982D01229D4AFE00BA2457 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D39E0B4C29A4573663675DD /* Pods-mobpay-iosTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
