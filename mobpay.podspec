@@ -1,5 +1,5 @@
 Pod::Spec.new do |spec|
-  spec.name         = "mobpay"
+  spec.name         = "Mobpay"
   spec.version      = "0.0.1"
   spec.summary      = "Mobpay is a payment lib"
   spec.description  = <<-DESC
@@ -15,6 +15,7 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "10.0"
   spec.exclude_files = "Classes/Exclude"
   spec.swift_version = '5.0'
-  spec.frameworks = "SwiftyRSA,CryptoSwift"
+  spec.frameworks = "CryptoSwift","SwiftyRSA"
+
   
 end

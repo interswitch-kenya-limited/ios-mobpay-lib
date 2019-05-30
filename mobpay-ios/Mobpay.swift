@@ -115,7 +115,7 @@ public class Mobpay {
     
     func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,completion: ( _ result: Bool)->())throws{
         let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? 1 : 0 )
-        let cardPaymentPayload:CardPaymentPayload = CardPaymentPayload(Merchant: merchant,Payment: payment,Customer: customer,authData: authData)
+//        let cardPaymentPayload:CardPaymentPayload = CardPaymentPayload(Merchant: merchant,Payment: payment,Customer: customer,authData: authData)
         let payload = PaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
@@ -129,7 +129,7 @@ public class Mobpay {
             city:customer.city,
             narration: payment.narration, domain: merchant.domain
         )
-        try submitPayment(clientId: "one", clientSecret: "two", httpRequest: "POST", payload: payload){(error) in
+        try!submitPayment(clientId: "one", clientSecret: "two", httpRequest: "POST", payload: payload){(error) in
         if let error = error {
                                 fatalError(error.localizedDescription)
                             }
