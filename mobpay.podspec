@@ -1,5 +1,5 @@
 Pod::Spec.new do |spec|
-  spec.name         = "Mobpay"
+  spec.name         = "mobpay"
   spec.version      = "0.0.1"
   spec.summary      = "Mobpay is a payment lib"
   spec.description  = <<-DESC
