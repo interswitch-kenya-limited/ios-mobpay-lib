@@ -10,7 +10,7 @@
 import Foundation
 import CryptoSwift
 import SwiftyRSA
-
+import PercentEncoder
 public class Mobpay {
     public static let instance = Mobpay()
     
@@ -65,12 +65,13 @@ public class Mobpay {
         var request = URLRequest(url: url)
 //        let stringUrl = url.absoluteString
 //        let stringUrl = "https://testids.interswitch.co.ke:9080/api/v1/merchant/transact/cards"
-        let encodedUrl = (url.absoluteString.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
+//        let encodedUrl = (url.absoluteString.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
+        let encodedUrl = PercentEncoding.encodeURIComponent.evaluate(string: url.absoluteString)
 
         request.httpMethod = httpRequest
         // Make sure that we include headers specifying that our request's HTTP body
         // will be JSON encoded
-        let signatureItems:Array<String> = [request.httpMethod!,String(bytes: encodedUrl, encoding: .utf8)!, timestamp, nonce, clientId, clientSecret]
+        let signatureItems:Array<String> = [request.httpMethod!,encodedUrl, timestamp, nonce, clientId, clientSecret]
         let hashedJoinedItems = signatureItems.joined(separator: "&").sha1()
         let base64HashedjoinedItems = (hashedJoinedItems.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
         let signature = String(bytes: base64HashedjoinedItems, encoding: .utf8)

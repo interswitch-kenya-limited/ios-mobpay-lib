@@ -17,6 +17,7 @@ Pod::Spec.new do |spec|
   spec.swift_version = '5.0'
   spec.dependency 'CryptoSwift', '~> 1.0'
   spec.dependency 'SwiftyRSA', '~> 1.5'
+  spec.dependency pod 'PercentEncoder', '~> 1.2'
 
   
 end
