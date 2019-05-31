@@ -63,12 +63,14 @@ public class Mobpay {
         
         // Specify this request as being a POST method
         var request = URLRequest(url: url)
-        let encodedUrl = try!String(contentsOf: url)
+//        let stringUrl = url.absoluteString
+//        let stringUrl = "https://testids.interswitch.co.ke:9080/api/v1/merchant/transact/cards"
+        let encodedUrl = (url.absoluteString.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
 
         request.httpMethod = httpRequest
         // Make sure that we include headers specifying that our request's HTTP body
         // will be JSON encoded
-        let signatureItems:Array<String> = [request.httpMethod!,encodedUrl, timestamp, nonce, clientId, clientSecret]
+        let signatureItems:Array<String> = [request.httpMethod!,String(bytes: encodedUrl, encoding: .utf8)!, timestamp, nonce, clientId, clientSecret]
         let hashedJoinedItems = signatureItems.joined(separator: "&").sha1()
         let base64HashedjoinedItems = (hashedJoinedItems.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
         let signature = String(bytes: base64HashedjoinedItems, encoding: .utf8)
@@ -81,7 +83,7 @@ public class Mobpay {
         headers["Timestamp"] = timestamp
         headers["SignatureMethod"] = signatureMethod
         headers["Signature"] = signature
-        headers["Authorization"] = "InterswitchAuth" + String(bytes: encodedClientId, encoding: .utf8)!
+        headers["Authorization"] = "InterswitchAuth " + String(bytes: encodedClientId, encoding: .utf8)!
         request.allHTTPHeaderFields = headers
         
         // Now let's encode out Post struct into JSON data...
@@ -113,9 +115,8 @@ public class Mobpay {
         task.resume()
     }
     
-    func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,completion: ( _ result: Bool)->())throws{
+    public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: ( _ result: Bool)->())throws{
         let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? 1 : 0 )
-//        let cardPaymentPayload:CardPaymentPayload = CardPaymentPayload(Merchant: merchant,Payment: payment,Customer: customer,authData: authData)
         let payload = PaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
@@ -129,7 +130,7 @@ public class Mobpay {
             city:customer.city,
             narration: payment.narration, domain: merchant.domain
         )
-        try!submitPayment(clientId: "one", clientSecret: "two", httpRequest: "POST", payload: payload){(error) in
+        try!submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload){(error) in
         if let error = error {
                                 fatalError(error.localizedDescription)
                             }
