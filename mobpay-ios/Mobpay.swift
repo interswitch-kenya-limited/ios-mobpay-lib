@@ -51,7 +51,7 @@ public class Mobpay {
         let signatureMethod:String = "SHA1";
         
         
-        let timestamp = String(Int(NSDate().timeIntervalSince1970/1000))
+        let timestamp = String(Int(NSDate().timeIntervalSince1970))
         
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
