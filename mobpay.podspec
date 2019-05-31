@@ -15,9 +15,8 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "10.0"
   spec.exclude_files = "Classes/Exclude"
   spec.swift_version = '5.0'
-  spec.dependency "JSONKit", "~> 1.4"
-  spec.dependency = 'CryptoSwift', '~> 1.0'
-  spec.dependency = 'SwiftyRSA', '~> 1.5'
+  spec.dependency 'CryptoSwift', '~> 1.0'
+  spec.dependency 'SwiftyRSA', '~> 1.5'
 
   
 end
