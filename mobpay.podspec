@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "10.0"
   spec.exclude_files = "Classes/Exclude"
   spec.swift_version = '5.0'
-  spec.frameworks = "CryptoSwift","SwiftyRSA"
+  spec.libraries = "CryptoSwift","SwiftyRSA"
 
   
 end
