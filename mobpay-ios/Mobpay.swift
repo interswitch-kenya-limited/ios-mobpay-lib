@@ -63,7 +63,7 @@ public class Mobpay {
     
     
     
-    func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
+    func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct)-> String {
         let nonceRegex = try! NSRegularExpression(pattern: "-", options: NSRegularExpression.Options.caseInsensitive)
         
         let rawNonce = UUID().uuidString
@@ -125,13 +125,16 @@ public class Mobpay {
             }
             // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
-                completion(utf8Representation)
+                
                 print("response: ", utf8Representation)
+                
+                self.backEndResponse = utf8Representation
             } else {
-                completion("no readable data received in response")
+                self.backEndResponse = "No readable data received in response"
             }
         }
         task.resume()
+        return backEndResponse!
     }
     
     public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: (String)->())throws{
@@ -150,10 +153,7 @@ public class Mobpay {
             narration: payment.narration, domain: merchant.domain
         )
         
-        submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload) { (urlResponse) in
-            //            response = urlResponse;
-            self.backEndResponse = urlResponse
-        }
+        self.backEndResponse = submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload)
         completion(backEndResponse!)
         
     }
