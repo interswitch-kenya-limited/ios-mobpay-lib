@@ -112,7 +112,7 @@ public class Mobpay {
             request.httpBody = jsonData
             //            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
         } catch {
-//            completion(String(error))
+            //            completion(String(error))
         }
         
         // Create and run a URLSession data task with our JSON encoded POST request
@@ -151,11 +151,11 @@ public class Mobpay {
         )
         
         submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload) { (urlResponse) in
-//            response = urlResponse;
-                self.backEndResponse = urlResponse
+            //            response = urlResponse;
+            self.backEndResponse = urlResponse
         }
         completion(backEndResponse!)
-
+        
     }
     
     
@@ -163,9 +163,9 @@ public class Mobpay {
     //make mobile money payment
     public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:(String)->())throws{
         let mobilePayload = MobilePaymentStruct(amount: payment.amount, orderId: payment.orderId, transactionRef: payment.transactionRef, terminalType: payment.terminalType, terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: mobile.provider, merchantId: merchant.merchantId,
-                                               customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
+                                                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
                                                 currency: payment.currency, country: customer.country, city: customer.city, narration: payment.narration, domain: merchant.domain, phone: mobile.phone)
-
+        
         
         submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload) { (urlResponse) in
             //            response = urlResponse;
@@ -223,7 +223,7 @@ public class Mobpay {
             request.httpBody = jsonData
             //            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
         } catch {
-//            completion(error)
+            //            completion(error)
         }
         
         // Create and run a URLSession data task with our JSON encoded POST request
