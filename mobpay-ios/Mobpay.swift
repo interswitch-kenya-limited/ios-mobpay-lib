@@ -52,7 +52,6 @@ public class Mobpay {
         let paymentItem :String
         let provider: String
         let merchantId: String
-//        let authData: String
         let customerInfor: String
         let currency: String
         let country: String
@@ -129,7 +128,7 @@ public class Mobpay {
                 completion(utf8Representation)
                 print("response: ", utf8Representation)
             } else {
-                print("no readable data received in response")
+                completion("no readable data received in response")
             }
         }
         task.resume()
@@ -166,11 +165,7 @@ public class Mobpay {
         let mobilePayload = MobilePaymentStruct(amount: payment.amount, orderId: payment.orderId, transactionRef: payment.transactionRef, terminalType: payment.terminalType, terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: mobile.provider, merchantId: merchant.merchantId,
                                                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
                                                 currency: payment.currency, country: customer.country, city: customer.city, narration: payment.narration, domain: merchant.domain, phone: mobile.phone)
-//        submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload){(error) in
-//            if let error = error {
-//                fatalError(error.localizedDescription)
-//            }
-//        }
+
         
         submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload) { (urlResponse) in
             //            response = urlResponse;
@@ -244,7 +239,7 @@ public class Mobpay {
                 completion(utf8Representation)
                 print("response: ", utf8Representation)
             } else {
-                print("no readable data received in response")
+                completion("no readable data received in response")
             }
         }
         task.resume()
