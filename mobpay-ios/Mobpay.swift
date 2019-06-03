@@ -63,7 +63,7 @@ public class Mobpay {
     
     
     
-    func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct)-> String {
+    func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
         let nonceRegex = try! NSRegularExpression(pattern: "-", options: NSRegularExpression.Options.caseInsensitive)
         
         let rawNonce = UUID().uuidString
@@ -128,16 +128,15 @@ public class Mobpay {
                 
                 print("response: ", utf8Representation)
                 
-                self.backEndResponse = utf8Representation
+                completion(utf8Representation)
             } else {
-                self.backEndResponse = "No readable data received in response"
+                completion("No readable data received in response")
             }
         }
         task.resume()
-        return backEndResponse!
     }
     
-    public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: (String)->())throws{
+    public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: @escaping (String)->())throws{
         let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? 1 : 0 )
         let payload = CardPaymentStruct(
             amount: payment.amount,
@@ -153,15 +152,17 @@ public class Mobpay {
             narration: payment.narration, domain: merchant.domain
         )
         
-        self.backEndResponse = submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload)
-        completion(backEndResponse!)
+        submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload) { (urlResponse) in
+            //            response = urlResponse;
+            completion(urlResponse)
+        }
         
     }
     
     
     //MOBILE MONEY
     //make mobile money payment
-    public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:(String)->())throws{
+    public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
         let mobilePayload = MobilePaymentStruct(amount: payment.amount, orderId: payment.orderId, transactionRef: payment.transactionRef, terminalType: payment.terminalType, terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: mobile.provider, merchantId: merchant.merchantId,
                                                 customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
                                                 currency: payment.currency, country: customer.country, city: customer.city, narration: payment.narration, domain: merchant.domain, phone: mobile.phone)
@@ -169,9 +170,8 @@ public class Mobpay {
         
         submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload) { (urlResponse) in
             //            response = urlResponse;
-            self.backEndResponse = urlResponse
+            completion(urlResponse)
         }
-        completion(backEndResponse!)
     }
     
     func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: String,payload: MobilePaymentStruct, completion:@escaping (String)->()) {
@@ -221,7 +221,7 @@ public class Mobpay {
             let jsonData = try encoder.encode(payload)
             // ... and set our request's HTTP body
             request.httpBody = jsonData
-            //            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
+            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
         } catch {
             //            completion(error)
         }

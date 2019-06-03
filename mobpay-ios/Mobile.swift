@@ -72,11 +72,11 @@ public class Mobile {
         }
         switch true {
         case mpesaChecker(phone: phone):
-            provider = "MPESA"
+            provider = "703"
             pattern = try!NSRegularExpression(pattern: "^(\\+?254|0)[7]([0-2][0-9]|[9][0-3])[0-9]{0,6}$")
             return (provider,pattern)
         case eazzyPayChecker(phone: phone):
-            provider = "EAZZYPAY"
+            provider = "708"
             pattern = try!NSRegularExpression(pattern: "^4[0-9]{1,12}(?:[0-9]{6})?$")
             return (provider,pattern)
         default:
