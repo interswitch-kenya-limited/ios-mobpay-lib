@@ -154,8 +154,6 @@ public class Mobpay {
         submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload) { (urlResponse) in
 //            response = urlResponse;
                 self.backEndResponse = urlResponse
-            
-            print(urlResponse)
         }
         completion(backEndResponse!)
 
@@ -164,18 +162,24 @@ public class Mobpay {
     
     //MOBILE MONEY
     //make mobile money payment
-    public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String ){
+    public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:(String)->())throws{
         let mobilePayload = MobilePaymentStruct(amount: payment.amount, orderId: payment.orderId, transactionRef: payment.transactionRef, terminalType: payment.terminalType, terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: mobile.provider, merchantId: merchant.merchantId,
                                                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
                                                 currency: payment.currency, country: customer.country, city: customer.city, narration: payment.narration, domain: merchant.domain, phone: mobile.phone)
-        submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload){(error) in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
+//        submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload){(error) in
+//            if let error = error {
+//                fatalError(error.localizedDescription)
+//            }
+//        }
+        
+        submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload) { (urlResponse) in
+            //            response = urlResponse;
+            self.backEndResponse = urlResponse
         }
+        completion(backEndResponse!)
     }
     
-    func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: String,payload: MobilePaymentStruct, completion:((Error?) -> Void)?) {
+    func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: String,payload: MobilePaymentStruct, completion:@escaping (String)->()) {
         let nonceRegex = try! NSRegularExpression(pattern: "-", options: NSRegularExpression.Options.caseInsensitive)
         
         let rawNonce = UUID().uuidString
@@ -224,7 +228,7 @@ public class Mobpay {
             request.httpBody = jsonData
             //            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
         } catch {
-            completion?(error)
+//            completion(error)
         }
         
         // Create and run a URLSession data task with our JSON encoded POST request
@@ -237,6 +241,7 @@ public class Mobpay {
             }
             // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                completion(utf8Representation)
                 print("response: ", utf8Representation)
             } else {
                 print("no readable data received in response")
