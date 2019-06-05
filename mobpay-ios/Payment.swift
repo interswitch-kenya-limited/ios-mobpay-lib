@@ -10,9 +10,9 @@ import Foundation
 
 
 public struct Payment{
-    var amount, transactionRef, orderId,terminalType,terminalId,paymentItem,currency: String;
-    var narration: String = "Payment-Card"
-    public init(amount: String, transactionRef: String, orderId : String, terminalType: String, terminalId: String, paymentItem: String,currency: String) {
+    var amount, transactionRef, orderId,terminalType,terminalId,paymentItem,currency,preauth,narration: String;
+    
+    public init(amount: String, transactionRef: String, orderId : String, terminalType: String, terminalId: String, paymentItem: String,currency: String,preauth: String,narration:String) {
         self.amount = amount
         self.transactionRef = transactionRef
         self.orderId = orderId
@@ -20,12 +20,9 @@ public struct Payment{
         self.terminalId = terminalId
         self.paymentItem = paymentItem
         self.currency = currency
-        
+        self.preauth = preauth
+        self.narration = narration
     }
-    var preauth: String {
-        get {
-            return "false";
-        }
-    }
+    
     
 }
