@@ -1,12 +1,12 @@
 Pod::Spec.new do |spec|
   spec.name         = "mobpay"
   spec.version      = "0.0.1"
-  spec.summary      = "Mobpay is a payment lib"
+  spec.summary      = "MobPay - An iOS library for integrating card and mobile payments through Interswitch"
   spec.description  = <<-DESC
-  longer description
+This SDK library enables you to integrate Interswitch payments to your mobile app
                    DESC
 
-  spec.homepage     = "http://EXAMPLE/mobpay"
+  spec.homepage     = "https://www.interswitchgroup.com/ke/"
   spec.license      = "MIT"
   spec.author             = { "Allan Mageto" => "allanbmageto@gmail.com" }
   spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git"}
