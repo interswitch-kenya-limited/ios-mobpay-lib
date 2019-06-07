@@ -33,4 +33,4 @@ try!Mobpay.instance.makeCardPayment(card: card, merchant: merchant, payment: pay
 
 ## Source code
 
-Visit https://github.com/interswitch-kenya-limited/mobpay-ios-example to get the source code and releases of this project if you want to try a manual integration process that does not make use of gradle.
+Visit https://github.com/interswitch-kenya-limited/mobpay-ios-example to get the source code and releases of this project if you want to try a manual integration process.
