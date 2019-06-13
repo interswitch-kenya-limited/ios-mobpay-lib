@@ -137,7 +137,7 @@ public class Mobpay {
     }
     
     public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: @escaping (String)->())throws{
-        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? 1 : 0 )
+        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0" )
         let payload = CardPaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
