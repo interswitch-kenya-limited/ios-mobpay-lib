@@ -1,0 +1,30 @@
+PODS:
+  - Alamofire (5.0.0-beta.6)
+  - CryptoSwift (1.0.0)
+  - PercentEncoder (1.2.1)
+  - SwiftyRSA (1.5.0):
+    - SwiftyRSA/ObjC (= 1.5.0)
+  - SwiftyRSA/ObjC (1.5.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.0.0-beta.5)
+  - CryptoSwift
+  - PercentEncoder
+  - SwiftyRSA
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - CryptoSwift
+    - PercentEncoder
+    - SwiftyRSA
+
+SPEC CHECKSUMS:
+  Alamofire: cd08a4402bd12cacd0c66f23fb12fec8d6b965e4
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
+  SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
+
+PODFILE CHECKSUM: 8b3cadae00cdc9bd742869ee606a65efc086a49b
+
+COCOAPODS: 1.7.0
