@@ -10,7 +10,7 @@
 import Foundation
 import CryptoSwift
 import SwiftyRSA
-import Alamofire
+
 public class Mobpay {
 //    var backEndResponse:String?;
     public static let instance = Mobpay()
@@ -31,24 +31,12 @@ public class Mobpay {
             city:customer.city,
             narration: payment.narration, domain: merchant.domain
         )
-        submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload){
+        submitCardTokenPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload){
             (urlResponse) in completion(urlResponse)
         }
     }
     
-    
-    
-    //confirm mobile money payment
-    public func confirmMobileMoneyPayment(orderId:String,completion:@escaping (String)->()){
-        AF.request("https://httpbin.org/get").responseJSON { response in
-            print("Request: \(String(describing: response.request))")   // original url request
-            print("Response: \(String(describing: response.response))") // http url response
-            print("Result: \(response.result)")                         // response serialization result
-        }
-    }
-    
-    
-    
+    //make card payment
     public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: @escaping (String)->())throws{
         let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0" )
         let payload = CardPaymentStruct(
@@ -81,9 +69,13 @@ public class Mobpay {
         
         
         submitMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: mobilePayload) { (urlResponse) in
-            //            response = urlResponse;
             completion(urlResponse)
         }
+    }
+    
+    //confirm mobile money payment
+    public func confirmMobileMoneyPayment(orderId:String,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
+        submitConfirmMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", transactionRef: orderId) { (urlResponse) in completion(urlResponse)}
     }
     
 

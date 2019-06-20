@@ -26,12 +26,9 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
     urlComponents.path = "/api/v1/merchant/transact/bills"
     guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
     
-    // Specify this request as being a POST method
     var request = URLRequest(url: url)
     let encodedUrl = PercentEncoding.encodeURIComponent.evaluate(string: url.absoluteString)
     request.httpMethod = httpRequest
-    // Make sure that we include headers specifying that our request's HTTP body
-    // will be JSON encoded
     let signatureItems:Array<String> = [request.httpMethod!,encodedUrl, timestamp, nonce, clientId, clientSecret]
     let hashedJoinedItems = [UInt8](signatureItems.joined(separator: "&").utf8)
     let sha1ofbytesof = hashedJoinedItems.sha1()
@@ -40,7 +37,7 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
     let encodedClientId = (clientId.data(using: String.Encoding.utf8)! as NSData).base64EncodedData()
     var headers = request.allHTTPHeaderFields ?? [:]
     headers["Content-Type"] = "application/json"
-    headers["User-Agent"] = "ios"
+    headers["User-Agent"] = "iOS"
     headers["Accept"] = "application/json"
     headers["Nonce"] = nonce
     headers["Timestamp"] = timestamp
@@ -49,18 +46,15 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
     headers["Authorization"] = "InterswitchAuth " + String(bytes: encodedClientId, encoding: .utf8)!
     request.allHTTPHeaderFields = headers
     
-    // Now let's encode out Post struct into JSON data...
     let encoder = JSONEncoder()
     do {
         let jsonData = try encoder.encode(payload)
-        // ... and set our request's HTTP body
         request.httpBody = jsonData
         print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
     } catch {
         //            completion(error)
     }
     
-    // Create and run a URLSession data task with our JSON encoded POST request
     let config = URLSessionConfiguration.default
     let session = URLSession(configuration: config)
     
@@ -68,7 +62,6 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
         guard responseError == nil else {
             return
         }
-        // APIs usually respond with the data you just sent in your POST request
         if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
             completion(utf8Representation)
             print("response: ", utf8Representation)
