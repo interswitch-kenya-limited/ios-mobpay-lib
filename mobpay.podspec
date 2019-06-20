@@ -18,6 +18,7 @@ This SDK library enables you to integrate Interswitch payments to your mobile ap
   spec.dependency 'CryptoSwift', '~> 1.0'
   spec.dependency 'SwiftyRSA', '~> 1.5'
   spec.dependency 'PercentEncoder', '~> 1.2'
+  spec.dependancy 'Eureka', '~> 5.0.0'
 
   
 end
