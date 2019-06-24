@@ -18,7 +18,7 @@ func submitConfirmMobilePayment(clientId:String, clientSecret:String,httpRequest
     
     
     let timestamp = String(Int(NSDate().timeIntervalSince1970))
-    
+//    let queryItem:URLQueryItem = URLQueryItem(name: "transactionRef", value: transactionRef)
     var urlComponents = URLComponents()
     urlComponents.scheme = "https"
     urlComponents.host = "testids.interswitch.co.ke"
@@ -46,7 +46,7 @@ func submitConfirmMobilePayment(clientId:String, clientSecret:String,httpRequest
     headers["Authorization"] = "InterswitchAuth " + String(bytes: encodedClientId, encoding: .utf8)!
     request.allHTTPHeaderFields = headers
     
-    let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
         guard error == nil else{
             return
         }
