@@ -13,11 +13,11 @@ import Foundation
 public struct CardToken {
     var token:String;
     var expiry:String;
-    var cvv:String;
+    var cvv:String?
     var panLast4Digits:String?
     var panFirst6Digits:String?
     
-    public init(token:String,expiry:String,cvv:String){
+    public init(token:String,expiry:String,cvv:String?){
         self.token = token;
         self.expiry = expiry;
         self.cvv = cvv;

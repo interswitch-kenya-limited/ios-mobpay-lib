@@ -17,7 +17,7 @@ public class Mobpay {
     
     //make card token payment
     public func makeCardTokenPayment(cardToken: CardToken,merchant: Merchant, payment: Payment, customer: Customer,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
-        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: cardToken.token, cvv: cardToken.cvv, expiry: cardToken.expiry, tokenize: "0" )
+        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: cardToken.token, cvv: cardToken.cvv, expiry: cardToken.expiry, tokenize: "true", separator: ",")
         let payload = CardPaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
@@ -38,7 +38,7 @@ public class Mobpay {
     
     //make card payment
     public func makeCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,completion: @escaping (String)->())throws{
-        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0" )
+        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0", separator: "D" )
         let payload = CardPaymentStruct(
             amount: payment.amount,
             orderId: payment.orderId,
