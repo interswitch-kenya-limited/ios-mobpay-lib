@@ -9,7 +9,8 @@ spec.summary      = "MobpayiOS - An iOS library for integrating card and mobile 
 spec.homepage     = "https://www.interswitchgroup.com/ke/"
 spec.license      = "MIT"
 spec.author       = { "Allan Mageto" => "alan.mageto@interswitchgroup.com" }
-spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git", :tag => spec.version}
+# spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git", :tag => spec.version}
+spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git", :branch => "feature3ds"}
 spec.source_files  = "mobpay-ios/*.swift"
 # spec.exclude_files = "Classes/Exclude"
 spec.platform     = :ios, "10.0"
@@ -19,7 +20,7 @@ spec.dependency 'CryptoSwift', '~> 1.0'
 spec.dependency 'SwiftyRSA', '~> 1.5'
 spec.dependency 'PercentEncoder', '~> 1.2'
 spec.dependency 'Eureka', '~> 5.0.0'
-spec.vendored_frameworks = "CardinalMobile.framework"
+spec.vendored_frameworks = "mobpay-ios/CardinalMobile.framework"
 
 
 
