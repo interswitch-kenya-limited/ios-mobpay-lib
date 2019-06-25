@@ -58,6 +58,7 @@
 		3927ADB8A81BB693387C7E2F582A3DAC /* SwiftyRSA+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9C4D4132A037CB6EC8AC66B6290F73 /* SwiftyRSA+ObjC.swift */; };
 		39664BD362BD3E4E555246D429268C74 /* ZeroPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28DE8A5042050574C49EBC178C3F133 /* ZeroPadding.swift */; };
 		39869BA3757DB3DF068589819AC45565 /* RowProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE275DB3D6EC16EAF0A65400D0BA417E /* RowProtocols.swift */; };
+		3BF673A922C20CC90038950E /* CardinalMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF673A822C20CC90038950E /* CardinalMobile.framework */; };
 		3C4C829ABE413FCB38DB74A825FD0E75 /* MultipleSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E64D4F725B801908538C35584FE74 /* MultipleSelectorViewController.swift */; };
 		4007425A4AEE955F38C1FB65BCBC6E7D /* EncryptedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E600292B10202EFDDB28C82850644A0 /* EncryptedMessage.swift */; };
 		409CF38D16FD69BB64CE8CA512CF1A72 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E54457556227B459BFF5CFEBC418EC1 /* Core.swift */; };
@@ -247,7 +248,7 @@
 		1552E83C5567CED8A0968EE2243B5D59 /* CellType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CellType.swift; path = Source/Core/CellType.swift; sourceTree = "<group>"; };
 		170CCE420CA21814E82290ED50396CC9 /* Blowfish+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Blowfish+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/Blowfish+Foundation.swift"; sourceTree = "<group>"; };
 		172798A95A2A0E32EC5A6516C87F5789 /* PickerRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PickerRow.swift; path = Source/Rows/PickerRow.swift; sourceTree = "<group>"; };
-		1767525FA12656603366D4045FEE408D /* PercentEncoder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = PercentEncoder.framework; path = PercentEncoder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1767525FA12656603366D4045FEE408D /* PercentEncoder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PercentEncoder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2CBA40C7011024CE3230C4ED722F45 /* RuleLength.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RuleLength.swift; path = Source/Validations/RuleLength.swift; sourceTree = "<group>"; };
 		1E03F8E2DD282511008DAB5B85357321 /* Utils+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Utils+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/Utils+Foundation.swift"; sourceTree = "<group>"; };
 		1E1F14FFF7BC50073F2EC6CD2EA1D560 /* Data+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Data+Extension.swift"; path = "Sources/CryptoSwift/Foundation/Data+Extension.swift"; sourceTree = "<group>"; };
@@ -271,12 +272,13 @@
 		3A7E5C65CCA5F89A37C18E1938AF8244 /* Eureka.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Eureka.modulemap; sourceTree = "<group>"; };
 		3A9ACFA9D2DE5FAF8E8D5C556DEA5A5D /* Eureka-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Eureka-prefix.pch"; sourceTree = "<group>"; };
 		3BB1189CD0D6981F17B9BCA7B75BFA39 /* DateRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateRow.swift; path = Source/Rows/DateRow.swift; sourceTree = "<group>"; };
+		3BF673A822C20CC90038950E /* CardinalMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CardinalMobile.framework; sourceTree = "<group>"; };
 		3BF6B4335422B7C5CDCBA4549F18994D /* SwiftyRSA.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftyRSA.modulemap; sourceTree = "<group>"; };
 		3D9C2FD51FD1130441C10D17C9632373 /* DatePickerRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DatePickerRow.swift; path = Source/Rows/DatePickerRow.swift; sourceTree = "<group>"; };
 		3FCE48DB97EE119EB1CF6406123B10C0 /* TriplePickerInputRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TriplePickerInputRow.swift; path = Source/Rows/TriplePickerInputRow.swift; sourceTree = "<group>"; };
 		3FEEC798211C1C45AAEC6701F914EDB4 /* PKCS7.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PKCS7.swift; path = Sources/CryptoSwift/PKCS/PKCS7.swift; sourceTree = "<group>"; };
 		40D71014473D5C69F872239D6A67408F /* PercentEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PercentEncoding.swift; path = PercentEncoder/PercentEncoding.swift; sourceTree = "<group>"; };
-		421769E7FA0FD5621F73AA0921269ED3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CryptoSwift.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		421769E7FA0FD5621F73AA0921269ED3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42FFD7A0D139EDA92F3971C4E7E84E03 /* CryptoSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CryptoSwift.xcconfig; sourceTree = "<group>"; };
 		4518044F1DD87C0C54C8C98FC7E10874 /* AES.Cryptors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AES.Cryptors.swift; path = Sources/CryptoSwift/AES.Cryptors.swift; sourceTree = "<group>"; };
 		464EF8FCCD421D2FB602208729B98B83 /* Cryptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cryptor.swift; path = Sources/CryptoSwift/Cryptor.swift; sourceTree = "<group>"; };
@@ -318,7 +320,7 @@
 		73CC9B2B11D36FF1997E16C3E9DBFB36 /* Operators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = Source/Core/Operators.swift; sourceTree = "<group>"; };
 		740C3AECCC9C0E78C3648E22F7E9AF6F /* Pods-mobpay-iosTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-mobpay-iosTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		7448D92F45976FEBA2EE03F27DA2A3CD /* PKCS5.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PKCS5.swift; path = Sources/CryptoSwift/PKCS/PKCS5.swift; sourceTree = "<group>"; };
-		74BC0195F3C946CFA1730DE17D926D33 /* SwiftyRSA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyRSA.framework; path = SwiftyRSA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		74BC0195F3C946CFA1730DE17D926D33 /* SwiftyRSA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyRSA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75ADB30D78D58E881299422F0BB3797A /* RowControllerType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RowControllerType.swift; path = Source/Core/RowControllerType.swift; sourceTree = "<group>"; };
 		769D78F8BF26DEC627ADD7735256684A /* CFB.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CFB.swift; path = Sources/CryptoSwift/BlockMode/CFB.swift; sourceTree = "<group>"; };
 		77118CBBB1F92490ABAB24C8322F0FB1 /* SelectorAlertController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SelectorAlertController.swift; path = Source/Rows/Controllers/SelectorAlertController.swift; sourceTree = "<group>"; };
@@ -357,7 +359,7 @@
 		99E0BB0E85811E6BB7CD936E226E675F /* SwiftyRSA-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyRSA-dummy.m"; sourceTree = "<group>"; };
 		9A4C3615A4030A96668C87258D3DE5C5 /* RuleRegExp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RuleRegExp.swift; path = Source/Validations/RuleRegExp.swift; sourceTree = "<group>"; };
 		9C100875250F55BE0D9227B439A31CDE /* SwiftyRSA.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyRSA.swift; path = Source/SwiftyRSA.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E134B4379DB61D208426CB1FDCDD6A2 /* Rabbit+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Rabbit+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/Rabbit+Foundation.swift"; sourceTree = "<group>"; };
 		9F6E64D4F725B801908538C35584FE74 /* MultipleSelectorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipleSelectorViewController.swift; path = Source/Rows/Controllers/MultipleSelectorViewController.swift; sourceTree = "<group>"; };
 		A31F362DEEABB05E4001CFAC7971E6C5 /* Eureka.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = Eureka.bundle; path = Source/Resources/Eureka.bundle; sourceTree = "<group>"; };
@@ -396,8 +398,8 @@
 		CD973CBEE54CDD3989CB08CE45E7D5DB /* AES+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AES+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/AES+Foundation.swift"; sourceTree = "<group>"; };
 		CE275DB3D6EC16EAF0A65400D0BA417E /* RowProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RowProtocols.swift; path = Source/Core/RowProtocols.swift; sourceTree = "<group>"; };
 		CEB5100440429ABD5BA4B08DB4EAAB05 /* BlockMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BlockMode.swift; path = Sources/CryptoSwift/BlockMode/BlockMode.swift; sourceTree = "<group>"; };
-		CF2600E39D4963866876F9A8BA86F3CD /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_mobpay_ios.framework; path = "Pods-mobpay-ios.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0352CAEFC53DA7C4FF440435081F4D2 /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_mobpay_iosTests.framework; path = "Pods-mobpay-iosTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF2600E39D4963866876F9A8BA86F3CD /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0352CAEFC53DA7C4FF440435081F4D2 /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2CB5C85FB07384791254A3E1C0EFEA5 /* Pods-mobpay-iosTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-mobpay-iosTests.modulemap"; sourceTree = "<group>"; };
 		D31F6F28797209F9AC15AD05AA95BA67 /* Pods-mobpay-iosTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-mobpay-iosTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		D4208C58AE8B3BAE81906BCEE6C5F558 /* UInt8+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UInt8+Extension.swift"; path = "Sources/CryptoSwift/UInt8+Extension.swift"; sourceTree = "<group>"; };
@@ -420,7 +422,7 @@
 		EB55C6FE2AB523B0A9424BF092480A6F /* FieldRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FieldRow.swift; path = Source/Rows/Common/FieldRow.swift; sourceTree = "<group>"; };
 		EBB2E0F75F1501382FB309AA8A3E129E /* CryptoSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CryptoSwift-prefix.pch"; sourceTree = "<group>"; };
 		EC13A6D99E28A5A04DC37C9CF4A739B6 /* SwiftyRSA.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyRSA.xcconfig; sourceTree = "<group>"; };
-		ED37C6B665182E83205624A986EB659E /* Eureka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Eureka.framework; path = Eureka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED37C6B665182E83205624A986EB659E /* Eureka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Eureka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED6D5468553E37C34672DFCF18F5979B /* BatchedCollection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BatchedCollection.swift; path = Sources/CryptoSwift/BatchedCollection.swift; sourceTree = "<group>"; };
 		EE509794450EC56B755F487620472BE7 /* OptionsRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OptionsRow.swift; path = Source/Rows/Common/OptionsRow.swift; sourceTree = "<group>"; };
 		EF4CECB7EC3C4C8DD3F1500AB9164AFA /* Pods-mobpay-ios.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-mobpay-ios.modulemap"; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BF673A922C20CC90038950E /* CardinalMobile.framework in Frameworks */,
 				7D9BDC116331578DD25B68B74723D4F7 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -503,6 +506,7 @@
 		0948E56E79363C79B66B634418E0E907 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				3BF673A822C20CC90038950E /* CardinalMobile.framework */,
 				F19B5439024FC073D43C1029ED167DB7 /* Foundation.framework */,
 				7CF7D08584084D688A745DB857594AE8 /* Security.framework */,
 				F5E87D6C79A9E9712203289AC53EC00B /* UIKit.framework */,
@@ -582,7 +586,6 @@
 				D6589144C3DA1943F7A32A71291D99CF /* Resources */,
 				5DE7F4F277EC85EC93B46EED85270171 /* Support Files */,
 			);
-			name = Eureka;
 			path = Eureka;
 			sourceTree = "<group>";
 		};
@@ -605,7 +608,6 @@
 				6B4D2A15CE45655143E5A45D36E17581 /* ObjC */,
 				C77B6CBFE9854791C19CCE81B903E7A5 /* Support Files */,
 			);
-			name = SwiftyRSA;
 			path = SwiftyRSA;
 			sourceTree = "<group>";
 		};
@@ -650,7 +652,6 @@
 				28DDFCCBAB5777DD9163C3B0C5DBA51F /* String+PercentEncoder.swift */,
 				99A7AAFA6F26885976B2A1EAB552B63B /* Support Files */,
 			);
-			name = PercentEncoder;
 			path = PercentEncoder;
 			sourceTree = "<group>";
 		};
@@ -810,7 +811,6 @@
 				F28DE8A5042050574C49EBC178C3F133 /* ZeroPadding.swift */,
 				E48F8AB503C056265DB20FDB750E7F3B /* Support Files */,
 			);
-			name = CryptoSwift;
 			path = CryptoSwift;
 			sourceTree = "<group>";
 		};
@@ -1622,6 +1622,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -1879,6 +1883,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;

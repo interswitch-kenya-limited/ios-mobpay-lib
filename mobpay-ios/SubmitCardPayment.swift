@@ -8,8 +8,35 @@
 
 import Foundation
 import PercentEncoder
+import CardinalMobile
+
+var session : CardinalSession!
+
+func setupCardinalSession(){
+    session = CardinalSession()
+    let config = CardinalSessionConfig()
+    config.deploymentEnvironment = .production
+    config.timeout = 8000
+    config.uiType = .both
+    
+    let yourCustomUi = UiCustomization()
+    //Set various customizations here. See "iOS UI Customization" documentation for detail.
+    config.uiCustomization = yourCustomUi
+    
+    config.renderType = [CardinalSessionRenderTypeOTP, CardinalSessionRenderTypeHTML]
+    config.enableQuickAuth = true
+    session.configure(config)
+}
 
 func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
+    
+    
+    
+    //before anything initialize a cardinal session
+    
+    setupCardinalSession()
+    
+    let encoder = JSONEncoder()
     let nonceRegex = try! NSRegularExpression(pattern: "-", options: NSRegularExpression.Options.caseInsensitive)
     
     let rawNonce = UUID().uuidString
@@ -19,11 +46,18 @@ func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payl
     
     let timestamp = String(Int(NSDate().timeIntervalSince1970))
     
+    
+    //convert the json payload to a string
+    let jsonData = try! encoder.encode(payload)
+    let cardpayment = String(data: jsonData,encoding: .utf8)
+    
+    //build the url
     var urlComponents = URLComponents()
     urlComponents.scheme = "https"
-    urlComponents.host = "testids.interswitch.co.ke"
+    urlComponents.host = "testmerchant.interswitch-ke.com"
     urlComponents.port = 9080
-    urlComponents.path = "/api/v1/merchant/transact/cards"
+    urlComponents.path = "/merchant/card/initialize"
+    urlComponents.queryItems = [URLQueryItem(name:"CardPaymentPayload",value: cardpayment)]
     guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
     
     // Specify this request as being a POST method
@@ -31,7 +65,6 @@ func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payl
     let encodedUrl = PercentEncoding.encodeURIComponent.evaluate(string: url.absoluteString)
     request.httpMethod = httpRequest
     // Make sure that we include headers specifying that our request's HTTP body
-    // will be JSON encoded
     let signatureItems:Array<String> = [request.httpMethod!,encodedUrl, timestamp, nonce, clientId, clientSecret]
     let hashedJoinedItems = [UInt8](signatureItems.joined(separator: "&").utf8)
     let sha1ofbytesof = hashedJoinedItems.sha1()
@@ -48,33 +81,13 @@ func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payl
     headers["Signature"] = signature
     headers["Authorization"] = "InterswitchAuth " + String(bytes: encodedClientId, encoding: .utf8)!
     request.allHTTPHeaderFields = headers
-    
-    // Now let's encode out Post struct into JSON data...
-    let encoder = JSONEncoder()
-    do {
-        let jsonData = try encoder.encode(payload)
-        // ... and set our request's HTTP body
-        request.httpBody = jsonData
-    } catch {
-//        completion(String(error))
-    }
-    
-    // Create and run a URLSession data task with our JSON encoded POST request
-    let config = URLSessionConfiguration.default
-    let session = URLSession(configuration: config)
-    
-    let task = session.dataTask(with: request) { (responseData, response, responseError) in
-        guard responseError == nil else {
+   
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        guard error == nil else{
             return
         }
-        // APIs usually respond with the data you just sent in your POST request
-        if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
-            
-            print("response: ", utf8Representation)
-            
-            completion(utf8Representation)
-        } else {
-            completion("No readable data received in response")
+        if let data = data, let dataString = String(data: data, encoding: .utf8) {
+            completion(dataString)
         }
     }
     task.resume()

@@ -10,7 +10,6 @@
 import Foundation
 import CryptoSwift
 import SwiftyRSA
-
 public class Mobpay {
 //    var backEndResponse:String?;
     public static let instance = Mobpay()

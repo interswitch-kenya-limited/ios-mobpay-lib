@@ -27,8 +27,6 @@ struct CardPaymentStruct: Codable {
     let domain: String
 }
 
-
-
 struct MobilePaymentStruct: Codable {
     let amount: String
     let orderId: String
