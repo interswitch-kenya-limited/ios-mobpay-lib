@@ -87,11 +87,11 @@ That should remove the old library and install the new one
 On your code instead of importing
 
 ```swift
-import 'mobpay'
+import mobpay
 ```
 
 do 
 
 ```swift
-import 'MobpayiOS'
+import MobpayiOS
 ```
