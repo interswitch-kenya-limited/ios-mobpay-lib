@@ -6,37 +6,43 @@
 //  Copyright © 2019 Allan Mageto. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import Eureka
 
 
-class CardPaymentUI: FormViewController {
+open class CardPaymentUI : FormViewController {
     
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
+        
         form +++
-            Section()
-            <<< SwitchRow() {
-                $0.cellProvider = CellProvider<SwitchCell>(nibName: "SwitchCell", bundle: Bundle.main)
-                }.cellSetup { (cell, row) in
-                    cell.height = { 67 }
-            }
             
-            <<< DatePickerRow() {
-                $0.cellProvider = CellProvider<DatePickerCell>(nibName: "DatePickerCell", bundle: Bundle.main)
-                }.cellSetup { (cell, row) in
-                    cell.height = { 345 }
+            Section("Enter your card details")
+            
+            <<< TextRow() {
+                $0.title = "Card Number"
+                $0.value = "John Doe"
             }
             
             <<< TextRow() {
-                $0.cellProvider = CellProvider<TextCell>(nibName: "TextCell", bundle: Bundle.main)
-                }.cellSetup { (cell, row) in
-                    cell.height = { 199 }
-                }
-                .onChange { row in
-                    if let textView = row.cell.viewWithTag(99) as? UITextView {
-                        textView.text = row.cell.textField.text
-                    }
+                $0.title = "Card Expiry date"
+                $0.value = "123"
+            }
+            
+            <<< IntRow() {
+                $0.title = "CVC"
+                $0.value = 123
+            }
+            
+            <<< SwitchRow() {
+                $0.title = "Save card"
+            }
+            
+            Section()
+            <<< ButtonRow("PAY KES - {AMOUNT}") { (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.presentationMode = .segueName(segueName: "HiddenRowsControllerSegue", onDismiss: nil)
         }
+        
     }
 }
