@@ -1,0 +1,11 @@
+framework module mobpay_ios {
+  umbrella header "mobpay_ios.h"
+
+  export *
+  module * { export * }
+}
+
+module mobpay_ios.Swift {
+    header "mobpay_ios-Swift.h"
+    requires objc
+}

@@ -1,89 +1,55 @@
-//
-//  InterSwitchPaymentUI.swift
-//  mobpay-ios
-//
-//  Created by Allan Mageto on 20/06/2019.
-//  Copyright © 2019 Allan Mageto. All rights reserved.
-//
 
-import Foundation
 import Eureka
 
-
-class InterSwitchPaymentUI: FormViewController{
-    override func viewDidLoad() {
-        
+open class InterSwitchPaymentUI : FormViewController {
+    var merchant:Merchant!
+    var payment:Payment!
+    var customer:Customer!
+    
+    convenience init(merchant: Merchant,payment: Payment, customer: Customer) {
+        self.init()
+        self.merchant = merchant;
+        self.payment = payment;
+        self.customer = customer;
+    }
+    
+    let tabBarCnt = UITabBarController()
+    override open func viewDidLoad() {
         super.viewDidLoad()
-        form = Section("What do you want to talk about:")
-            <<< SegmentedRow<String>("segments"){
-                $0.options = ["Sport", "Music", "Films"]
-                $0.value = "Films"
-            }
-            +++ Section(){
-                $0.tag = "sport_s"
-                $0.hidden = "$segments != 'Sport'" // .Predicate(NSPredicate(format: "$segments != 'Sport'"))
-            }
-            <<< TextRow(){
-                $0.title = "Which is your favourite soccer player?"
-            }
-            
-            <<< TextRow(){
-                $0.title = "Which is your favourite coach?"
-            }
-            
-            <<< TextRow(){
-                $0.title = "Which is your favourite team?"
-            }
-            
-            +++ Section(){
-                $0.tag = "music_s"
-                $0.hidden = "$segments != 'Music'"
-            }
-            <<< TextRow(){
-                $0.title = "Which music style do you like most?"
-            }
-            
-            <<< TextRow(){
-                $0.title = "Which is your favourite singer?"
-            }
-            <<< TextRow(){
-                $0.title = "How many CDs have you got?"
-            }
-            
-            +++ Section(){
-                $0.tag = "films_s"
-                $0.hidden = "$segments != 'Films'"
-            }
-            <<< TextRow(){
-                $0.title = "Which is your favourite actor?"
-            }
-            
-            <<< TextRow(){
-                $0.title = "Which is your favourite film?"
-            }
-            
-            +++ Section()
-            
-            <<< SwitchRow("Show Next Row"){
-                $0.title = $0.tag
-            }
-            <<< SwitchRow("Show Next Section"){
-                $0.title = $0.tag
-                $0.hidden = .function(["Show Next Row"], { form -> Bool in
-                    let row: RowOf<Bool>! = form.rowBy(tag: "Show Next Row")
-                    return row.value ?? false == false
-                })
-            }
-            
-            +++ Section(footer: "This section is shown only when 'Show Next Row' switch is enabled"){
-                $0.hidden = .function(["Show Next Section"], { form -> Bool in
-                    let row: RowOf<Bool>! = form.rowBy(tag: "Show Next Section")
-                    return row.value ?? false == false
-                })
-            }
-            <<< TextRow() {
-                $0.placeholder = "Gonna dissapear soon!!"
-        }
+        // Do any additional setup after loading the view, typically from a nib.
+        tabBarCnt.tabBar.tintColor = UIColor.blue
+        createTabBarController()
+    }
+    
+    override open func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    func createTabBarController() {
+        
+        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer)
+        cardVC.title = "Card"
+        cardVC.tabBarItem = UITabBarItem.init(title: "Card", image: UIImage(named: "HomeTab"), tag: 0)
+        
+        let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer)
+        mobileVC.title = "Mobile"
+        mobileVC.view.backgroundColor =  UIColor.green
+        mobileVC.tabBarItem = UITabBarItem.init(title: "Mobile", image: UIImage(named: "Location"), tag: 1)
+        
+        let bankVC = UIViewController()
+        bankVC.title = "Bank"
+        bankVC.view.backgroundColor = UIColor.yellow
+        
+        let vervePaycodeVC = UIViewController()
+        vervePaycodeVC.title = "Verve Paycode"
+        vervePaycodeVC.view.backgroundColor = UIColor.blue
+        
+        let controllerArray = [cardVC, mobileVC,bankVC,vervePaycodeVC]
+        tabBarCnt.viewControllers = controllerArray.map{ UINavigationController.init(rootViewController: $0)}
+        
+        self.view.addSubview(tabBarCnt.view)
     }
 }
 

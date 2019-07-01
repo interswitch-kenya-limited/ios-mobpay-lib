@@ -10,8 +10,9 @@
 import Foundation
 import CryptoSwift
 import SwiftyRSA
+import Eureka
 
-public class Mobpay {
+public class Mobpay:FormViewController {
 //    var backEndResponse:String?;
     public static let instance = Mobpay()
     
@@ -77,6 +78,14 @@ public class Mobpay {
     public func confirmMobileMoneyPayment(orderId:String,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
         submitConfirmMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", transactionRef: orderId) { (urlResponse) in completion(urlResponse)}
     }
+    
+    
+    //launch ui
+    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer) -> FormViewController{
+        let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer)
+        return UserInterfaceController
+    }
+    
     
 
 }
