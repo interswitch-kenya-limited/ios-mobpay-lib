@@ -10,6 +10,16 @@ import Foundation
 import Eureka
 
 open class MobilePaymentUI : FormViewController {
+    var merchant:Merchant!
+    var payment:Payment!
+    var customer:Customer!
+    
+    convenience init(merchant: Merchant,payment: Payment, customer: Customer) {
+        self.init()
+        self.merchant = merchant;
+        self.payment = payment;
+        self.customer = customer;
+    }
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +39,6 @@ open class MobilePaymentUI : FormViewController {
                     to.popoverPresentationController?.permittedArrowDirections = .up
             }
             
-            Section()
             
             <<< SegmentedRow<String>("segments"){
                 $0.options = ["Express Checkout", "Paybill"]
@@ -54,13 +63,15 @@ open class MobilePaymentUI : FormViewController {
                 $0.textAreaMode = .readOnly
                 $0.textAreaHeight = .dynamic(initialTextViewHeight: 10.0)
             }
-            <<< ButtonRow("PAY KES - {AMOUNT}") { (row: ButtonRow) -> Void in
+            <<< ButtonRow("PAY KES - \(self.payment.amount)") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = .segueName(segueName: "HiddenRowsControllerSegue", onDismiss: nil)
             }
+            
+            //Paybill section
             +++ Section(){
                 $0.tag = "paybill"
-                $0.hidden = "$segments != 'paybill'" // .Predicate(NSPredicate(format: "$segments != 'Sport'"))
+                $0.hidden = "$segments != 'Paybill'" // .Predicate(NSPredicate(format: "$segments != 'Sport'"))
             }
             <<< TextAreaRow() {
                 $0.value = """
@@ -69,7 +80,7 @@ open class MobilePaymentUI : FormViewController {
                 \u{2022} Select Pay Bill Option
                 \u{2022} Enter business no. {business number}
                 \u{2022} Enter account no {account number}
-                \u{2022} Enter the EXACT amount {amount}
+                \u{2022} Enter the EXACT amount \(self.payment.amount)
                 \u{2022} Enter your M-PESA PIN and send
                 Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
                 """

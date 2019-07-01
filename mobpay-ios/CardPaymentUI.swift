@@ -12,6 +12,17 @@ import Eureka
 
 open class CardPaymentUI : FormViewController {
     
+    var merchant:Merchant!
+    var payment:Payment!
+    var customer:Customer!
+    
+    convenience init(merchant: Merchant,payment: Payment, customer: Customer) {
+        self.init()
+        self.merchant = merchant;
+        self.payment = payment;
+        self.customer = customer;
+    }
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,7 +50,7 @@ open class CardPaymentUI : FormViewController {
             }
             
             Section()
-            <<< ButtonRow("PAY KES - {AMOUNT}") { (row: ButtonRow) -> Void in
+            <<< ButtonRow("PAY KES -" + self.payment.amount) { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = .segueName(segueName: "HiddenRowsControllerSegue", onDismiss: nil)
         }

@@ -79,7 +79,13 @@ public class Mobpay:FormViewController {
         submitConfirmMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", transactionRef: orderId) { (urlResponse) in completion(urlResponse)}
     }
     
-    public var UserInterfaceController = InterSwitchPaymentUI()
+    
+    //launch ui
+    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer) -> FormViewController{
+        let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer)
+        return UserInterfaceController
+    }
+    
     
 
 }

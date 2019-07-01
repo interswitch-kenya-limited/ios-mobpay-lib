@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "16"
             endingLineNumber = "16"
-            landmarkName = "getAuthDataMerchant(panOrToken:cvv:expiry:tokenize:)"
+            landmarkName = "getAuthDataMerchant(panOrToken:cvv:expiry:tokenize:separator:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
