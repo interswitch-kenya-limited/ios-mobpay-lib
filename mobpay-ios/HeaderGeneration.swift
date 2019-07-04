@@ -20,7 +20,7 @@ func generateHeaders(clientId:String,clientSecret:String,httpRequest: String,pat
     let timestamp = String(Int(NSDate().timeIntervalSince1970))
     
     var urlComponents = URLComponents()
-    urlComponents.scheme = "http"
+    urlComponents.scheme = "https"
     urlComponents.host = "testids.interswitch.co.ke"
     urlComponents.port = 9080
     urlComponents.path = path
