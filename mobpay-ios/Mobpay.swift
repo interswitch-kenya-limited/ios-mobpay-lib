@@ -54,7 +54,7 @@ public class Mobpay:FormViewController {
             narration: payment.narration, domain: merchant.domain
         )
         
-        submitPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload) { (urlResponse) in
+        submitPayment(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload) { (urlResponse) in
             completion(urlResponse)
         }
         

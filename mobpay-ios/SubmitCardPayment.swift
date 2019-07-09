@@ -8,37 +8,21 @@
 
 import Foundation
 
-func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
-    
-    var request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: httpRequest, path: "/api/v1/merchant/transact/cards")
-
-
+func submitPayment(transactionRef:String,merchantId: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
+    var stringPayload:String!
     let encoder = JSONEncoder()
     do {
         let jsonData = try encoder.encode(payload)
-        // ... and set our request's HTTP body
-        request.httpBody = jsonData
+
+        var stringPayload = String(data:jsonData,encoding: .utf8)
     } catch {
 //        completion(String(error))
     }
     
-    // Create and run a URLSession data task with our JSON encoded POST request
-    let config = URLSessionConfiguration.default
-    let session = URLSession(configuration: config)
     
-    let task = session.dataTask(with: request) { (responseData, response, responseError) in
-        guard responseError == nil else {
-            return
-        }
-        // APIs usually respond with the data you just sent in your POST request
-        if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
-            
-            print("response: ", utf8Representation)
-            
-            completion(utf8Representation)
-        } else {
-            completion("No readable data received in response")
-        }
+    let meh = PayWithThreeDS(payload: stringPayload, transactionType: "CARD", merchantId: merchantId, transactionRef: transactionRef)
+    
+    try!meh.payWithWeb{
+        (urlResponse) in completion(urlResponse)
     }
-    task.resume()
 }
