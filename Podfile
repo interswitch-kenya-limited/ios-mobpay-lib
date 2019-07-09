@@ -8,6 +8,7 @@ target 'mobpay-ios' do
    pod 'CryptoSwift'
    pod 'PercentEncoder'
    pod 'Eureka'
+   pod 'CocoaMQTT'
   # Pods for mobpay-ios
 
   target 'mobpay-iosTests' do

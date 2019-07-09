@@ -1,4 +1,7 @@
 PODS:
+  - CocoaAsyncSocket (7.6.3)
+  - CocoaMQTT (1.2.4):
+    - CocoaAsyncSocket (~> 7.6.3)
   - CryptoSwift (1.0.0)
   - Eureka (5.0.0)
   - PercentEncoder (1.2.1)
@@ -7,6 +10,7 @@ PODS:
   - SwiftyRSA/ObjC (1.5.0)
 
 DEPENDENCIES:
+  - CocoaMQTT
   - CryptoSwift
   - Eureka
   - PercentEncoder
@@ -14,17 +18,21 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - CocoaAsyncSocket
+    - CocoaMQTT
     - CryptoSwift
     - Eureka
     - PercentEncoder
     - SwiftyRSA
 
 SPEC CHECKSUMS:
+  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
+  CocoaMQTT: 56f7a757a65c65bbb4df17c6f06aeea79fb2969c
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   Eureka: 0f64f477ec8ef6201c6fec143d60ff5c201cf654
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: 398529a5a54ba8a02ee6962a06391ca77d838c89
+PODFILE CHECKSUM: d73c3e544b5468829b65b3b8becbb03b78908f6b
 
-COCOAPODS: 1.7.0
+COCOAPODS: 1.7.3

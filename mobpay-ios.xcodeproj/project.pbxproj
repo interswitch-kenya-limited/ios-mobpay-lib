@@ -18,6 +18,7 @@
 		3B6E6610229D53540076822B /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660F229D53540076822B /* Merchant.swift */; };
 		3B6E6612229D53770076822B /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6611229D53770076822B /* Payment.swift */; };
 		3B928F2022D4DAB800CC072D /* ThreeDSWebUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B928F1F22D4DAB800CC072D /* ThreeDSWebUI.swift */; };
+		3B928F2222D4DBC200CC072D /* PayWith3Ds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B928F2122D4DBC200CC072D /* PayWith3Ds.swift */; };
 		3B97B67F22BB539D00703BDC /* SubmitCardTokenPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97B67E22BB539D00703BDC /* SubmitCardTokenPayment.swift */; };
 		3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97B68122BB5A1300703BDC /* ConfirmMobilePayment.swift */; };
 		3B97B68422BB674200703BDC /* InterSwitchPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */; };
@@ -56,6 +57,7 @@
 		3B6E660F229D53540076822B /* Merchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
 		3B6E6611229D53770076822B /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		3B928F1F22D4DAB800CC072D /* ThreeDSWebUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDSWebUI.swift; sourceTree = "<group>"; };
+		3B928F2122D4DBC200CC072D /* PayWith3Ds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWith3Ds.swift; sourceTree = "<group>"; };
 		3B97B67E22BB539D00703BDC /* SubmitCardTokenPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitCardTokenPayment.swift; sourceTree = "<group>"; };
 		3B97B68122BB5A1300703BDC /* ConfirmMobilePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMobilePayment.swift; sourceTree = "<group>"; };
 		3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterSwitchPaymentUI.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */,
 				3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */,
 				3B498A5A22C6010300137324 /* HeaderGeneration.swift */,
+				3B928F2122D4DBC200CC072D /* PayWith3Ds.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				3B928F2022D4DAB800CC072D /* ThreeDSWebUI.swift in Sources */,
 				3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */,
 				3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */,
+				3B928F2222D4DBC200CC072D /* PayWith3Ds.swift in Sources */,
 				3B97B67F22BB539D00703BDC /* SubmitCardTokenPayment.swift in Sources */,
 				3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */,
 				3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */,
