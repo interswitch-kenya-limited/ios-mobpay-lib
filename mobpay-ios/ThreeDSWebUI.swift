@@ -25,8 +25,6 @@ class ThreeDSWebUI:UIViewController,WKNavigationDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         let url = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(self.transactionType!)&payload=\(self.payload!)")!
         webView.load(URLRequest(url: url))
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.goBack))

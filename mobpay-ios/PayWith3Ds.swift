@@ -36,7 +36,7 @@ class PayWithThreeDS:UIViewController{
     }
     
     func setUpMQTT(){
-        let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
+        let clientID = "iOS-" + String(ProcessInfo().processIdentifier)
         mqtt = CocoaMQTT(clientID: clientID, host: "testmerchant.interswitch-ke.com", port: 1883)
         mqtt.username = ""
         mqtt.password = ""
@@ -51,7 +51,7 @@ extension PayWithThreeDS:CocoaMQTTDelegate{
     func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         print("Connected")
         self.mqtt.subscribe("merchant_portal/\(self.merchantId!)/\(self.transactionRef!)")
-        let ThreeDSWebUIController = ThreeDSWebUI(payload: payload, transactionType: transactionType,merchantId: merchantId,transactionRef: transactionRef)
+        let ThreeDSWebUIController = ThreeDSWebUI(payload: self.payload, transactionType: self.transactionType,merchantId: self.merchantId!,transactionRef: self.transactionRef!)
         self.present(ThreeDSWebUIController, animated:true, completion:nil)
     }
     

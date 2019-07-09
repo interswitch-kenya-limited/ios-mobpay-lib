@@ -9,18 +9,11 @@
 import Foundation
 
 func submitPayment(transactionRef:String,merchantId: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
-    var stringPayload:String!
     let encoder = JSONEncoder()
-    do {
-        let jsonData = try encoder.encode(payload)
-
-        var stringPayload = String(data:jsonData,encoding: .utf8)
-    } catch {
-//        completion(String(error))
-    }
+    let jsonData = try!encoder.encode(payload)
     
     
-    let meh = PayWithThreeDS(payload: stringPayload, transactionType: "CARD", merchantId: merchantId, transactionRef: transactionRef)
+    let meh = PayWithThreeDS(payload: String(data:jsonData,encoding: .utf8)!, transactionType: "CARD", merchantId: merchantId, transactionRef: transactionRef)
     
     try!meh.payWithWeb{
         (urlResponse) in completion(urlResponse)
