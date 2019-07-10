@@ -30,7 +30,7 @@ public class Mobpay:FormViewController {
             customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
             currency:payment.currency, country:customer.country,
             city:customer.city,
-            narration: payment.narration, domain: merchant.domain
+            narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
         )
         submitCardTokenPayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "POST", payload: payload){
             (urlResponse) in completion(urlResponse)
@@ -51,7 +51,7 @@ public class Mobpay:FormViewController {
             customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
             currency:payment.currency, country:customer.country,
             city:customer.city,
-            narration: payment.narration, domain: merchant.domain
+            narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
         )
         
         submitPayment(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload) { (urlResponse) in

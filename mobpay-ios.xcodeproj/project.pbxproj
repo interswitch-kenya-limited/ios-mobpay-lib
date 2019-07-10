@@ -32,6 +32,7 @@
 		3BB84666229FBC85001C80AD /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84665229FBC85001C80AD /* Mobile.swift */; };
 		3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84667229FCB53001C80AD /* RSAUtil.swift */; };
 		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
+		3BBDFF7322D5C4AB00CE4F5C /* PayWith3DS2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBDFF7222D5C4AB00CE4F5C /* PayWith3DS2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		3BB84665229FBC85001C80AD /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
 		3BB84667229FCB53001C80AD /* RSAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtil.swift; sourceTree = "<group>"; };
 		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
+		3BBDFF7222D5C4AB00CE4F5C /* PayWith3DS2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWith3DS2.swift; sourceTree = "<group>"; };
 		47ED8EFCD6897591D58DFAF7 /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F6C699601A5D605DCA14079 /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */,
 				3B498A5A22C6010300137324 /* HeaderGeneration.swift */,
 				3B928F2122D4DBC200CC072D /* PayWith3Ds.swift */,
+				3BBDFF7222D5C4AB00CE4F5C /* PayWith3DS2.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				3B928F2222D4DBC200CC072D /* PayWith3Ds.swift in Sources */,
 				3B97B67F22BB539D00703BDC /* SubmitCardTokenPayment.swift in Sources */,
 				3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */,
+				3BBDFF7322D5C4AB00CE4F5C /* PayWith3DS2.swift in Sources */,
 				3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */,
 				3B6E6612229D53770076822B /* Payment.swift in Sources */,
 			);

@@ -1,22 +1,24 @@
 //
-//  PayWith3Ds.swift
+//  PayWith3DS2.swift
 //  mobpay-ios
 //
-//  Created by Allan Mageto on 09/07/2019.
+//  Created by Allan Mageto on 10/07/2019.
 //  Copyright © 2019 Allan Mageto. All rights reserved.
 //
 
 import CocoaMQTT
+import Eureka
+import UIKit
 import WebKit
-import PercentEncoder
+import CryptoSwift
 
-class PayWithThreeDS:UIViewController,WKNavigationDelegate{
+class ThreeDSWebPlugIn:UIViewController,WKNavigationDelegate{
     var webView: WKWebView!
     var bounds = UIScreen.main.bounds
-
-    
+    var msgStringText:String!
     var mqtt: CocoaMQTT!
-
+    
+    
     var payload:String!
     var transactionType:String!
     var merchantId:String!
@@ -29,14 +31,11 @@ class PayWithThreeDS:UIViewController,WKNavigationDelegate{
         self.merchantId = merchantId
         self.transactionRef = transactionRef
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        let base64Payload = Data(self.payload!.utf8).base64EncodedString()
-        let stringUrl = "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(self.transactionType!)&payload=\(base64Payload)"
-        let url = URL(string:stringUrl)!
+        let url = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(self.transactionType!)&payload=\(self.payload!)")!
         webView.load(URLRequest(url: url))
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.goBack))
         toolbarItems = [refresh]
@@ -47,27 +46,16 @@ class PayWithThreeDS:UIViewController,WKNavigationDelegate{
         }
     }
     
-    func payWithWeb( completion:@escaping (String)->())throws{
-        setUpMQTT()
-        self.present(PayWithThreeDS(payload: self.payload!, transactionType: self.transactionType!, merchantId: self.merchantId!, transactionRef: self.transactionRef!), animated: true, completion: nil)
-        mqtt.didReceiveMessage = { mqtt, message, id in
-            mqtt.disconnect()
-            print(message.string!)
-            completion(message.string!)
-            self.dismiss(animated: true)
-        }
-    }
-    
     override func loadView() {
         super.loadView()
+        setUpMQTT()
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.navigationDelegate = self
         view = webView
     }
-    
     func setUpMQTT(){
-        let clientID = "iOS-" + String(ProcessInfo().processIdentifier)
+        let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
         mqtt = CocoaMQTT(clientID: clientID, host: "testmerchant.interswitch-ke.com", port: 1883)
         mqtt.username = ""
         mqtt.password = ""
@@ -76,16 +64,32 @@ class PayWithThreeDS:UIViewController,WKNavigationDelegate{
         mqtt.connect()
         mqtt.delegate = self
     }
+    
+    func showMessage(message:String){
+        let alert = UIAlertController(title: "Backend Report", message: message, preferredStyle: .alert);
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel,handler: nil))
+        
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
-
-
-
-
-extension PayWithThreeDS:CocoaMQTTDelegate{
+extension ThreeDSWebPlugIn: CocoaMQTTDelegate {
+    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        print(message.string!)
+        //        showMessage(message:message.string!)
+        self.dismiss(animated: true)
+    }
+    
+    // Other required methods for CocoaMQTTDelegate
+    func mqtt(_ mqtt: CocoaMQTT, didReceive trust: SecTrust, completionHandler: @escaping (Bool) -> Void) {
+        completionHandler(true)
+    }
+    
     func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         print("Connected")
         self.mqtt.subscribe("merchant_portal/\(self.merchantId!)/\(self.transactionRef!)")
+        
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
@@ -94,8 +98,8 @@ extension PayWithThreeDS:CocoaMQTTDelegate{
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-      
+    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topic: String) {
+        
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
@@ -114,5 +118,6 @@ extension PayWithThreeDS:CocoaMQTTDelegate{
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
     }
     
-    
+    func _console(_ info: String) {
+    }
 }

@@ -25,6 +25,9 @@ struct CardPaymentStruct: Codable {
     let city: String
     let narration: String
     let domain: String
+    let preauth:String
+    let fee: String
+    let paca: String
 }
 
 
