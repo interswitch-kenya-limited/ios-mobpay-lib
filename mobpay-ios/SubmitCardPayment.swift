@@ -11,11 +11,16 @@ import Foundation
 func submitPayment(transactionRef:String,merchantId: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
     let encoder = JSONEncoder()
     let jsonData = try!encoder.encode(payload)
-    
-    
-    let meh = PayWithThreeDS(payload: String(data:jsonData,encoding: .utf8)!, transactionType: "CARD", merchantId: merchantId, transactionRef: transactionRef)
-    
-    try!meh.payWithWeb{
-        (urlResponse) in completion(urlResponse)
-    }
 }
+
+
+func generateLink(transactionRef:String,merchantId: String, payload: CardPaymentStruct,transactionType:String)->URL{
+    let encoder = JSONEncoder()
+    let jsonData = try!encoder.encode(payload)
+    let base64Payload = jsonData.base64EncodedString()
+    let transactionType:String = transactionType
+    let webCardinalURL = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(transactionType)&payload=\(base64Payload)")!
+    return webCardinalURL
+}
+
+

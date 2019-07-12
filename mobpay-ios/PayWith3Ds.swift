@@ -7,63 +7,27 @@
 //
 
 import CocoaMQTT
-import WebKit
 import PercentEncoder
 
-class PayWithThreeDS:UIViewController,WKNavigationDelegate{
-    var webView: WKWebView!
-    var bounds = UIScreen.main.bounds
-
-    
+open class PayWithThreeDS{
     var mqtt: CocoaMQTT!
-
-    var payload:String!
-    var transactionType:String!
+    
     var merchantId:String!
     var transactionRef:String!
     
-    convenience init(payload:String,transactionType:String,merchantId:String,transactionRef:String){
+    public convenience init(merchantId:String,transactionRef:String){
         self.init()
-        self.payload = payload
-        self.transactionType = transactionType
         self.merchantId = merchantId
         self.transactionRef = transactionRef
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-        let base64Payload = Data(self.payload!.utf8).base64EncodedString()
-        let stringUrl = "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(self.transactionType!)&payload=\(base64Payload)"
-        let url = URL(string:stringUrl)!
-        webView.load(URLRequest(url: url))
-        let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.goBack))
-        toolbarItems = [refresh]
-        navigationController?.isToolbarHidden = false
-        
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            title = webView.title
-        }
-    }
-    
-    func payWithWeb( completion:@escaping (String)->())throws{
+
+    public func payWithWeb( completion:@escaping (String)->()){
         setUpMQTT()
-        self.present(PayWithThreeDS(payload: self.payload!, transactionType: self.transactionType!, merchantId: self.merchantId!, transactionRef: self.transactionRef!), animated: true, completion: nil)
         mqtt.didReceiveMessage = { mqtt, message, id in
             mqtt.disconnect()
             print(message.string!)
             completion(message.string!)
-            self.dismiss(animated: true)
         }
-    }
-    
-    override func loadView() {
-        super.loadView()
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.navigationDelegate = self
-        view = webView
     }
     
     func setUpMQTT(){
@@ -79,40 +43,31 @@ class PayWithThreeDS:UIViewController,WKNavigationDelegate{
 }
 
 
-
-
-
 extension PayWithThreeDS:CocoaMQTTDelegate{
-    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+    public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         print("Connected")
         self.mqtt.subscribe("merchant_portal/\(self.merchantId!)/\(self.transactionRef!)")
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-      
-    }
+    public func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {}
     
-    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
+    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
         print("topics: \(topics)")
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
-    }
+    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {}
     
-    func mqttDidPing(_ mqtt: CocoaMQTT) {
-    }
+    public func mqttDidPing(_ mqtt: CocoaMQTT) {}
     
-    func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
-    }
+    public func mqttDidReceivePong(_ mqtt: CocoaMQTT) {}
     
-    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-    }
+    public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {}
     
     
 }
