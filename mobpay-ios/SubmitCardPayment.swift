@@ -8,16 +8,12 @@
 
 import Foundation
 
-func submitPayment(transactionRef:String,merchantId: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
-    let encoder = JSONEncoder()
-    let jsonData = try!encoder.encode(payload)
-}
-
-
 func generateLink(transactionRef:String,merchantId: String, payload: CardPaymentStruct,transactionType:String)->URL{
     let encoder = JSONEncoder()
     let jsonData = try!encoder.encode(payload)
     let base64Payload = jsonData.base64EncodedString()
+    //rsa encrypt the payload
+//    let encryptedBase64Payload = try!RSAUtil.encryptBrowserPayload(payload: String(data: jsonData, encoding: .utf8)!)
     let transactionType:String = transactionType
     let webCardinalURL = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(transactionType)&payload=\(base64Payload)")!
     return webCardinalURL

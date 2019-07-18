@@ -2,6 +2,8 @@ PODS:
   - CocoaAsyncSocket (7.6.3)
   - CocoaMQTT (1.2.4):
     - CocoaAsyncSocket (~> 7.6.3)
+  - CreditCardRow (3.2.0):
+    - Eureka (~> 5.0)
   - CryptoSwift (1.0.0)
   - Eureka (5.0.0)
   - PercentEncoder (1.2.1)
@@ -11,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - CocoaMQTT
+  - CreditCardRow (~> 3.2)
   - CryptoSwift
   - Eureka
   - PercentEncoder
@@ -20,6 +23,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CocoaAsyncSocket
     - CocoaMQTT
+    - CreditCardRow
     - CryptoSwift
     - Eureka
     - PercentEncoder
@@ -28,11 +32,12 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   CocoaMQTT: 56f7a757a65c65bbb4df17c6f06aeea79fb2969c
+  CreditCardRow: 50a5ecf90d8e9660ed1e9d54a4340e7a22d2259d
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   Eureka: 0f64f477ec8ef6201c6fec143d60ff5c201cf654
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: d73c3e544b5468829b65b3b8becbb03b78908f6b
+PODFILE CHECKSUM: 975448f750c28d7a4d3e7e79b2c471baecfb9e27
 
 COCOAPODS: 1.7.3

@@ -63,6 +63,7 @@ open class MobilePaymentUI : FormViewController {
                 $0.textAreaMode = .readOnly
                 $0.textAreaHeight = .dynamic(initialTextViewHeight: 10.0)
             }
+            
             <<< ButtonRow("PAY KES - \(self.payment.amount)") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = .segueName(segueName: "HiddenRowsControllerSegue", onDismiss: nil)
