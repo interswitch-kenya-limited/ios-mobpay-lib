@@ -23,5 +23,6 @@ spec.dependency 'PercentEncoder', '~> 1.2'
 spec.dependency 'Eureka', '~> 5.0.0'
 spec.dependency 'CocoaMQTT', '~> 1.2'
 spec.dependency 'CreditCardRow', '~> 3.2'
+spec.dependency 'ViewRow'
 
 end
