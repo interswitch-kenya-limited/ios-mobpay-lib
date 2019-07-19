@@ -25,7 +25,6 @@ class StringLengthCell: Cell<String>, CellType, UITextFieldDelegate {
         super.update()
         
         guard let row = row as? StringLengthRow else { return }
-        
         row.title = nil
         valueTextField.text = row.value
         valueTextField.placeholder = row.placeholder

@@ -31,6 +31,7 @@
 		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
 		3BC52FA722DF401500D549B8 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC52FA622DF401500D549B8 /* Images.swift */; };
 		3BC52FAC22DF583500D549B8 /* StringLengthCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC52FAB22DF583500D549B8 /* StringLengthCell.swift */; };
+		3BC52FB422E19C4300D549B8 /* MQTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC52FB322E19C4300D549B8 /* MQTT.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
 		3BC52FA622DF401500D549B8 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		3BC52FAB22DF583500D549B8 /* StringLengthCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLengthCell.swift; sourceTree = "<group>"; };
+		3BC52FB322E19C4300D549B8 /* MQTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTT.swift; sourceTree = "<group>"; };
 		47ED8EFCD6897591D58DFAF7 /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F6C699601A5D605DCA14079 /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */,
 				3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */,
 				3B498A5A22C6010300137324 /* HeaderGeneration.swift */,
+				3BC52FB322E19C4300D549B8 /* MQTT.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				3B6E660E229D53310076822B /* Customer.swift in Sources */,
 				3B6E660A229D52C20076822B /* Mobpay.swift in Sources */,
 				3B1BE8AB22C37DBE0078CF50 /* MobilePaymentUI.swift in Sources */,
+				3BC52FB422E19C4300D549B8 /* MQTT.swift in Sources */,
 				3B9F4AE422B8D1DA00E96384 /* submitMobilePayment.swift in Sources */,
 				3BC52FAC22DF583500D549B8 /* StringLengthCell.swift in Sources */,
 				3B6E660C229D530E0076822B /* Card.swift in Sources */,

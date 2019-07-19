@@ -20,7 +20,7 @@ public class RSAUtil{
 }
     
     public static func encryptBrowserPayload(payload:String) ->String{
-        let browserPublicKey = try!PublicKey(base64Encoded: "MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgFeOZRulNBCP+80WTva6kkv6LjafIS9QndmLCONELrQ70HEAAn0PBnLHDDNDI6Q9Ig75BlR7YaUpnTnzQBvof0lWIVWBT3B4F9JN1eS5jOrMGMUGYAVB24LU5L2JsFOexT07riBJQ4/sqbeDbAA3kX+E5ha3/oKmr+oUH2Obh6SJAgMBAAE=");
+        let browserPublicKey = try!PublicKey(base64Encoded: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCcS3/OiYyHdlCHicBm9yHiOQdvJ/8XRR3dHSaezR5SjlrUEiul4MeNdmqYU7IB7zXG+4aW2OtrdUkfVLXkxjqO4IW8B1cfdXOxNzrq1/NUUKYdepcAGcT1xMtvRgqPXd7ja+U5lLNT2n3GLYuLAVuk987bgVKQQ4gBAls5WIwGIQIDAQAB");
         let clear = try!ClearMessage(string: payload, using: .utf8)
         let encryptedPayload = try!clear.encrypted(with: browserPublicKey, padding: .PKCS1)
         return encryptedPayload.base64String;
