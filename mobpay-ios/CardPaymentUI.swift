@@ -10,13 +10,22 @@
 import UIKit
 import SafariServices
 
+
+protocol CardPaymentUIDelegate {
+    func didReceivePayload(_ payload:String)
+}
 open class CardPaymentUI : UIViewController,UITextFieldDelegate {
+    
+    
+    var CardPaymentUIDelegate:CardPaymentUIDelegate?
+    
     
     var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
     var clientId:String!
     var clientSecret:String!
+    
     
     
     //phone dimentions
@@ -118,7 +127,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
     }
     
     func tokenizeSwitchButton() -> UISwitch{
-        let tokenizeSwitchButton = UISwitch(frame:CGRect(x: 150, y: 150, width: 0, height: 0))
+        let tokenizeSwitchButton = UISwitch(frame:CGRect(x: 150, y: phoneHeight/(2/3), width: 0, height: 0))
         tokenizeSwitchButton.addTarget(self, action: #selector(switchTokenize(_:)), for: .valueChanged)
         tokenizeSwitchButton.setOn(true, animated: false)
         return tokenizeSwitchButton
@@ -134,14 +143,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
         let svc = SFSafariViewController(url: webCardinalURL)
         self.present(svc, animated: true, completion: nil)
         Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
+            self.CardPaymentUIDelegate?.didReceivePayload(payloadFromServer)
             self.dismiss(animated: true)
-            let alert = UIAlertController(title: "Backend Report", message: payloadFromServer, preferredStyle: .alert);
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel,handler: nil))
-            
-            // show the alert
-            self.present(alert, animated: true, completion: nil)
         }
-//        print(webCardinalURL)
     }
     
     @objc func switchTokenize(_ sender:UISwitch){
@@ -192,7 +196,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
     
     //LABELS
     func headerOne(labelTitle:String,x:CGFloat,y:CGFloat) -> UILabel{
-        let headerOneLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: Double(phoneWidth/2.25), height: 30.0))
+        let headerOneLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: Double(phoneWidth), height: 30.0))
         headerOneLabel.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
         
         headerOneLabel.translatesAutoresizingMaskIntoConstraints  = true

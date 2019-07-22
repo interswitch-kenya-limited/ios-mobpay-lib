@@ -43,6 +43,8 @@ public class Mobpay:FormViewController {
     
     //launch ui
     public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String) -> FormViewController{
+        
+        //TODO: get merchant config
         let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret)
         return UserInterfaceController
     }

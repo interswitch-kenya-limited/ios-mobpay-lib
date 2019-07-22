@@ -6,14 +6,15 @@ open class InterSwitchPaymentUI : FormViewController {
     var payment:Payment!
     var customer:Customer!
     var clientId:String!
-    var clientString:String!
+    var clientSecret:String!
     public convenience init(merchant: Merchant,payment: Payment, customer: Customer,clientId:String,clientSecret:String) {
         self.init()
         self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
         self.clientId = clientId
-        self.clientString = clientSecret
+        self.clientSecret = clientSecret
+        //TODO add token details
     }
     
     let tabBarCnt = UITabBarController()
@@ -32,11 +33,11 @@ open class InterSwitchPaymentUI : FormViewController {
     
     func createTabBarController() {
         
-        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,clientId: self.clientId,clientSecret: self.clientString)
+        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,clientId: self.clientId,clientSecret: self.clientSecret)
         cardVC.title = "Card"
         cardVC.tabBarItem = UITabBarItem.init(title: "Card", image: UIImage(named: "HomeTab"), tag: 0)
         
-        let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer)
+        let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.clientId, clientSecret: self.clientSecret)
         mobileVC.title = "Mobile"
         mobileVC.view.backgroundColor =  UIColor.green
         mobileVC.tabBarItem = UITabBarItem.init(title: "Mobile", image: UIImage(named: "Location"), tag: 1)
