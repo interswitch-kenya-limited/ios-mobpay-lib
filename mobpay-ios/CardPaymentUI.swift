@@ -9,13 +9,25 @@
 
 import UIKit
 import SafariServices
-
+import WebKit
+import FormTextField
 
 protocol CardPaymentUIDelegate {
     func didReceivePayload(_ payload:String)
 }
-open class CardPaymentUI : UIViewController,UITextFieldDelegate {
-    
+open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
+    let height = CGFloat(60)
+    public var initialY : CGFloat{
+        get{
+            if self.navigationController != nil && !self.navigationController!.navigationBar.isTranslucent{
+                return 0
+            }else{
+                let barHeight=self.navigationController?.navigationBar.frame.height ?? 0
+                let statusBarHeight = UIApplication.shared.isStatusBarHidden ? CGFloat(0) : UIApplication.shared.statusBarFrame.height
+                return barHeight + statusBarHeight + 20
+            }
+        }
+    }
     
     var CardPaymentUIDelegate:CardPaymentUIDelegate?
     
@@ -26,17 +38,8 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
     var clientId:String!
     var clientSecret:String!
     
-    
-    
-    //phone dimentions
-    var phoneHeight = UIScreen.main.bounds.height
-    var phoneWidth = UIScreen.main.bounds.width
-    
    //ui input elements
-    var cardNumberField:UITextField?
-    var cvcField:UITextField?
     var tokenize:Bool = false
-    var cardExpDateField:UITextField?
     
     convenience init(merchant: Merchant,payment: Payment, customer: Customer, clientId:String,clientSecret:String) {
         self.init()
@@ -56,96 +59,93 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
-        
-        let interswtichIcon = loadImageFromBase64(base64String: Base64Images().interswitchIcon, x: 0.1, y: 0.15, width: 30, height: 50)
-        let topRightAmountLabel = topRightAmount(amount: "850", x: 0.5, y: 0.15)
-        let customerEmail = headerTwo(labelTitle: customer.email, x: 0.5, y: 0.18)
-        //card details
-        let cardDetailsHeader = headerOne(labelTitle: "Enter Your Card Details", x: 0.5,y: 0.3)
-        let cardNumberHeader = headerTwo(labelTitle: "Card Number", x: 0.3,y: 0.35)
-        self.cardNumberField = cardNumberTextField(x: 0.5, y: 0.4)
-        let cardExpHeader = headerTwo(labelTitle: "Card Expiry Date", x: 0.4,y: 0.45)
-        self.cardExpDateField = cardExpiryDateTextField(x: 0.4, y: 0.5)
-        let cvcHeader = headerTwo(labelTitle: "CVC", x: 0.75,y: 0.45)
-        self.cvcField = cvcTextField(x: 0.75, y: 0.5)
-        let tokenizeSwitch = tokenizeSwitchButton()
-        let saveToken = headerTwo(labelTitle: "save", x: 200,y: 350)
-        let submitUIButton = submitButton(buttonTitle: "Pay KES \(payment.amount)",x: 0.5,y:0.6)
-        let cancelUIBUtton = cancelButton(x: 0.5, y: 0.7)
-        //images row
-        let poweredByInterswitch = loadImageFromBase64(base64String: Base64Images().poweredByInterswitch, x: 0.5, y: 0.95, width: 120, height: 30)
-
         //Add elements on to the view
         //top header
         self.view.addSubview(interswtichIcon)
-        self.view.addSubview(topRightAmountLabel)
-        self.view.addSubview(customerEmail)
+        self.view.addSubview(amountLabel)
+        self.view.addSubview(customerEmailLabel)
         
         //card details
-        self.view.addSubview(cardDetailsHeader)
-        self.view.addSubview(cardNumberHeader)
-        self.view.addSubview(self.cardNumberField!)
-        self.view.addSubview(cardExpHeader)
-        self.view.addSubview(self.cardExpDateField!)
-        self.view.addSubview(cvcHeader)
-        self.view.addSubview(self.cvcField!)
-        self.view.addSubview(tokenizeSwitch)
-        self.view.addSubview(saveToken)
+        self.view.addSubview(enterCardDetailsLabel)
+        self.view.addSubview(cardNumberLabel)
+        self.view.addSubview(cardNumberField)
+        self.view.addSubview(cardExpiryDateLabel)
+        self.view.addSubview(cardExpirationDateField)
+        self.view.addSubview(cvcLabel)
+        self.view.addSubview(cvcField)
+        self.view.addSubview(tokenizeSwitchButton)
+        self.view.addSubview(saveCardLabel)
+        //small images row
+        self.view.addSubview(verveSafeTokenImage)
+        self.view.addSubview(verifiedByVisa)
+        self.view.addSubview(mastercardSecureCode)
+        self.view.addSubview(pciDss)
+        
         //action buttons
-        self.view.addSubview(submitUIButton)
-        self.view.addSubview(cancelUIBUtton)
+        self.view.addSubview(submitButton)
+        self.view.addSubview(cancelButton)
         //bottom images
         self.view.addSubview(poweredByInterswitch)
     }
     
     
     //BUTTONS
-    func submitButton(buttonTitle:String,x:CGFloat,y:CGFloat) -> UIButton{
+    lazy var  submitButton:UIButton = {
+        var previousFrame = self.cardNumberField.frame
+        previousFrame.origin.y = self.tokenizeSwitchButton.frame.maxY + 20
         let submitButton = UIButton.init(type: .roundedRect)
-        submitButton.frame = CGRect(x: 0, y: 0, width:  Double(phoneWidth - 40), height: 50.0)
-        submitButton.setTitle(buttonTitle, for: .normal)
+        submitButton.frame = previousFrame
+        submitButton.setTitle("Pay KES \(payment.amount)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitButtonAction(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
-        submitButton.center = CGPoint(x: view.bounds.maxX * 0.5, y: view.bounds.maxY * y)
         submitButton.layer.cornerRadius = 10;
         submitButton.clipsToBounds = true;
-//        submitButton.isEnabled = false
         return submitButton
-    }
+    }()
     
-    func cancelButton(x:CGFloat,y:CGFloat) -> UIButton{
+    lazy var cancelButton:UIButton = {
+        var previousFrame = self.submitButton.frame
+        previousFrame.origin.y = self.submitButton.frame.maxY + 20
+        previousFrame.size.width = self.submitButton.frame.size.width * 0.5
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
         let cancelButton = UIButton.init(type: .roundedRect)
-        cancelButton.frame = CGRect(x: 0, y: 0, width: Double(phoneWidth - 100), height: 50.0)
-        cancelButton.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
+        cancelButton.frame = previousFrame
         cancelButton.setTitle("CANCEL", for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelTransaction(_ :)), for: .touchDown)
         cancelButton.setTitleColor(UIColor.black, for: .normal)
-        cancelButton.backgroundColor = UIColor.gray
+        cancelButton.backgroundColor = UIColor(red:209/255 ,green: 209/255 ,blue: 209/255,alpha: 1.0)
         cancelButton.layer.cornerRadius = 10;
         return cancelButton
-    }
+    }()
     
-    func tokenizeSwitchButton() -> UISwitch{
-        let tokenizeSwitchButton = UISwitch(frame:CGRect(x: 150, y: phoneHeight/(2/3), width: 0, height: 0))
+    lazy var tokenizeSwitchButton:UISwitch = {
+        let margin = CGFloat(20)
+        var previousFrame = self.cardExpirationDateField.frame
+        previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin
+        let tokenizeSwitchButton = UISwitch(frame: previousFrame)
         tokenizeSwitchButton.addTarget(self, action: #selector(switchTokenize(_:)), for: .valueChanged)
         tokenizeSwitchButton.setOn(true, animated: false)
         return tokenizeSwitchButton
-    }
+    }()
     
     //BUTTON ACTIONS
     @objc func submitButtonAction(_ : UIButton){
-        let expDateArray = Array(self.cardExpDateField!.text!)
-        let expYear = String(expDateArray[0]) + String(expDateArray[1])
-        let expMonth = String(expDateArray[2]) + String(expDateArray[3])
-        let cardInput = Card(pan: self.cardNumberField!.text!, cvv: self.cvcField!.text!, expiryYear: String(expYear), expiryMonth: String(expMonth), tokenize: self.tokenize)
-        let webCardinalURL = Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.clientId!,clientSecret: self.clientSecret!)
-        let svc = SFSafariViewController(url: webCardinalURL)
-        self.present(svc, animated: true, completion: nil)
-        Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
-            self.CardPaymentUIDelegate?.didReceivePayload(payloadFromServer)
-            self.dismiss(animated: true)
+        if cardNumberField.validate() && cardExpirationDateField.validate() && cvcField.validate() {
+            let expDateArray = Array(self.cardExpirationDateField.text!)
+            let expMonth = String(expDateArray[0]) + String(expDateArray[1])
+            let expYear = String(expDateArray[3]) + String(expDateArray[4])
+            let cardInput = Card(pan: self.cardNumberField.text!.replacingOccurrences(of: " ", with: ""), cvv: self.cvcField.text!, expiryYear: expYear, expiryMonth: expMonth, tokenize: self.tokenize)
+            let webCardinalURL = Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.clientId!,clientSecret: self.clientSecret!)
+            let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
+            self.navigationController?.pushViewController(threeDS,animated: true)
+            Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
+                self.CardPaymentUIDelegate?.didReceivePayload(payloadFromServer)
+            }
+        }else{
+            print("card number: \(cardNumberField.validate()) card expiration : \(cardExpirationDateField.validate()) cvv field: \(cvcField.validate())")
         }
+       
     }
     
     @objc func switchTokenize(_ sender:UISwitch){
@@ -153,121 +153,219 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.dismiss(animated: false)
+        self.dismiss(animated: true)
     }
     
-    //TEXT FIELDS
-    func cardNumberTextField(x:CGFloat,y:CGFloat)->UITextField{
-        let cardNumberTextFieldView = UITextField.init()
-        cardNumberTextFieldView.frame = CGRect(x: 0, y: 0, width: Double(phoneWidth - 40), height: 50)
-        cardNumberTextFieldView.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        cardNumberTextFieldView.placeholder = "4111111111111111"
-        cardNumberTextFieldView.keyboardType = UIKeyboardType.numberPad
-        cardNumberTextFieldView.returnKeyType = UIReturnKeyType.next
-        cardNumberTextFieldView.borderStyle = UITextField.BorderStyle.roundedRect
-        cardNumberTextFieldView.delegate = self
-        return cardNumberTextFieldView
-    }
+
+    lazy var cardNumberField:FormTextField = {
+        let margin = CGFloat(5)
+        var previousFrame = self.cardNumberLabel.frame
+        previousFrame.origin.y = self.cardNumberLabel.frame.maxY + margin
+        previousFrame.size.height = self.cardNumberLabel.frame.size.height * 1.5
+        previousFrame.size.width = self.cardNumberLabel.frame.size.width
+        
+        let textField = FormTextField(frame: previousFrame)
+        textField.inputType = .integer
+        textField.formatter = CardNumberFormatter()
+        textField.placeholder = "0000 0000 0000 0000"
+        
+        var validation = Validation()
+        validation.maximumLength = 19
+        validation.minimumLength = 19
+        let characterSet = NSMutableCharacterSet.decimalDigit()
+        characterSet.addCharacters(in: " ")
+        validation.characterSet = characterSet as CharacterSet
+        let inputValidator = InputValidator(validation: validation)
+        textField.inputValidator = inputValidator
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        
+        return textField
+    }()
     
-    func cvcTextField(x:CGFloat,y:CGFloat)->UITextField{
-        let cvcTextField = UITextField.init()
-        cvcTextField.frame = CGRect(x: 0, y: 0, width: Double(phoneWidth * 0.3), height: 50.0)
-        cvcTextField.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        cvcTextField.placeholder = "123"
-        cvcTextField.keyboardType = UIKeyboardType.numberPad
-        cvcTextField.returnKeyType = UIReturnKeyType.done
-        cvcTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        cvcTextField.delegate = self
-        return cvcTextField
-    }
+    lazy var cardExpirationDateField: FormTextField = {
+        let margin = CGFloat(5)
+        var previousFrame = self.cardExpiryDateLabel.frame
+        previousFrame.origin.y = self.cardExpiryDateLabel.frame.maxY + margin
+        previousFrame.size.width = self.cardNumberField.frame.size.width * 0.6
+        let textField = FormTextField(frame: previousFrame)
+        textField.inputType = .integer
+        textField.formatter = CardExpirationDateFormatter()
+        textField.placeholder = "MM/YY"
+        
+        var validation = Validation()
+        validation.minimumLength = 1
+        let inputValidator = CardExpirationDateInputValidator(validation: validation)
+        textField.inputValidator = inputValidator
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        
+        return textField
+    }()
     
-    func cardExpiryDateTextField(x:CGFloat,y:CGFloat)->UITextField{
-        let cardExpiryDateTextField = UITextField.init()
-        cardExpiryDateTextField.frame = CGRect(x: 0, y: 0, width: Double(phoneWidth * 0.4), height: 50.0)
-        cardExpiryDateTextField.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        cardExpiryDateTextField.placeholder = "MM/YY"
-        cardExpiryDateTextField.keyboardType = UIKeyboardType.numberPad
-        cardExpiryDateTextField.returnKeyType = UIReturnKeyType.done
-        cardExpiryDateTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        cardExpiryDateTextField.delegate = self
-        return cardExpiryDateTextField
-    }
-    
+    lazy var cvcField: FormTextField = {
+        let margin = CGFloat(5)
+        var previousFrame = self.cardNumberField.frame
+        previousFrame.origin.x = self.cardExpirationDateField.frame.maxX + previousFrame.size.width * 0.05
+        previousFrame.origin.y = self.cvcLabel.frame.maxY + margin
+        previousFrame.size.width = self.cardNumberField.frame.size.width * 0.35
+        let textField = FormTextField(frame: previousFrame)
+        textField.inputType = .integer
+        textField.placeholder = "CVC"
+        
+        var validation = Validation()
+        validation.maximumLength = "CVC".count
+        validation.minimumLength = "CVC".count
+        validation.characterSet = NSCharacterSet.decimalDigits
+        let inputValidator = InputValidator(validation: validation)
+        textField.inputValidator = inputValidator
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        
+        return textField
+    }()
     
     //LABELS
-    func headerOne(labelTitle:String,x:CGFloat,y:CGFloat) -> UILabel{
-        let headerOneLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: Double(phoneWidth), height: 30.0))
-        headerOneLabel.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
+    lazy var amountLabel:UILabel = {
+        let margin = CGFloat(5)
+        let label = UILabel.init(frame: CGRect(x: margin, y: self.initialY, width: self.view.frame.width - (margin * 2.0), height: 30))
+        label.text = "KES \(self.payment.amount)"
+        label.textAlignment = .right
+        return label
+    }()
+    lazy var customerEmailLabel:UILabel = {
+        let margin = CGFloat(5)
+        var previousFrame = self.amountLabel.frame
+        previousFrame.origin.y = self.amountLabel.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width
+        let label = UILabel.init(frame: previousFrame)
+        label.textAlignment = .right
+        label.text = self.customer.email
         
-        headerOneLabel.translatesAutoresizingMaskIntoConstraints  = true
-        headerOneLabel.text = labelTitle
-        headerOneLabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        return headerOneLabel
-    }
-    
-    func headerTwo(labelTitle:String,x:CGFloat,y:CGFloat) -> UILabel{
-        let headerTwolabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: Double(phoneWidth - 40), height: 30.0))
-        headerTwolabel.text = labelTitle
-        headerTwolabel.translatesAutoresizingMaskIntoConstraints = true
-        headerTwolabel.center =  CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        headerTwolabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        headerTwolabel.textAlignment = .right
-        return headerTwolabel
-    }
-    
-    func topRightAmount(amount:String,x:CGFloat,y:CGFloat)->UILabel{
-        let topRightAmount = UILabel.init(frame: CGRect(x: 0, y: 0, width: Double(phoneWidth - 40), height: 30.0))
-        topRightAmount.text = "KES \(amount)"
-        topRightAmount.translatesAutoresizingMaskIntoConstraints = true
-        topRightAmount.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        topRightAmount.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        topRightAmount.textAlignment = .right
-        return topRightAmount
-    }
-    
+        return label
+    }()
+    lazy var enterCardDetailsLabel:UILabel = {
+        let margin = CGFloat(10)
+        var previousFrame = self.customerEmailLabel.frame
+        previousFrame.origin.y = self.customerEmailLabel.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width
+        let label = UILabel(frame: previousFrame)
+        label.textAlignment = .center
+        label.text = "Enter your card details"
+        
+        return label
+    }()
+    lazy var cardNumberLabel:UILabel = {
+        let margin = CGFloat(10)
+        var previousFrame = self.enterCardDetailsLabel.frame
+        previousFrame.origin.y = self.enterCardDetailsLabel.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width
+        let label = UILabel(frame: previousFrame)
+        label.text = "Card number"
+        
+        return label
+    }()
+    lazy var cardExpiryDateLabel:UILabel = {
+        let margin = CGFloat(10)
+        var previousFrame = self.cardNumberField.frame
+        previousFrame.origin.y = self.cardNumberField.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width * 0.6
+        let label = UILabel(frame: previousFrame)
+        label.text = "Card expiry date"
+        
+        return label
+    }()
+    lazy var cvcLabel:UILabel = {
+        let margin = CGFloat(10)
+        var previousFrame = self.cardNumberField.frame
+        previousFrame.origin.x = self.cardExpirationDateField.frame.maxX + previousFrame.size.width * 0.05
+        previousFrame.origin.y = self.cardNumberField.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width * 0.35
+        let label = UILabel(frame: previousFrame)
+        label.text = "CVC"
+        
+        return label
+    }()
+    lazy var saveCardLabel:UILabel = {
+        let margin = CGFloat(20)
+        var previousFrame = self.cardExpirationDateField.frame
+        previousFrame.origin.x = self.tokenizeSwitchButton.frame.maxX + 10
+        previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width
+        let label = UILabel(frame: previousFrame)
+        label.text = "Save Card"
+        
+        return label
+    }()
     //LOAD IMAGES
-    func loadImageFromBase64(base64String: String,x: CGFloat,y: CGFloat,width:Int,height:Int) -> UIImageView{
-        let dataDecoded : Data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)!
-        let decodedimage = UIImage(data: dataDecoded)
-        let imageView = UIImageView(image: decodedimage)
-        imageView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        imageView.center = CGPoint(x: view.bounds.maxX * x, y: view.bounds.maxY * y)
-        imageView.translatesAutoresizingMaskIntoConstraints = true
-        imageView.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+    lazy var interswtichIcon:UIImageView = {
+        var margin = CGFloat(20)
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().interswitchIcon))
+        imageView.frame = CGRect(x: margin, y: self.initialY, width: 30, height: 50)
         return imageView
-    }
+    }()
     
-    //validation
+    lazy var verveSafeTokenImage:UIImageView = {
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verveSafeToken))
+        var previousFrame = self.tokenizeSwitchButton.frame
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.1
+        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        imageView.frame = previousFrame
+        return imageView
+    }()
+    lazy var verifiedByVisa:UIImageView = {
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verifiedByVisa))
+        var previousFrame = self.verveSafeTokenImage.frame
+        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + 20
+        imageView.frame = previousFrame
+        return imageView
+    }()
+    lazy var mastercardSecureCode:UIImageView = {
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().masterCardSecureCode))
+        var previousFrame = self.verveSafeTokenImage.frame
+        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.x = self.verifiedByVisa.frame.maxX + 20
+        imageView.frame = previousFrame
+        return imageView
+    }()
     
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if string.count == 0{
-            return true
-        }
-        
-        let currentText = textField.text ?? ""
-        let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        
-        switch textField {
-        case cvcField:
-            return prospectiveText.count <= 3 && checkIfStringHasDecimals(stringToTest: prospectiveText)
-            
-        case cardExpDateField:
-            return prospectiveText.count <= 4 && checkIfStringHasDecimals(stringToTest: prospectiveText)
-            
-        case cardNumberField:
-            return prospectiveText.count <= 19 && checkIfStringHasDecimals(stringToTest: prospectiveText)
-        default:
-            return true
-        }
-    }
+    lazy var pciDss:UIImageView = {
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().pciDss))
+        var previousFrame = self.verveSafeTokenImage.frame
+        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + 20
+        imageView.frame = previousFrame
+        return imageView
+    }()
     
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true;
-    }
-    
-    func checkIfStringHasDecimals(stringToTest:String)->Bool{
-        let numbersRange = stringToTest.rangeOfCharacter(from: .decimalDigits)
-        return numbersRange != nil
+    lazy var poweredByInterswitch:UIImageView = {
+        let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().poweredByInterswitch))
+        var previousFrame = self.cancelButton.frame
+        previousFrame.origin.y = view.frame.size.height - 150
+        imageView.frame = previousFrame
+        return imageView
+    }()
+    func loadImageFromBase64(base64String: String) -> UIImage{
+        let dataDecoded : Data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)!
+        let decodedimage = UIImage(data: dataDecoded)!
+        return decodedimage
     }
 }
+
+
+class ThreeDSWebView: UIViewController, WKUIDelegate {
+    
+    var webView: WKWebView!
+    var webCardinalURL: URL!
+    convenience init(webCardinalURL:URL){
+        self.init()
+        self.webCardinalURL = webCardinalURL
+    }
+    override func loadView() {
+    let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        webView.load(URLRequest(url: webCardinalURL))
+    }}

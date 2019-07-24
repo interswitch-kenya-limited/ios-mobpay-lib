@@ -104,7 +104,6 @@ public class Mobpay:FormViewController {
         setUpMQTT()
         mqtt.didReceiveMessage = { mqtt, message, id in
             mqtt.disconnect()
-            print(message.string!)
             payloadFromServer(message.string!)
         }
     }

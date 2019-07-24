@@ -32,21 +32,21 @@ open class MobilePaymentUI : FormViewController {
         form +++
             
             Section()
-            <<< ViewRow<UIView>("Header") { (row) in
-                }.cellSetup{(cell,row) in
-                    let header = UIView.init()
-//                    let interswtichIcon = self.loadImageFromBase64(base64String: Base64Images().interswitchIcon, x: 0, y: 0, width: 30, height: 50)
-//                    let topRightAmountLabel = self.topRightAmount(amount: self.payment.amount, x: 0.5, y: 0.15)
-                    let customerEmail = self.headerTwo(labelTitle: self.customer.email, x: 0.5, y: 0.18)
-//                    header.addSubview(interswtichIcon)
-//                    header.addSubview(topRightAmountLabel)
-                    header.addSubview(customerEmail)
-                    cell.viewRightMargin = 0.0
-                    cell.viewLeftMargin = 0.0
-                    cell.viewTopMargin = 0.0
-                    cell.viewBottomMargin = 0.0
-                    cell.height = { return CGFloat(300) }
-            }
+//            <<< ViewRow<UIView>("Header") { (row) in
+//                }.cellSetup{(cell,row) in
+//                    let header = UIView.init()
+////                    let interswtichIcon = self.loadImageFromBase64(base64String: Base64Images().interswitchIcon, x: 0, y: 0, width: 30, height: 50)
+////                    let topRightAmountLabel = self.topRightAmount(amount: self.payment.amount, x: 0.5, y: 0.15)
+//                    let customerEmail = self.headerTwo(labelTitle: self.customer.email, x: 0.5, y: 0.18)
+////                    header.addSubview(interswtichIcon)
+////                    header.addSubview(topRightAmountLabel)
+//                    header.addSubview(customerEmail)
+//                    cell.viewRightMargin = 0.0
+//                    cell.viewLeftMargin = 0.0
+//                    cell.viewTopMargin = 0.0
+//                    cell.viewBottomMargin = 0.0
+//                    cell.height = { return CGFloat(300) }
+//            }
             <<< ActionSheetRow<String>() {
                 $0.tag = "paymentMethod"
                 $0.title = "Payment Methods"

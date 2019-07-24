@@ -20,14 +20,12 @@ open class InterSwitchPaymentUI : FormViewController {
     let tabBarCnt = UITabBarController()
     override open func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         tabBarCnt.tabBar.tintColor = UIColor.blue
         createTabBarController()
     }
     
     override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     
