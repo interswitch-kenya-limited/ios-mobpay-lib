@@ -22,6 +22,9 @@ public class Mobpay:FormViewController {
     var merchantId:String!
     var transactionRef:String!
     
+    public var MobpayDelegate:MobpayPaymentDelegate?
+
+    
     //MOBILE MONEY
     //make mobile money payment
     public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
@@ -42,19 +45,48 @@ public class Mobpay:FormViewController {
     
     
     //launch ui
-    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String) -> FormViewController{
-        
-        //TODO: get merchant config
-        let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret)
-        return UserInterfaceController
+    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,launchUI:@escaping (FormViewController)->())throws{
+        try!getMerchantConfigs(clientId: clientId, clientSecret: clientSecret){
+            (merchantConfig) in
+            let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig)
+            UserInterfaceController.InterSwitchPaymentUIDelegate = self
+            launchUI(UserInterfaceController)
+        }
     }
     
     
+    func getMerchantConfigs(clientId: String, clientSecret: String,completion:@escaping(MerchantConfig)->())throws{
+        let request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", path: "/api/v1/merchant/mfb/confignew")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil else{
+                return
+            }
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print(dataString)
+                let responseAsJson:Dictionary<String,Any> = self.convertToDictionary(message:dataString)!
+                let configs = responseAsJson["config"] as? Dictionary<String,Any>
+                let merchantConfig:MerchantConfig = MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int)
+            completion(merchantConfig)
+            }
+        }
+        task.resume()
+    }
+
+    func convertToDictionary(message: String) -> [String: Any]? {
+        if let data = message.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+
     //THREE DS
     //CARD PAYMENT
     public func generateCardWebQuery(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String)->URL{
-        
-        
         let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0", separator: "D" )
         let payload = CardPaymentStruct(
             amount: payment.amount,
@@ -118,11 +150,6 @@ public class Mobpay:FormViewController {
         mqtt.connect()
         mqtt.delegate = self
     }
-    
-    
-    
-   
-
 }
 
 extension Mobpay:CocoaMQTTDelegate{
@@ -163,4 +190,14 @@ extension Mobpay:CocoaMQTTDelegate{
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         print("mqtt disconnected")
     }
+}
+
+extension Mobpay:InterSwitchPaymentUIDelegate{
+    func didReceivePayload(_ message: String) {
+        self.MobpayDelegate?.launchUIPayload(message)
+    }
+}
+
+public protocol MobpayPaymentDelegate {
+    func launchUIPayload(_ message: String)
 }

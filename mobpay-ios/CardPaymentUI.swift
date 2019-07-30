@@ -8,12 +8,11 @@
 
 
 import UIKit
-import SafariServices
 import WebKit
 import FormTextField
 
 protocol CardPaymentUIDelegate {
-    func didReceivePayload(_ payload:String)
+    func didReceiveCardPayload(_ payload:String)
 }
 open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     let height = CGFloat(60)
@@ -35,21 +34,54 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
-    var clientId:String!
-    var clientSecret:String!
+    var merchantConfig:MerchantConfig!
     
    //ui input elements
     var tokenize:Bool = false
     
-    convenience init(merchant: Merchant,payment: Payment, customer: Customer, clientId:String,clientSecret:String) {
+    convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
         self.init()
         self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
-        self.clientId = clientId;
-        self.clientSecret = clientSecret;
+        self.merchantConfig = merchantConfig
     }
-    
+    func convertToDictionary(message: String) -> [String: Any]? {
+        if let data = message.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    func showResponse(message: String){
+        let responseAsString = message
+        let responseAsJson = convertToDictionary(message: responseAsString)
+        let errorExists = responseAsJson?["error"] != nil
+        if errorExists == true {
+            let paymentMessage:String = "Please try again ot select an alternative payment option"
+            let alert = UIAlertController(title: "Payment Failed", message: paymentMessage, preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "Quit", style: .destructive) { (action:UIAlertAction!) in
+                print("Quit")
+            })
+            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { (action:UIAlertAction!) in
+                print("Canceled")
+            })
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            let paymentMessage:String = "Payment Success"
+            let paymentSuccessfullImage = UIImageView(image: loadImageFromBase64(base64String: Base64Images().happyFace))
+            paymentSuccessfullImage.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+            let alert = UIAlertController(title: "Payment Success", message: paymentMessage, preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "Okay", style: .default){(action: UIAlertAction!) in
+                self.CardPaymentUIDelegate?.didReceiveCardPayload(responseAsString)
+            })
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
     override open var shouldAutorotate: Bool {return false}
     
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {return .portrait}
@@ -95,7 +127,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         previousFrame.origin.y = self.tokenizeSwitchButton.frame.maxY + 20
         let submitButton = UIButton.init(type: .roundedRect)
         submitButton.frame = previousFrame
-        submitButton.setTitle("Pay KES \(payment.amount)", for: .normal)
+        submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitButtonAction(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
@@ -126,6 +158,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let tokenizeSwitchButton = UISwitch(frame: previousFrame)
         tokenizeSwitchButton.addTarget(self, action: #selector(switchTokenize(_:)), for: .valueChanged)
         tokenizeSwitchButton.setOn(true, animated: false)
+        tokenizeSwitchButton.isHidden  = self.merchantConfig.tokenizeStatus != 0
         return tokenizeSwitchButton
     }()
     
@@ -136,11 +169,12 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
             let expMonth = String(expDateArray[0]) + String(expDateArray[1])
             let expYear = String(expDateArray[3]) + String(expDateArray[4])
             let cardInput = Card(pan: self.cardNumberField.text!.replacingOccurrences(of: " ", with: ""), cvv: self.cvcField.text!, expiryYear: expYear, expiryMonth: expMonth, tokenize: self.tokenize)
-            let webCardinalURL = Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.clientId!,clientSecret: self.clientSecret!)
+            let webCardinalURL = Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret)
             let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
             self.navigationController?.pushViewController(threeDS,animated: true)
             Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
-                self.CardPaymentUIDelegate?.didReceivePayload(payloadFromServer)
+                self.navigationController?.popViewController(animated: true)
+                self.showResponse(message:payloadFromServer)
             }
         }else{
             print("card number: \(cardNumberField.validate()) card expiration : \(cardExpirationDateField.validate()) cvv field: \(cvcField.validate())")
@@ -153,7 +187,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.dismiss(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 
@@ -226,7 +260,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     lazy var amountLabel:UILabel = {
         let margin = CGFloat(5)
         let label = UILabel.init(frame: CGRect(x: margin, y: self.initialY, width: self.view.frame.width - (margin * 2.0), height: 30))
-        label.text = "KES \(self.payment.amount)"
+        label.text = "KES \(Double(self.payment.amount)!/100)"
         label.textAlignment = .right
         return label
     }()
@@ -290,6 +324,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width
         let label = UILabel(frame: previousFrame)
+        label.isHidden  = self.merchantConfig.tokenizeStatus != 0
         label.text = "Save Card"
         
         return label
@@ -355,17 +390,21 @@ class ThreeDSWebView: UIViewController, WKUIDelegate {
     
     var webView: WKWebView!
     var webCardinalURL: URL!
+    
     convenience init(webCardinalURL:URL){
         self.init()
         self.webCardinalURL = webCardinalURL
     }
+    
     override func loadView() {
     let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         view = webView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.load(URLRequest(url: webCardinalURL))
-    }}
+    }
+}

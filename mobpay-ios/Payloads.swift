@@ -49,3 +49,22 @@ struct MobilePaymentStruct: Codable {
     let domain: String
     let phone:String
 }
+
+
+public struct MerchantConfig{
+    let merchantId:String
+    let merchantName:String
+    let clientId:String
+    let clientSecret:String
+    let cardStatus:Int
+    let mpesaStatus:Int
+    let equitelStatus:Int
+    let tkashStatus:Int
+    let airtelStatus:Int
+    let paycodeStatus:Int
+    let mpesaPaybill:String
+    let equitelPaybill:String
+    let tokenizeStatus:Int
+    let cardauthStatus:Int
+    let cardPreauth:Int
+}
