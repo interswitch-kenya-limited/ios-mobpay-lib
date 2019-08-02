@@ -16,7 +16,7 @@ protocol CardPaymentUIDelegate {
 }
 open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     let height = CGFloat(60)
-    public var initialY : CGFloat{
+    var initialY : CGFloat{
         get{
             if self.navigationController != nil && !self.navigationController!.navigationBar.isTranslucent{
                 return 0
@@ -27,6 +27,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
             }
         }
     }
+    let screenDimensions = UIScreen.main.bounds
     
     var CardPaymentUIDelegate:CardPaymentUIDelegate?
     
@@ -35,23 +36,32 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     var payment:Payment!
     var customer:Customer!
     var merchantConfig:MerchantConfig!
-    
+    var cardTokens:Array<CardToken>? = nil
+    var useCardTokenSection:Bool = false
    //ui input elements
-    var tokenize:Bool = false
-    
-    convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
+    var tokenize:Bool!
+    convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil ) {
         self.init()
         self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
         self.merchantConfig = merchantConfig
+        if cardTokens != nil {
+            self.cardTokens = cardTokens
+            self.useCardTokenSection = true
+        }
+        if (merchantConfig.tokenizeStatus == 1) {
+            self.tokenize = true
+        }else{
+            self.tokenize = false
+        }
     }
     func convertToDictionary(message: String) -> [String: Any]? {
         if let data = message.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                print(error.localizedDescription)
+                self.CardPaymentUIDelegate?.didReceiveCardPayload(error.localizedDescription)
             }
         }
         return nil
@@ -92,35 +102,91 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         //Add elements on to the view
-        //top header
-        self.view.addSubview(interswtichIcon)
-        self.view.addSubview(amountLabel)
-        self.view.addSubview(customerEmailLabel)
-        
+        self.view.addSubview(headerSection)
         //card details
+//        self.view.addSubview(cardDetailsWithoutTokenView)
         self.view.addSubview(enterCardDetailsLabel)
         self.view.addSubview(cardNumberLabel)
+        self.view.addSubview(useTokenOrCardSegmentedControl)
         self.view.addSubview(cardNumberField)
         self.view.addSubview(cardExpiryDateLabel)
         self.view.addSubview(cardExpirationDateField)
         self.view.addSubview(cvcLabel)
+        self.view.addSubview(whatIsThis)
         self.view.addSubview(cvcField)
         self.view.addSubview(tokenizeSwitchButton)
         self.view.addSubview(saveCardLabel)
         //small images row
-        self.view.addSubview(verveSafeTokenImage)
-        self.view.addSubview(verifiedByVisa)
-        self.view.addSubview(mastercardSecureCode)
-        self.view.addSubview(pciDss)
-        
+        self.view.addSubview(imageRowSection)
         //action buttons
+//        self.view.addSubview(actionButtons)
         self.view.addSubview(submitButton)
         self.view.addSubview(cancelButton)
-        //bottom images
+//        //bottom images
         self.view.addSubview(poweredByInterswitch)
     }
     
     
+    
+    //SECTIONS
+    lazy var headerSection:UIView = {
+        let section = UIView()
+        section.addSubview(interswtichIcon)
+        section.addSubview(amountLabel)
+        section.addSubview(customerEmailLabel)
+        return section
+    }()
+    
+    lazy var imageRowSection:UIView = {
+        let section = UIView()
+        section.addSubview(verveSafeTokenImage)
+        section.addSubview(verifiedByVisa)
+        section.addSubview(mastercardSecureCode)
+        section.addSubview(pciDss)
+        return section
+    }()
+    lazy var cardDetailsWithoutTokenView:UIView = {
+        let section = UIView()
+        section.addSubview(enterCardDetailsLabel)
+        section.addSubview(cardNumberLabel)
+        section.addSubview(cardNumberField)
+        section.addSubview(cardExpiryDateLabel)
+        section.addSubview(cardExpirationDateField)
+        section.addSubview(cvcLabel)
+        section.addSubview(whatIsThis)
+        section.addSubview(cvcField)
+        section.addSubview(tokenizeSwitchButton)
+        section.addSubview(saveCardLabel)
+        var previousFrame = self.headerSection.frame
+        previousFrame.origin.y = self.headerSection.frame.maxY
+        previousFrame.size.width = previousFrame.size.width * 0.6
+//        section.isHidden = self.useCardTokenSection
+        return section
+    }()
+    lazy var cardDetailsWithTokenView:UIView = {
+        let section = UIView()
+        section.addSubview(enterCardDetailsLabel)
+        section.addSubview(cardNumberLabel)
+        section.addSubview(useTokenOrCardSegmentedControl)
+        section.addSubview(cardNumberField)
+        section.addSubview(cardExpiryDateLabel)
+        section.addSubview(cardExpirationDateField)
+        section.addSubview(cvcLabel)
+        section.addSubview(whatIsThis)
+        section.addSubview(cvcField)
+        section.addSubview(tokenizeSwitchButton)
+        section.addSubview(saveCardLabel)
+        section.isHidden = self.useCardTokenSection
+        return section
+    }()
+    
+    lazy var actionButtons:UIView = {
+        let section = UIView()
+        section.addSubview(submitButton)
+        section.addSubview(cancelButton)
+        section.addSubview(poweredByInterswitch)
+        return section
+    }()
     //BUTTONS
     lazy var  submitButton:UIButton = {
         var previousFrame = self.cardNumberField.frame
@@ -158,9 +224,22 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let tokenizeSwitchButton = UISwitch(frame: previousFrame)
         tokenizeSwitchButton.addTarget(self, action: #selector(switchTokenize(_:)), for: .valueChanged)
         tokenizeSwitchButton.setOn(true, animated: false)
-        tokenizeSwitchButton.isHidden  = self.merchantConfig.tokenizeStatus != 0
+        tokenizeSwitchButton.isHidden  = self.merchantConfig.tokenizeStatus != 1
         return tokenizeSwitchButton
     }()
+    lazy var useTokenOrCardSegmentedControl:UISegmentedControl = {
+        let margin = CGFloat(20)
+        let items = ["Saved","New"]
+        var previousFrame = self.enterCardDetailsLabel.frame
+        previousFrame.origin.y = self.enterCardDetailsLabel.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width
+        let segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.frame = previousFrame
+        segmentedControl.addTarget(self, action: #selector(CardPaymentUI.useTokenOrCardSegmentedControlChanged(_:)), for: .valueChanged)
+        return segmentedControl
+    }()
+    
     
     //BUTTON ACTIONS
     @objc func submitButtonAction(_ : UIButton){
@@ -181,7 +260,16 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         }
        
     }
-    
+    @objc func useTokenOrCardSegmentedControlChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex{
+        case 0:
+            print("Saved");
+        case 1:
+            print("New")
+        default:
+            break
+        }
+    }
     @objc func switchTokenize(_ sender:UISwitch){
         self.tokenize = sender.isOn
     }
@@ -190,7 +278,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-
+    
     lazy var cardNumberField:FormTextField = {
         let margin = CGFloat(5)
         var previousFrame = self.cardNumberLabel.frame
@@ -264,6 +352,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         label.textAlignment = .right
         return label
     }()
+    
     lazy var customerEmailLabel:UILabel = {
         let margin = CGFloat(5)
         var previousFrame = self.amountLabel.frame
@@ -314,7 +403,20 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         previousFrame.size.width = previousFrame.size.width * 0.35
         let label = UILabel(frame: previousFrame)
         label.text = "CVC"
-        
+        label.font = label.font.withSize(20)
+        label.textAlignment = .left
+        return label
+    }()
+    lazy var whatIsThis:UILabel = {
+        let margin = CGFloat(10)
+        var previousFrame = self.cardNumberField.frame
+        previousFrame.origin.x = self.cardExpirationDateField.frame.maxX + previousFrame.size.width * 0.05
+        previousFrame.origin.y = self.cardNumberField.frame.maxY + margin
+        previousFrame.size.width = previousFrame.size.width * 0.35
+        let label = UILabel(frame: previousFrame)
+        label.text = "What is this?"
+        label.textAlignment = .right
+        label.font = label.font.withSize(15)
         return label
     }()
     lazy var saveCardLabel:UILabel = {
@@ -324,11 +426,13 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width
         let label = UILabel(frame: previousFrame)
-        label.isHidden  = self.merchantConfig.tokenizeStatus != 0
+        label.isHidden  = self.merchantConfig.tokenizeStatus != 1
         label.text = "Save Card"
-        
         return label
     }()
+    
+    
+    
     //LOAD IMAGES
     lazy var interswtichIcon:UIImageView = {
         var margin = CGFloat(20)
@@ -340,8 +444,10 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     lazy var verveSafeTokenImage:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verveSafeToken))
         var previousFrame = self.tokenizeSwitchButton.frame
-        previousFrame.origin.x = UIScreen.main.bounds.width * 0.1
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.size.height = CGFloat(20.0)
+        previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
         return imageView
     }()
@@ -349,7 +455,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verifiedByVisa))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + 20
+        previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.size.height = CGFloat(20.0)
+        previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
         return imageView
     }()
@@ -357,7 +465,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().masterCardSecureCode))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.verifiedByVisa.frame.maxX + 20
+        previousFrame.origin.x = self.verifiedByVisa.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.size.height = CGFloat(20.0)
+        previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
         return imageView
     }()
@@ -366,7 +476,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().pciDss))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + 20
+        previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.size.height = CGFloat(20.0)
+        previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
         return imageView
     }()
@@ -378,6 +490,8 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         imageView.frame = previousFrame
         return imageView
     }()
+    
+   
     func loadImageFromBase64(base64String: String) -> UIImage{
         let dataDecoded : Data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)!
         let decodedimage = UIImage(data: dataDecoded)!

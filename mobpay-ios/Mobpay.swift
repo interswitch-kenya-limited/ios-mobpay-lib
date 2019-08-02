@@ -45,10 +45,10 @@ public class Mobpay:FormViewController {
     
     
     //launch ui
-    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,launchUI:@escaping (FormViewController)->())throws{
+    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,cardTokens:Array<CardToken>? = nil,launchUI:@escaping (FormViewController)->())throws{
         try!getMerchantConfigs(clientId: clientId, clientSecret: clientSecret){
             (merchantConfig) in
-            let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig)
+            let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig,cardTokens:cardTokens)
             UserInterfaceController.InterSwitchPaymentUIDelegate = self
             launchUI(UserInterfaceController)
         }
@@ -57,7 +57,6 @@ public class Mobpay:FormViewController {
     
     func getMerchantConfigs(clientId: String, clientSecret: String,completion:@escaping(MerchantConfig)->())throws{
         let request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", path: "/api/v1/merchant/mfb/confignew")
-        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else{
                 return
@@ -140,6 +139,8 @@ public class Mobpay:FormViewController {
         }
     }
     
+    
+    
     func setUpMQTT(){
         let clientID = "iOS-" + String(ProcessInfo().processIdentifier)
         mqtt = CocoaMQTT(clientID: clientID, host: "testmerchant.interswitch-ke.com", port: 1883)
@@ -154,12 +155,12 @@ public class Mobpay:FormViewController {
 
 extension Mobpay:CocoaMQTTDelegate{
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        print("mqtt Connected")
+        debugPrint("mqtt Connected")
         self.mqtt.subscribe("merchant_portal/\(self.merchantId!)/\(self.transactionRef!)")
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        print(message.string!)
+        debugPrint(message.string!)
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
@@ -171,8 +172,7 @@ extension Mobpay:CocoaMQTTDelegate{
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
-        print(topics)
-        
+        debugPrint(topics)
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
@@ -188,7 +188,7 @@ extension Mobpay:CocoaMQTTDelegate{
     }
     
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-        print("mqtt disconnected")
+        debugPrint("mqtt disconnected")
     }
 }
 

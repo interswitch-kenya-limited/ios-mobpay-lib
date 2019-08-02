@@ -13,8 +13,8 @@ func submitConfirmMobilePayment(clientId:String, clientSecret:String,httpRequest
     let request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: httpRequest, path: "/api/v1/merchant/bills/transactions/"+transactionRef)
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-        guard error == nil else{
-            return
+        if error != nil {
+            completion(error!.localizedDescription)
         }
         if let data = data, let dataString = String(data: data, encoding: .utf8) {
             completion(dataString)

@@ -16,11 +16,12 @@ public struct CardToken {
     var cvv:String?
     var panLast4Digits:String?
     var panFirst6Digits:String?
-    
-    public init(token:String,expiry:String,cvv:String?){
+    public init(token:String,expiry:String,cvv:String? = nil,panLast4Digits:String? = nil,panFirst6Digits:String? = nil){
         self.token = token;
         self.expiry = expiry;
         self.cvv = cvv;
+        self.panLast4Digits = panLast4Digits
+        self.panFirst6Digits = panFirst6Digits
     }
     
 }

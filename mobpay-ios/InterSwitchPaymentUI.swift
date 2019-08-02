@@ -11,7 +11,9 @@ open class InterSwitchPaymentUI : FormViewController {
     var merchantConfig:MerchantConfig!
     var clientId:String!
     var clientSecret:String!
-    public convenience init(merchant: Merchant,payment: Payment, customer: Customer,clientId:String,clientSecret:String,merchantConfig:MerchantConfig) {
+    var cardTokens:Array<CardToken>? = nil
+    
+    public convenience init(merchant: Merchant,payment: Payment, customer: Customer,clientId:String,clientSecret:String,merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil) {
         self.init()
         self.merchant = merchant;
         self.payment = payment;
@@ -19,6 +21,7 @@ open class InterSwitchPaymentUI : FormViewController {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.merchantConfig = merchantConfig
+        self.cardTokens = cardTokens
         //TODO add token details
     }
     
