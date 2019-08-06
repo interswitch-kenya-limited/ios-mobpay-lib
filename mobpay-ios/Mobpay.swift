@@ -10,11 +10,10 @@
 import Foundation
 import CryptoSwift
 import SwiftyRSA
-import Eureka
 import SafariServices
 import CocoaMQTT
 
-public class Mobpay:FormViewController {
+public class Mobpay:UIViewController {
 
     public static let instance = Mobpay()
     
@@ -45,7 +44,7 @@ public class Mobpay:FormViewController {
     
     
     //launch ui
-    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,cardTokens:Array<CardToken>? = nil,launchUI:@escaping (FormViewController)->())throws{
+    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,cardTokens:Array<CardToken>? = nil,launchUI:@escaping (UIViewController)->())throws{
         try!getMerchantConfigs(clientId: clientId, clientSecret: clientSecret){
             (merchantConfig) in
             let UserInterfaceController = InterSwitchPaymentUI(merchant: merchant, payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig,cardTokens:cardTokens)
@@ -62,10 +61,11 @@ public class Mobpay:FormViewController {
                 return
             }
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print(dataString)
-                let responseAsJson:Dictionary<String,Any> = self.convertToDictionary(message:dataString)!
-                let configs = responseAsJson["config"] as? Dictionary<String,Any>
-                let merchantConfig:MerchantConfig = MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int)
+
+            let responseAsJson:Dictionary<String,Any> = self.convertToDictionary(message:dataString)!
+            let configs = responseAsJson["config"] as? Dictionary<String,Any>
+            
+            let merchantConfig:MerchantConfig = MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int)
             completion(merchantConfig)
             }
         }

@@ -1,7 +1,7 @@
 
-import Eureka
+import UIKit
 
-open class InterSwitchPaymentUI : FormViewController {
+open class InterSwitchPaymentUI : UIViewController {
     
     var InterSwitchPaymentUIDelegate:InterSwitchPaymentUIDelegate?
 
@@ -39,14 +39,14 @@ open class InterSwitchPaymentUI : FormViewController {
     
     func createTabBarController() {
         
-        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig)
+        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
         cardVC.title = "Card"
         cardVC.tabBarItem = UITabBarItem.init(title: "Card", image: UIImage(named: "HomeTab"), tag: 0)
         cardVC.CardPaymentUIDelegate = self
         
         let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
         mobileVC.title = "Mobile"
-        mobileVC.view.backgroundColor =  UIColor.green
+        mobileVC.view.backgroundColor =  UIColor.white
         mobileVC.tabBarItem = UITabBarItem.init(title: "Mobile", image: UIImage(named: "Location"), tag: 1)
         mobileVC.MobilePaymentUIDelegate = self
         

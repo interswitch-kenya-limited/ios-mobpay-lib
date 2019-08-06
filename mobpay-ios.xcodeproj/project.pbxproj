@@ -11,6 +11,7 @@
 		3B1BE8AB22C37DBE0078CF50 /* MobilePaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */; };
 		3B1BE8AD22C37DDB0078CF50 /* CardPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */; };
 		3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */; };
+		3B4087D922F437A40034CE56 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4087D822F437A40034CE56 /* ActivityIndicator.swift */; };
 		3B498A5B22C6010300137324 /* HeaderGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B498A5A22C6010300137324 /* HeaderGeneration.swift */; };
 		3B59629E22F1963700A92195 /* CommonUIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59629D22F1963700A92195 /* CommonUIElements.swift */; };
 		3B6E660A229D52C20076822B /* Mobpay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6609229D52C20076822B /* Mobpay.swift */; };
@@ -49,6 +50,7 @@
 		3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilePaymentUI.swift; sourceTree = "<group>"; };
 		3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPaymentUI.swift; sourceTree = "<group>"; };
 		3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankPaymentUI.swift; sourceTree = "<group>"; };
+		3B4087D822F437A40034CE56 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		3B498A5A22C6010300137324 /* HeaderGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderGeneration.swift; sourceTree = "<group>"; };
 		3B59629D22F1963700A92195 /* CommonUIElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUIElements.swift; sourceTree = "<group>"; };
 		3B6E6609229D52C20076822B /* Mobpay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobpay.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */,
 				3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */,
 				3B59629D22F1963700A92195 /* CommonUIElements.swift */,
+				3B4087D822F437A40034CE56 /* ActivityIndicator.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				3B59629E22F1963700A92195 /* CommonUIElements.swift in Sources */,
 				3BC52FA722DF401500D549B8 /* Images.swift in Sources */,
 				3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */,
+				3B4087D922F437A40034CE56 /* ActivityIndicator.swift in Sources */,
 				3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */,
 				3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */,
 				3B6E6612229D53770076822B /* Payment.swift in Sources */,

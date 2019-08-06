@@ -12,7 +12,7 @@ import PercentEncoder
 func submitConfirmMobilePayment(clientId:String, clientSecret:String,httpRequest: String,transactionRef: String, completion:@escaping (String)->()) {
     let request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: httpRequest, path: "/api/v1/merchant/bills/transactions/"+transactionRef)
     
-    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+    let task = try URLSession.shared.dataTask(with: request) { (data, response, error) in
         if error != nil {
             completion(error!.localizedDescription)
         }
