@@ -14,7 +14,7 @@ import FormTextField
 protocol CardPaymentUIDelegate {
     func didReceiveCardPayload(_ payload:String)
 }
-open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
+open class CardPaymentUI : UIViewController,WKUIDelegate {
     let height = CGFloat(60)
     var initialY : CGFloat{
         get{
@@ -31,7 +31,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     
     var CardPaymentUIDelegate:CardPaymentUIDelegate?
     
-    
+    var cardTokenIndex:Int = 0
     var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
@@ -70,6 +70,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         return nil
     }
     func showResponse(message: String){
+        
         let responseAsString = message
         let responseAsJson = convertToDictionary(message: responseAsString)
         let errorExists = responseAsJson?["error"] != nil
@@ -83,6 +84,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
                 print("Cancelled")
             })
             self.present(alert, animated: true, completion: nil)
+            
         }else{
             let paymentMessage:String = "Payment Success"
             let paymentSuccessfullImage = UIImageView(image: loadImageFromBase64(base64String: Base64Images().happyFace))
@@ -92,6 +94,10 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
                 self.CardPaymentUIDelegate?.didReceiveCardPayload(responseAsString)
             })
             self.present(alert, animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                self.dismiss(animated: true)
+                self.CardPaymentUIDelegate?.didReceiveCardPayload(responseAsString)
+            })
         }
         
     }
@@ -109,7 +115,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     
     
     lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: CGRect(x: 0, y: initialY, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 10, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         view.addSubview(headerSection)
         view.addSubview(enterCardDetailsLabel)
         view.addSubview(cardNumberLabel)
@@ -197,9 +203,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         return label
     }()
     lazy var cardNumberField:FormTextField = {
-        let margin = CGFloat(5)
+        let margin = CGFloat(20)
         var previousFrame = self.cardNumberLabel.frame
-        previousFrame.origin.y = self.cardNumberLabel.frame.maxY
+        previousFrame.origin.y = self.cardNumberLabel.frame.maxY + margin
         previousFrame.size.height = self.cardNumberLabel.frame.size.height * 1.5
         previousFrame.size.width = self.cardNumberLabel.frame.size.width
         
@@ -235,18 +241,9 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let textField = UITextField()
         textField.frame = previousFrame
         textField.borderStyle = UITextField.BorderStyle.roundedRect
-        //        textField.rightViewMode = UITextField.ViewMode.always
-        //        textField.rightViewMode = .always
         textField.inputView = tokenPicker
         textField.text = self.cardTokens?[0].tokenizedCardPan
         textField.isHidden = !self.useCardTokenSection
-        //        let textView = UITextView();
-        //        textView.frame = CGRect(x:0, y: 0, width: 60, height: 45)
-        //        textView.textAlignment = .center
-        //        textView.isEditable = false
-        //        textView.isSelectable = true
-        //        textView.text = "Select Payment Method"
-        //        textField.rightView = textView;
         return textField
     }()
     lazy var useTokenOrCardSegmentedControl:UISegmentedControl = {
@@ -283,7 +280,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
         let textField = FormTextField(frame: previousFrame)
         textField.inputType = .integer
         textField.formatter = CardExpirationDateFormatter()
-        if(!self.useCardTokenSection){
+        if(self.useCardTokenSection == false){
             textField.placeholder = "MM/YY"
         }else{
             textField.placeholder = self.cardTokens?[0].expiry
@@ -428,7 +425,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     
     //BUTTON ACTIONS
     @objc func submitButtonAction(_ : UIButton){
-        if (self.useCardTokenSection) {
+        if (self.useCardTokenSection == false) {
             if cardNumberField.validate() && cardExpirationDateField.validate() && cvcField.validate() {
                 let expDateArray = Array(self.cardExpirationDateField.text!)
                 let expMonth = String(expDateArray[0]) + String(expDateArray[1])
@@ -446,7 +443,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
             }
         }else{
             if cvcField.validate(){
-                let token = CardToken(token: self.cardTokens![0].token, expiry: cardTokens![0].expiry, cvv: self.cvcField.text!)
+                let token = CardToken(token: self.cardTokens![self.cardTokenIndex].token, expiry: cardTokens![0].expiry, cvv: self.cvcField.text!)
                 let webCardinalURL = Mobpay.instance.generateCardTokenWebQuery(cardToken: token, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId, clientSecret: self.merchantConfig.clientSecret)
                 let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
                 self.navigationController?.pushViewController(threeDS,animated: true)
@@ -463,9 +460,11 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     @objc func useTokenOrCardSegmentedControlChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
         case 0:
-            self.useCardTokenSection = false
-        case 1:
             self.useCardTokenSection = true
+            refreshTextFields()
+        case 1:
+            self.useCardTokenSection = false
+            refreshTextFields()
         default:
             break
         }
@@ -475,7 +474,7 @@ open class CardPaymentUI : UIViewController,UITextFieldDelegate,WKUIDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.navigationController?.popViewController(animated: true)
+        self.CardPaymentUIDelegate?.didReceiveCardPayload("Transaction failed: User quit before finishing the transaction")
     }
     
     //LOAD IMAGES
@@ -576,12 +575,27 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
         cardTokenField.text = self.cardTokens?[row].tokenizedCardPan
+        self.cardTokenIndex = row
         self.cardToken = cardTokenField.text!
+        cardExpirationDateField.placeholder = cardTokenField.text!
         cardTokenField.endEditing(true)
-//        refreshTextViews()
-//        refreshButtons()
+        refreshTextFields()
+        refreshButtons()
     }
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
+    
+    func refreshTextFields(){
+        cardTokenField.isHidden = !self.useCardTokenSection
+        cardNumberField.isHidden = self.useCardTokenSection
+        cardExpirationDateField.isEnabled = true
+        cardExpirationDateField.setNeedsLayout()
+        self.view.setNeedsDisplay()
+    }
+    func refreshButtons(){}
+}
+
+extension CardPaymentUI: FormTextFieldDelegate {
+    
 }

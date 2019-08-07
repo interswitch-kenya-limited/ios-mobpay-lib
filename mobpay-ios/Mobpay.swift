@@ -56,7 +56,7 @@ public class Mobpay:UIViewController {
     
     func getMerchantConfigs(clientId: String, clientSecret: String,completion:@escaping(MerchantConfig)->())throws{
         let request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", path: "/api/v1/merchant/mfb/confignew")
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = try!URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else{
                 return
             }

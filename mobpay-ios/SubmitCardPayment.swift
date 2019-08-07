@@ -17,15 +17,18 @@ func generateLink(transactionRef:String,merchantId: String, payload: CardPayment
     let payload = String(data: jsonData, encoding: .utf8)
     
     let transactionType:String = transactionType
-    let key:String = generateKey(length: 16)                   // 16 bytes for AES128
+    let key:String = generateKey(length: 16)
+    // 16 bytes for AES128
+    let iv:String = "drowssapdrowssap"
     let encryptedKey:String = try!RSAUtil.encryptBrowserPayload(payload: key)
-    
-    let aes = try!AES(key: key, iv: "drowssapdrowssap") // aes128
+    let encryptedIv:String = try!RSAUtil.encryptBrowserPayload(payload: iv)
+    let aes = try!AES(key: key, iv: iv) // aes128
     let ciphertext = try!aes.encrypt(Array(payload!.utf8))
     let cryptedMessage = ciphertext.toBase64()
     let encodedCryptedMessage = PercentEncoding.encodeURIComponent.evaluate(string: cryptedMessage!)
     let encodedEncryptedKey = PercentEncoding.encodeURIComponent.evaluate(string: encryptedKey)
-    let webCardinalURL = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(transactionType)&key=\(encodedEncryptedKey)&payload=\(encodedCryptedMessage)")!
+    let encodedEncrytpedIv = PercentEncoding.encodeURIComponent.evaluate(string: encryptedIv)
+    let webCardinalURL = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(transactionType)&key=\(encodedEncryptedKey)&iv=\(encodedEncrytpedIv)&payload=\(encodedCryptedMessage)")!
     return webCardinalURL
 }
 

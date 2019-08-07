@@ -31,7 +31,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     var paymentMethods:Array<String> = []
     var paymentMethod:String!
     var phoneNumber:String = ""
-    var selectedPaymentOption:String = "ExpressCheckout"
+    var selectedPaymentOption:String = "Express Checkout"
     
     convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
         self.init()
@@ -41,8 +41,49 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         self.merchantConfig = merchantConfig;
         self.paymentMethods = self.populatePaymentmethods()
         self.paymentMethod = self.paymentMethods[0]
+        
+        self.refreshTextViews()
     }
-    
+    func convertToDictionary(message: String) -> [String: Any]? {
+        if let data = message.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+               self.MobilePaymentUIDelegate?.didReceiveMobilePayload(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    func showMobileResponse(message: String){
+        let responseAsString = message
+        let responseAsJson = convertToDictionary(message: responseAsString)
+        let errorExists = responseAsJson?["error"] != nil
+        if errorExists == true {
+            let paymentMessage:String = "Please try again ot select an alternative payment option"
+            let alert = UIAlertController(title: "Payment Failed", message: paymentMessage, preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "Quit", style: .destructive) { (action:UIAlertAction!) in
+               self.MobilePaymentUIDelegate?.didReceiveMobilePayload("Transaction failed: User quit before finishing the transaction")
+            })
+            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { (action:UIAlertAction!) in
+                print("Cancelled")
+            })
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            let paymentMessage:String = "Payment Success"
+            let paymentSuccessfullImage = UIImageView(image: loadImageFromBase64(base64String: Base64Images().happyFace))
+            paymentSuccessfullImage.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+            let alert = UIAlertController(title: "Payment Success", message: paymentMessage, preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "Okay", style: .default){(action: UIAlertAction!) in
+                self.MobilePaymentUIDelegate?.didReceiveMobilePayload(responseAsString)
+            })
+            self.present(alert, animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                self.dismiss(animated: true)
+                self.MobilePaymentUIDelegate?.didReceiveMobilePayload(responseAsString)
+            })
+        }
+        
+    }
     func populatePaymentmethods()->Array<String>{
         if self.merchantConfig.mpesaStatus == 1 {
             self.paymentMethods.append("MPESA")
@@ -68,16 +109,13 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     
     //SECTIONS
     lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: CGRect(x: 0, y: initialY, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 10, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         view.addSubview(headerSection)
         view.addSubview(selectMobilePaymentOptionLabel)
         view.addSubview(selectPaymentMethod)
         view.addSubview(chooseExpressCheckoutOrPaybill)
         view.addSubview(phoneNumberField)
-        view.addSubview(mpesaExpressCheckoutInstructions)
-        view.addSubview(mpesaPaybillInstructions)
-        view.addSubview(eazzyPayExpressCheckoutInstructions)
-        view.addSubview(eazzyPaybillInstructions)
+        view.addSubview(mobilePaymentInstructions)
         view.addSubview(submitButton)
         view.addSubview(cancelButton)
         view.addSubview(grayMpesa)
@@ -114,6 +152,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         previousFrame.size.width = previousFrame.size.width
         let label = UILabel.init(frame: previousFrame)
         label.textAlignment = .right
+        label.textColor = UIColor.gray
         label.text = self.customer.email
         return label
     }()
@@ -144,17 +183,8 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         let textField = UITextField()
         textField.frame = previousFrame
         textField.borderStyle = UITextField.BorderStyle.roundedRect
-        //        textField.rightViewMode = UITextField.ViewMode.always
-        //        textField.rightViewMode = .always
         textField.inputView = paymentMethodPicker
         textField.text = paymentMethods[0]
-        //        let textView = UITextView();
-        //        textView.frame = CGRect(x:0, y: 0, width: 60, height: 45)
-        //        textView.textAlignment = .center
-        //        textView.isEditable = false
-        //        textView.isSelectable = true
-        //        textView.text = "Select Payment Method"
-        //        textField.rightView = textView;
         return textField
     }()
     lazy var chooseExpressCheckoutOrPaybill:UISegmentedControl = {
@@ -172,47 +202,103 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     }()
     
     @objc func chooseExpressCheckoutOrPaybill(_ : UIButton){
-        if self.selectedPaymentOption == "ExpressCheckout" {
+        if self.selectedPaymentOption == "Express Checkout" {
             self.selectedPaymentOption = "Paybill"
         }else{
-            self.selectedPaymentOption = "ExpressCheckout"
+            self.selectedPaymentOption = "Express Checkout"
         }
-        self.refreshTextViews()
-        self.refreshButtons()
+        refreshTextViews()
+        refreshButtons()
         self.view.setNeedsDisplay()
     }
     
     func refreshTextViews(){
-        self.mpesaExpressCheckoutInstructions.isHidden = !(self.selectedPaymentOption == "ExpressCheckout" && self.paymentMethod == "MPESA")
-        self.mpesaPaybillInstructions.isHidden = !(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "MPESA")
-        self.eazzyPayExpressCheckoutInstructions.isHidden = !(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY")
-        self.eazzyPaybillInstructions.isHidden = !(self.selectedPaymentOption == "ExpressCheckout" && self.paymentMethod == "EAZZYPAY")
-        scrollView.setNeedsDisplay()
+        var phonePreviousFrame = self.chooseExpressCheckoutOrPaybill.frame
+        phonePreviousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + 20
+        phonePreviousFrame.size.height = CGFloat(50)
+        if(self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "MPESA"){
+            phoneNumberField.isHidden = false
+            var previousFrame = self.phoneNumberField.frame
+            previousFrame.origin.y = self.phoneNumberField.frame.maxY + 20
+            mobilePaymentInstructions.frame = previousFrame
+            mobilePaymentInstructions.text = """
+            \u{2022} Enter your M-PESA number above.
+            \u{2022} Click the pay button
+            \u{2022} Enter your M-PESA pin when prompted on your phone
+            \u{2022} Confirm the details then complete the transaction
+            Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
+            """
+        }else if(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "MPESA"){
+            phoneNumberField.isHidden = true
+            var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
+            previousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + 20
+            mobilePaymentInstructions.frame = previousFrame
+            mobilePaymentInstructions.text = """
+                \u{2022} Go to M-PESA on your phone
+                \u{2022} Select Lipa na Mpesa option
+                \u{2022} Select Pay Bill Option
+                \u{2022} Enter business no. \(self.merchantConfig.mpesaPaybill)
+                \u{2022} Enter account no \(self.payment.transactionRef)
+                \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
+                \u{2022} Enter your M-PESA PIN and send
+                Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
+                """
+        }else if(self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "EAZZYPAY"){
+            phoneNumberField.isHidden = false
+            var previousFrame = self.phoneNumberField.frame
+            previousFrame.origin.y = self.phoneNumberField.frame.maxY + 20
+            mobilePaymentInstructions.frame = previousFrame
+            self.mobilePaymentInstructions.text = """
+            \u{2022} Click the Pay button
+            \u{2022} Enter your EazzyPay pin when prompted on your phone
+            \u{2022} Confirm the details then complete the transaction
+            Didn’t get the prompt on your phone?
+            Choose paybill and follow the instructions
+            """
+        }else{
+            var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
+            previousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + 20
+            phoneNumberField.isHidden = false
+            mobilePaymentInstructions.frame = previousFrame
+            self.mobilePaymentInstructions.text = """
+                    \u{2022} Go to EazzyPay on your phone
+                    \u{2022} Select Lipa na Mpesa option
+                    \u{2022} Select Pay Bill Option
+                    \u{2022} Enter business no. \(self.merchantConfig.equitelPaybill)
+                    \u{2022} Enter account no \(self.payment.transactionRef)
+                    \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
+                    \u{2022} Enter your EazzyPay PIN and send
+                    Once you receive a confirmation SMS from EazzyPay, click on the confirm payment button below
+                    """
+        }
+        phoneNumberField.frame = phonePreviousFrame
+        mobilePaymentInstructions.sizeToFit()
+        self.view.setNeedsDisplay()
     }
     func refreshButtons(){
         if self.selectedPaymentOption == "Paybill" && self.paymentMethod == "MPESA" {
-            var previousFrame = self.mpesaPaybillInstructions.frame
-            previousFrame.origin.y = previousFrame.maxY + 20
-            previousFrame.size.width = UIScreen.main.bounds.width - 20
-            previousFrame.size.height = CGFloat(50)
-            submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
-        }else if self.selectedPaymentOption == "ExpressCheckout" && self.paymentMethod == "MPESA"{
-            var previousFrame = self.mpesaExpressCheckoutInstructions.frame
+            var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
             submitButton.setTitle("CONFIRM PAYMENT", for: .normal)
+        }else if self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "MPESA"{
+            var previousFrame = self.mobilePaymentInstructions.frame
+            previousFrame.origin.y = previousFrame.maxY + 20
+            previousFrame.size.width = UIScreen.main.bounds.width - 20
+            previousFrame.size.height = CGFloat(50)
+            submitButton.frame = previousFrame
+            submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
         }else if self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY"{
-            var previousFrame = self.eazzyPaybillInstructions.frame
+            var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
         }else{
-            var previousFrame = self.eazzyPayExpressCheckoutInstructions.frame
+            var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
@@ -230,7 +316,6 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         let margin = CGFloat(20)
         var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
         previousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
         previousFrame.size.height = CGFloat(50)
         let textField = UITextField.init()
         textField.frame = previousFrame
@@ -241,104 +326,22 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         textField.delegate = self
         return textField
     }()
-    
-    lazy var mpesaExpressCheckoutInstructions: UITextView = {
+    lazy var mobilePaymentInstructions: UITextView  = {
         let margin = CGFloat(20)
         var previousFrame = self.phoneNumberField.frame
         previousFrame.origin.y = self.phoneNumberField.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
         let textView = UITextView(frame: previousFrame)
         textView.text = """
-        \u{2022} Go to M-PESA on your phone
-        \u{2022} Select Lipa na Mpesa option
-        \u{2022} Select Pay Bill Option
-        \u{2022} Enter business no. \(self.merchantConfig.mpesaPaybill)
-        \u{2022} Enter account no \(self.payment.transactionRef)
-        \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
-        \u{2022} Enter your M-PESA PIN and send
-        Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
-        """
-        textView.textAlignment = .justified
-        textView.isSelectable = true
-        textView.isEditable = false
-        textView.isHidden = !(self.selectedPaymentOption == "ExpressCheckout" && self.paymentMethod == "MPESA")
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.textColor = UIColor.gray
-        return textView
-    }()
-    lazy var mpesaPaybillInstructions: UITextView = {
-        let margin = CGFloat(20)
-        var previousFrame = self.phoneNumberField.frame
-        previousFrame.origin.y = self.phoneNumberField.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
-        let textView = UITextView(frame: previousFrame)
-        //        textView.font = UIFont.systemFont(ofSize: 15)
-        textView.text = """
-        \u{2022} Go to M-PESA on your phone
-        \u{2022} Select Lipa na Mpesa option
-        \u{2022} Select Pay Bill Option
-        \u{2022} Enter business no. \(self.merchantConfig.mpesaPaybill)
-        \u{2022} Enter account no \(self.payment.transactionRef)
-        \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
-        \u{2022} Enter your M-PESA PIN and send
-        Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
-        """
-        textView.textAlignment = .justified
-        textView.isSelectable = true
-        textView.isEditable = false
-        textView.isHidden = !(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "MPESA")
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.textColor = UIColor.gray
-        return textView
-    }()
-    lazy var eazzyPayExpressCheckoutInstructions: UITextView = {
-        let margin = CGFloat(20)
-        var previousFrame = self.phoneNumberField.frame
-        previousFrame.origin.y = self.phoneNumberField.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
-        let textView = UITextView(frame: previousFrame)
-        textView.text = """
-        \u{2022} Click the Pay button
-        \u{2022} Enter your EazzyPay pin when prompted on your phone
+        \u{2022} Enter your M-PESA number above.
+        \u{2022} Click the pay button
+        \u{2022} Enter your M-PESA pin when prompted on your phone
         \u{2022} Confirm the details then complete the transaction
-        Didn’t get the prompt on your phone?
-        Choose paybill and follow the instructions
+        Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
         """
         textView.textAlignment = .justified
         textView.isSelectable = true
         textView.isEditable = false
-        textView.isHidden = !(self.selectedPaymentOption == "ExpressCheckout" && self.paymentMethod == "EAZZYPAY")
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
-        textView.textColor = UIColor.gray
-        textView.isScrollEnabled = false
-        return textView
-    }()
-    lazy var eazzyPaybillInstructions: UITextView = {
-        let margin = CGFloat(20)
-        var previousFrame = self.phoneNumberField.frame
-        previousFrame.origin.y = self.phoneNumberField.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
-        let textView = UITextView(frame: previousFrame)
-        textView.text = """
-        \u{2022} Go to EazzyPay on your phone
-        \u{2022} Select Lipa na Mpesa option
-        \u{2022} Select Pay Bill Option
-        \u{2022} Enter business no. \(self.merchantConfig.equitelPaybill)
-        \u{2022} Enter account no \(self.payment.transactionRef)
-        \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
-        \u{2022} Enter your EazzyPay PIN and send
-        Once you receive a confirmation SMS from EazzyPay, click on the confirm payment button below
-        """
-        textView.textAlignment = .justified
-        textView.isSelectable = true
-        textView.isEditable = false
-        textView.isHidden = !(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY")
-        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.isHidden = !(self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "MPESA")
         textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.textColor = UIColor.gray
@@ -346,7 +349,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     }()
     lazy var  submitButton:UIButton = {
         let margin = CGFloat(20)
-        var previousFrame = self.mpesaExpressCheckoutInstructions.frame
+        var previousFrame = self.mobilePaymentInstructions.frame
         previousFrame.origin.y = previousFrame.maxY + margin
         previousFrame.size.width = UIScreen.main.bounds.width - 20
         previousFrame.size.height = CGFloat(50)
@@ -360,19 +363,34 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         submitButton.clipsToBounds = true;
         return submitButton
     }()
+    
+    
+    lazy var activityIndicator:UIActivityIndicatorView = {
+        var indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    
     @objc func submitMobilePayment(_ : UIButton){
-        
-        if(self.selectedPaymentOption == "ExpressCheckout"){
-//            ViewControllerUtils().showActivityIndicator(uiView: self.view)
-            let mobile = Mobile(phone: self.phoneNumber)
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+
+        if(self.selectedPaymentOption == "Express Checkout"){
+            let mobile = Mobile(phone: self.phoneNumberField.text!)
             try!Mobpay.instance.makeMobileMoneyPayment(mobile: mobile, merchant: merchant, payment: payment, customer: customer, clientId: self.merchantConfig.clientId, clientSecret:self.merchantConfig.clientSecret){ (completion) in
-//                ViewControllerUtils().hideActivityIndicator(uiView: self.view)
-                self.MobilePaymentUIDelegate?.didReceiveMobilePayload(completion)
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                    self.showMobileResponse(message: completion)
+                }
             }
         }else{
             try!Mobpay.instance.confirmMobileMoneyPayment(orderId: self.payment.orderId, clientId: self.merchantConfig.clientId, clientSecret: self.merchantConfig.clientSecret){(completion) in
-//                ViewControllerUtils().hideActivityIndicator(uiView: self.view)
-                self.MobilePaymentUIDelegate?.didReceiveMobilePayload(completion)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.showMobileResponse(message: completion)
+            }
             }
         }
         
@@ -393,7 +411,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     }()
     
     @objc func cancelTransaction(_ : UIButton){
-        self.navigationController?.popViewController(animated: true)
+        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("Transaction failed: User quit before finishing the transaction")
     }
     
     
@@ -440,12 +458,18 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         }
         let currentText = textField.text ?? ""
         let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        if prospectiveText.count == 10 && checkIfStringHasDecimals(stringToTest: prospectiveText){
+            submitButton.backgroundColor = UIColor(red: 0.0/255, green: 69.0/255, blue: 95.0/255, alpha: 1.0)
+            submitButton.layoutMarginsDidChange()
+            submitButton.layoutIfNeeded()
+        }
         switch textField {
         case phoneNumberField:
             return prospectiveText.count <= 10 && checkIfStringHasDecimals(stringToTest: prospectiveText)
         default:
             return true
         }
+        
     }
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -472,8 +496,9 @@ extension MobilePaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
         selectPaymentMethod.text = paymentMethods[row]
         self.paymentMethod = selectPaymentMethod.text!
         selectPaymentMethod.endEditing(true)
-        self.refreshTextViews()
-        self.refreshButtons()
+        refreshTextViews()
+        refreshButtons()
+        self.dismiss(animated: true)
     }
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
