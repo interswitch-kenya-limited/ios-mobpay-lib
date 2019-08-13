@@ -21,7 +21,6 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             }
         }
     }
-    var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
     var merchantConfig:MerchantConfig!
@@ -35,9 +34,8 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     var selectedPaymentOption:String = "Express Checkout"
     var shownPaymentAmount:String!
     var validPhoneNumberField:Bool = false
-    convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
+    convenience init(payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
         self.init()
-        self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
         self.merchantConfig = merchantConfig;
@@ -401,7 +399,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         view.addSubview(activityIndicator)
         if(self.selectedPaymentOption == "Express Checkout"){
             let mobile = Mobile(phone: self.phoneNumberField.text!)
-            try!Mobpay.instance.makeMobileMoneyPayment(mobile: mobile, merchant: merchant, payment: payment, customer: customer, clientId: self.merchantConfig.clientId, clientSecret:self.merchantConfig.clientSecret){ (completion) in
+            try!Mobpay.instance.makeMobileMoneyPayment(mobile: mobile, merchant: Merchant(merchantId: merchantConfig.merchantId, domain: merchantConfig.merchantDomain), payment: payment, customer: customer, clientId: self.merchantConfig.clientId, clientSecret:self.merchantConfig.clientSecret){ (completion) in
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                     self.showMobileResponse(message: completion)

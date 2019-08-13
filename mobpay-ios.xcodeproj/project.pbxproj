@@ -28,6 +28,7 @@
 		3B9F4AE422B8D1DA00E96384 /* submitMobilePayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */; };
 		3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */; };
 		3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE722BA023E00E96384 /* Payloads.swift */; };
+		3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */; };
 		3BB84666229FBC85001C80AD /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84665229FBC85001C80AD /* Mobile.swift */; };
 		3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84667229FCB53001C80AD /* RSAUtil.swift */; };
 		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
@@ -72,6 +73,7 @@
 		3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = submitMobilePayment.swift; sourceTree = "<group>"; };
 		3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitCardPayment.swift; sourceTree = "<group>"; };
 		3B9F4AE722BA023E00E96384 /* Payloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payloads.swift; sourceTree = "<group>"; };
+		3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDSWebView.swift; sourceTree = "<group>"; };
 		3BB84665229FBC85001C80AD /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
 		3BB84667229FCB53001C80AD /* RSAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtil.swift; sourceTree = "<group>"; };
 		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */,
 				3B59629D22F1963700A92195 /* CommonUIElements.swift */,
 				3B4087D822F437A40034CE56 /* ActivityIndicator.swift */,
+				3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				3B97B68422BB674200703BDC /* InterSwitchPaymentUI.swift in Sources */,
 				3B498A5B22C6010300137324 /* HeaderGeneration.swift in Sources */,
 				3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */,
+				3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */,
 				3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */,
 				3B6E6610229D53540076822B /* Merchant.swift in Sources */,
 				3BB84666229FBC85001C80AD /* Mobile.swift in Sources */,

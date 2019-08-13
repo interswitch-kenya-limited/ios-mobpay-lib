@@ -5,7 +5,6 @@ open class InterSwitchPaymentUI : UIViewController {
     
     var InterSwitchPaymentUIDelegate:InterSwitchPaymentUIDelegate?
 
-    var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
     var merchantConfig:MerchantConfig!
@@ -13,9 +12,8 @@ open class InterSwitchPaymentUI : UIViewController {
     var clientSecret:String!
     var cardTokens:Array<CardToken>? = nil
     
-    public convenience init(merchant: Merchant,payment: Payment, customer: Customer,clientId:String,clientSecret:String,merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil) {
+    public convenience init(payment: Payment, customer: Customer,clientId:String,clientSecret:String,merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil) {
         self.init()
-        self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
         self.clientId = clientId
@@ -41,14 +39,14 @@ open class InterSwitchPaymentUI : UIViewController {
         var controllerArray:Array<UIViewController> = []
 
         if self.merchantConfig.cardStatus == 1 {
-            let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
+            let cardVC = CardPaymentUI(payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
             cardVC.title = "CARD"
             cardVC.tabBarItem = UITabBarItem.init(title: "CARD", image: UIImage(named: "CARD"), tag: 0)
             cardVC.CardPaymentUIDelegate = self
             controllerArray.append(cardVC)
         }
         if self.merchantConfig.airtelStatus == 1 || self.merchantConfig.mpesaStatus == 1 || self.merchantConfig.tkashStatus == 1 || self.merchantConfig.equitelStatus == 1 {
-            let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
+            let mobileVC = MobilePaymentUI(payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
             mobileVC.title = "MOBILE"
             mobileVC.view.backgroundColor =  UIColor.white
             mobileVC.tabBarItem = UITabBarItem.init(title: "MOBILE", image: UIImage(named: "MOBILE"), tag: 1)

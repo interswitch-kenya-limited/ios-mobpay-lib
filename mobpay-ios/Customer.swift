@@ -22,8 +22,6 @@ public struct Customer{
         self.postalCode = postalCode
         self.street = street
         self.state = state
-    }
-
-    
+    } 
 }
 

@@ -62,9 +62,11 @@ public struct MerchantConfig{
     let tkashStatus:Int
     let airtelStatus:Int
     let paycodeStatus:Int
+    let bnkStatus:Int
     let mpesaPaybill:String
     let equitelPaybill:String
     let tokenizeStatus:Int
     let cardauthStatus:Int
     let cardPreauth:Int
+    let merchantDomain:String
 }

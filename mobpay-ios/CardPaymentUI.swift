@@ -33,7 +33,6 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     var CardPaymentUIDelegate:CardPaymentUIDelegate?
     
     var cardTokenIndex:Int = 0
-    var merchant:Merchant!
     var payment:Payment!
     var customer:Customer!
     var merchantConfig:MerchantConfig!
@@ -41,13 +40,13 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     var useCardTokenSection:Bool = false
     var cardToken:String!
     var shownPaymentAmount:String!
+    var merchant:Merchant!
    //ui input elements
     var tokenize:Bool!
     
     
-    convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil ) {
+    convenience init(payment: Payment, customer: Customer, merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil ) {
         self.init()
-        self.merchant = merchant;
         self.payment = payment;
         self.customer = customer;
         self.merchantConfig = merchantConfig
@@ -61,12 +60,14 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         }else{
             self.tokenize = false
         }
+        self.merchant = Merchant(merchantId: merchantConfig.merchantId, domain: merchantConfig.merchantDomain)
     }
-    func convertToDictionary(message: String) -> [String: Any]? {
+    func convertToDictionary(message: String) throws-> [String: Any]? {
         if let data = message.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
+                throw error
                 self.CardPaymentUIDelegate?.didReceiveCardPayload(error.localizedDescription)
             }
         }
@@ -75,7 +76,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     func showResponse(message: String){
         
         let responseAsString = message
-        let responseAsJson = convertToDictionary(message: responseAsString)
+        let responseAsJson = try!convertToDictionary(message: responseAsString)
         let errorExists = responseAsJson?["error"] != nil
         if errorExists == true {
             let paymentMessage:String = "Please try again ot select an alternative payment option"
@@ -437,7 +438,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
                 let expMonth = String(expDateArray[0]) + String(expDateArray[1])
                 let expYear = String(expDateArray[3]) + String(expDateArray[4])
                 let cardInput = Card(pan: self.cardNumberField.text!.replacingOccurrences(of: " ", with: ""), cvv: self.cvcField.text!, expiryYear: expYear, expiryMonth: expMonth, tokenize: self.tokenize)
-                let webCardinalURL = Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret)
+                let webCardinalURL = try!Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret)
                 let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
                 self.navigationController?.pushViewController(threeDS,animated: true)
                 Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
@@ -450,7 +451,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         }else{
             if cvcField.validate(){
                 let token = CardToken(token: self.cardTokens![self.cardTokenIndex].token, expiry: cardTokens![0].expiry, cvv: self.cvcField.text!)
-                let webCardinalURL = Mobpay.instance.generateCardTokenWebQuery(cardToken: token, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId, clientSecret: self.merchantConfig.clientSecret)
+                let webCardinalURL = try!Mobpay.instance.generateCardTokenWebQuery(cardToken: token, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId, clientSecret: self.merchantConfig.clientSecret)
                 let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
                 self.navigationController?.pushViewController(threeDS,animated: true)
                 Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
@@ -546,31 +547,6 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         return decodedimage
     }
 }
-
-
-class ThreeDSWebView: UIViewController, WKUIDelegate {
-    
-    var webView: WKWebView!
-    var webCardinalURL: URL!
-    
-    convenience init(webCardinalURL:URL){
-        self.init()
-        self.webCardinalURL = webCardinalURL
-    }
-    
-    override func loadView() {
-    let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        webView.load(URLRequest(url: webCardinalURL))
-    }
-}
-
 extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         return self.cardTokens!.count
@@ -603,8 +579,10 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
     func refreshButtons(){}
 }
 
-extension CardPaymentUI: FormTextFieldDelegate {
+extension CardPaymentUI:MobpayPaymentDelegate{
+    public func launchUIPayload(_ message: String) {
+        
+    }
     
+    public func receivedPayload(_ message: String) {}
 }
-
-
