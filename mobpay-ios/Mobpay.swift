@@ -61,12 +61,16 @@ public class Mobpay:UIViewController {
                 return
             }
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
-
-            let responseAsJson:Dictionary<String,Any> = self.convertToDictionary(message:dataString)!
-            let configs = responseAsJson["config"] as? Dictionary<String,Any>
+                do{
+                   let responseAsJson:Dictionary<String,Any> = try self.convertToDictionary(message:dataString)!
+                    let configs = responseAsJson["config"] as? Dictionary<String,Any>
+                    
+                    let merchantConfig:MerchantConfig = try MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int)
+                    completion(merchantConfig)
+                } catch{
+                    return
+                }
             
-            let merchantConfig:MerchantConfig = MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int)
-            completion(merchantConfig)
             }
         }
         task.resume()
@@ -77,6 +81,7 @@ public class Mobpay:UIViewController {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
+//                return
                 print(error.localizedDescription)
             }
         }

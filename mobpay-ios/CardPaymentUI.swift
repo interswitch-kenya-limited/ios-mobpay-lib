@@ -15,6 +15,7 @@ protocol CardPaymentUIDelegate {
     func didReceiveCardPayload(_ payload:String)
 }
 open class CardPaymentUI : UIViewController,WKUIDelegate {
+    
     let height = CGFloat(60)
     var initialY : CGFloat{
         get{
@@ -39,6 +40,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     var cardTokens:Array<CardToken>? = nil
     var useCardTokenSection:Bool = false
     var cardToken:String!
+    var shownPaymentAmount:String!
    //ui input elements
     var tokenize:Bool!
     
@@ -49,11 +51,12 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         self.payment = payment;
         self.customer = customer;
         self.merchantConfig = merchantConfig
+        self.shownPaymentAmount = String(format:"%.02f",Double(self.payment.amount)!/100)
         if cardTokens != nil && cardTokens?.count ?? 0 > 0{
             self.cardTokens = cardTokens
             self.useCardTokenSection = true
         }
-        if (merchantConfig.tokenizeStatus == 1) {
+        if (merchantConfig.tokenizeStatus != 2) {
             self.tokenize = true
         }else{
             self.tokenize = false
@@ -115,11 +118,12 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     
     
     lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 10, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 5, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         view.addSubview(headerSection)
         view.addSubview(enterCardDetailsLabel)
         view.addSubview(cardNumberLabel)
         //card details without token
+
         view.addSubview(cardNumberLabel)
         view.addSubview(cardNumberField)
         view.addSubview(cardTokenField)
@@ -149,7 +153,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         section.addSubview(customerEmailLabel)
         return section
     }()
-    
+   
     lazy var interswtichIcon:UIImageView = {
         var margin = CGFloat(20)
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().interswitchIcon))
@@ -159,13 +163,14 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var amountLabel:UILabel = {
         let margin = CGFloat(5)
         let label = UILabel.init(frame: CGRect(x: margin, y: 0, width: self.view.frame.width - (margin * 2.0), height: 30))
-        label.text = "KES \(Double(self.payment.amount)!/100)"
+        debugPrint(label.frame.size.width)
+        label.text = "KES \(self.shownPaymentAmount!)"
         label.textAlignment = .right
         return label
     }()
     
     lazy var customerEmailLabel:UILabel = {
-        let margin = CGFloat(5)
+        let margin = CGFloat(2.5)
         var previousFrame = self.amountLabel.frame
         previousFrame.origin.y = self.amountLabel.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width
@@ -192,10 +197,11 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
    
     //card details without token
     lazy var cardNumberLabel:UILabel = {
-        let margin = CGFloat(10)
+        let margin = CGFloat(30)
         var previousFrame = self.enterCardDetailsLabel.frame
         previousFrame.origin.y = self.enterCardDetailsLabel.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
+        previousFrame.size.width = previousFrame.size.width - margin
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         let label = UILabel(frame: previousFrame)
         label.text = "Card number"
         label.textColor = UIColor.gray
@@ -205,10 +211,10 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var cardNumberField:FormTextField = {
         let margin = CGFloat(20)
         var previousFrame = self.cardNumberLabel.frame
-        previousFrame.origin.y = self.cardNumberLabel.frame.maxY + margin
+        previousFrame.origin.y = self.cardNumberLabel.frame.maxY + 10
         previousFrame.size.height = self.cardNumberLabel.frame.size.height * 1.5
         previousFrame.size.width = self.cardNumberLabel.frame.size.width
-        
+
         let textField = FormTextField(frame: previousFrame)
         textField.inputType = .integer
         textField.formatter = CardNumberFormatter()
@@ -302,7 +308,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         previousFrame.origin.y = self.cardNumberField.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width * 0.35
         let label = UILabel(frame: previousFrame)
-        label.text = "..."
+        label.text = "CVV"
         label.font = label.font.withSize(10)
         label.textColor = UIColor.gray
         label.textAlignment = .left
@@ -364,7 +370,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         let margin = CGFloat(20)
         var previousFrame = self.cardExpirationDateField.frame
         previousFrame.origin.x = self.tokenizeSwitchButton.frame.maxX + 10
-        previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin
+        previousFrame.origin.y = self.cardExpirationDateField.frame.maxY + margin - 10
         previousFrame.size.width = previousFrame.size.width
         let label = UILabel(frame: previousFrame)
         label.isHidden  = self.merchantConfig.tokenizeStatus != 1 || self.useCardTokenSection
@@ -399,11 +405,11 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         }
         let submitButton = UIButton.init(type: .roundedRect)
         submitButton.frame = previousFrame
-        submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
+        submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitButtonAction(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
-        submitButton.layer.cornerRadius = 10;
+        submitButton.layer.cornerRadius = 5;
         submitButton.clipsToBounds = true;
         return submitButton
     }()
@@ -412,14 +418,14 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         var previousFrame = self.submitButton.frame
         previousFrame.origin.y = self.submitButton.frame.maxY + 20
         previousFrame.size.width = self.submitButton.frame.size.width * 0.5
-        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         let cancelButton = UIButton.init(type: .roundedRect)
         cancelButton.frame = previousFrame
         cancelButton.setTitle("CANCEL", for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelTransaction(_ :)), for: .touchDown)
         cancelButton.setTitleColor(UIColor.black, for: .normal)
         cancelButton.backgroundColor = UIColor(red:209/255 ,green: 209/255 ,blue: 209/255,alpha: 1.0)
-        cancelButton.layer.cornerRadius = 10;
+        cancelButton.layer.cornerRadius = 5;
         return cancelButton
     }()
     
@@ -464,6 +470,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
             refreshTextFields()
         case 1:
             self.useCardTokenSection = false
+            cardExpirationDateField.placeholder = "MM/YY"
             refreshTextFields()
         default:
             break
@@ -482,10 +489,10 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var verveSafeTokenImage:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verveSafeToken))
         var previousFrame = self.tokenizeSwitchButton.frame
-        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.1875
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
         previousFrame.size.height = CGFloat(20.0)
-        previousFrame.size.width = UIScreen.main.bounds.width * 0.115
+        previousFrame.size.width = UIScreen.main.bounds.width * 0.110
         imageView.frame = previousFrame
         return imageView
     }()
@@ -493,7 +500,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verifiedByVisa))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
@@ -503,7 +510,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().masterCardSecureCode))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.verifiedByVisa.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.origin.x = self.verifiedByVisa.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
@@ -514,7 +521,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().pciDss))
         var previousFrame = self.verveSafeTokenImage.frame
         previousFrame.origin.y = self.cancelButton.frame.maxY + 30
-        previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + UIScreen.main.bounds.width * 0.01
+        previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
         imageView.frame = previousFrame
@@ -524,10 +531,10 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var poweredByInterswitch:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().poweredByInterswitch))
         var previousFrame = self.cancelButton.frame
-        previousFrame.origin.x = UIScreen.main.bounds.width/2 - 50
+        previousFrame.origin.x = UIScreen.main.bounds.width/2 - 60
         previousFrame.origin.y = self.pciDss.frame.maxY + 50
         previousFrame.size.height  = CGFloat(30)
-        previousFrame.size.width = CGFloat(90)
+        previousFrame.size.width = CGFloat(120)
         imageView.frame = previousFrame
         return imageView
     }()
@@ -577,7 +584,7 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
         cardTokenField.text = self.cardTokens?[row].tokenizedCardPan
         self.cardTokenIndex = row
         self.cardToken = cardTokenField.text!
-        cardExpirationDateField.placeholder = cardTokenField.text!
+        cardExpirationDateField.placeholder = self.cardTokens![self.cardTokenIndex].expiry
         cardTokenField.endEditing(true)
         refreshTextFields()
         refreshButtons()
@@ -599,3 +606,5 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
 extension CardPaymentUI: FormTextFieldDelegate {
     
 }
+
+

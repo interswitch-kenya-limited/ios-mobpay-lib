@@ -27,12 +27,14 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     var merchantConfig:MerchantConfig!
     
     var MobilePaymentUIDelegate:MobilePaymentUIDelegate?
-
+    let screenDimensions = UIScreen.main.bounds
+    
     var paymentMethods:Array<String> = []
     var paymentMethod:String!
     var phoneNumber:String = ""
     var selectedPaymentOption:String = "Express Checkout"
-    
+    var shownPaymentAmount:String!
+    var validPhoneNumberField:Bool = false
     convenience init(merchant: Merchant,payment: Payment, customer: Customer, merchantConfig:MerchantConfig) {
         self.init()
         self.merchant = merchant;
@@ -41,7 +43,8 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         self.merchantConfig = merchantConfig;
         self.paymentMethods = self.populatePaymentmethods()
         self.paymentMethod = self.paymentMethods[0]
-        
+        self.shownPaymentAmount = String(format:"%.02f",Double(self.payment.amount)!/100)
+
         self.refreshTextViews()
     }
     func convertToDictionary(message: String) -> [String: Any]? {
@@ -109,7 +112,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     
     //SECTIONS
     lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 10, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        let view = UIScrollView(frame: CGRect(x: 0, y: initialY + 5, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         view.addSubview(headerSection)
         view.addSubview(selectMobilePaymentOptionLabel)
         view.addSubview(selectPaymentMethod)
@@ -129,39 +132,41 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         section.addSubview(interswtichIcon)
         section.addSubview(amountLabel)
         section.addSubview(customerEmailLabel)
-        section.frame = CGRect(x: 0, y:0, width: UIScreen.main.bounds.width, height : CGFloat(60))
         return section
     }()
+    
     lazy var interswtichIcon:UIImageView = {
         var margin = CGFloat(20)
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().interswitchIcon))
-        imageView.frame = CGRect(x: margin, y: 0, width: 30, height: 50)
+        imageView.frame = CGRect(x: margin, y: initialY + 5, width: 30, height: 50)
         return imageView
     }()
     lazy var amountLabel:UILabel = {
         let margin = CGFloat(5)
-        let label = UILabel.init(frame: CGRect(x: margin, y: 0, width: self.view.frame.width - (margin * 2.0), height: 30))
-        label.text = "KES \(Double(self.payment.amount)!/100)"
+        let label = UILabel.init(frame: CGRect(x: margin, y: initialY + 5, width: self.view.frame.width - (margin * 2.0), height: 30))
+        label.text = "KES \(self.shownPaymentAmount!)"
         label.textAlignment = .right
         return label
     }()
+    
     lazy var customerEmailLabel:UILabel = {
-        let margin = CGFloat(5)
+        let margin = CGFloat(2.5)
         var previousFrame = self.amountLabel.frame
         previousFrame.origin.y = self.amountLabel.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width
         let label = UILabel.init(frame: previousFrame)
         label.textAlignment = .right
-        label.textColor = UIColor.gray
         label.text = self.customer.email
+        label.textColor = UIColor.gray
         return label
     }()
     
     lazy var selectMobilePaymentOptionLabel:UILabel = {
-        let margin = CGFloat(5)
+        let margin = CGFloat(30)
         var previousFrame = self.customerEmailLabel.frame
         previousFrame.origin.y = self.customerEmailLabel.frame.maxY + margin
-        previousFrame.size.width = previousFrame.size.width
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width + margin)/2
+        previousFrame.size.width = previousFrame.size.width - margin
         let label = UILabel(frame: previousFrame)
         label.text = "Select your mobile payment option"
         label.textAlignment = .center
@@ -175,9 +180,10 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         return picker
     }()
     lazy var selectPaymentMethod:UITextField = {
-        let margin = CGFloat(20)
+        let margin = CGFloat(30)
         var previousFrame = self.selectMobilePaymentOptionLabel.frame
         previousFrame.origin.y = self.selectMobilePaymentOptionLabel.frame.maxY + margin
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         previousFrame.size.width = previousFrame.size.width
         previousFrame.size.height = CGFloat(50)
         let textField = UITextField()
@@ -193,7 +199,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         var previousFrame = self.selectPaymentMethod.frame
         previousFrame.origin.y = self.selectPaymentMethod.frame.maxY + margin
         previousFrame.size.width = previousFrame.size.width
-        previousFrame.size.height = CGFloat(30)
+        previousFrame.size.height = CGFloat(40)
         let segmentedControl = UISegmentedControl(items: items)
         segmentedControl.frame = previousFrame
         segmentedControl.selectedSegmentIndex = 0
@@ -204,8 +210,13 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     @objc func chooseExpressCheckoutOrPaybill(_ : UIButton){
         if self.selectedPaymentOption == "Express Checkout" {
             self.selectedPaymentOption = "Paybill"
+            submitButton.isEnabled = true
+            submitButton.backgroundColor = UIColor(red: 0.0/255, green: 69.0/255, blue: 95.0/255, alpha: 1.0)
         }else{
             self.selectedPaymentOption = "Express Checkout"
+            if(!self.validPhoneNumberField){
+                submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
+            }
         }
         refreshTextViews()
         refreshButtons()
@@ -226,6 +237,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             \u{2022} Click the pay button
             \u{2022} Enter your M-PESA pin when prompted on your phone
             \u{2022} Confirm the details then complete the transaction
+            \n
             Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
             """
         }else if(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "MPESA"){
@@ -239,8 +251,9 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
                 \u{2022} Select Pay Bill Option
                 \u{2022} Enter business no. \(self.merchantConfig.mpesaPaybill)
                 \u{2022} Enter account no \(self.payment.transactionRef)
-                \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
+                \u{2022} Enter the EXACT amount \(self.shownPaymentAmount!)
                 \u{2022} Enter your M-PESA PIN and send
+                \n
                 Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
                 """
         }else if(self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "EAZZYPAY"){
@@ -252,6 +265,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             \u{2022} Click the Pay button
             \u{2022} Enter your EazzyPay pin when prompted on your phone
             \u{2022} Confirm the details then complete the transaction
+            \n
             Didn’t get the prompt on your phone?
             Choose paybill and follow the instructions
             """
@@ -266,8 +280,9 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
                     \u{2022} Select Pay Bill Option
                     \u{2022} Enter business no. \(self.merchantConfig.equitelPaybill)
                     \u{2022} Enter account no \(self.payment.transactionRef)
-                    \u{2022} Enter the EXACT amount \(Double(self.payment.amount)!/100)
+                    \u{2022} Enter the EXACT amount \(self.shownPaymentAmount!)
                     \u{2022} Enter your EazzyPay PIN and send
+                    \n
                     Once you receive a confirmation SMS from EazzyPay, click on the confirm payment button below
                     """
         }
@@ -289,21 +304,21 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
+            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         }else if self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY"{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
+            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         }else{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
+            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         }
         var previousFrame = self.submitButton.frame
         previousFrame.origin.y = self.submitButton.frame.maxY + 20
@@ -331,13 +346,18 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         var previousFrame = self.phoneNumberField.frame
         previousFrame.origin.y = self.phoneNumberField.frame.maxY + margin
         let textView = UITextView(frame: previousFrame)
-        textView.text = """
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 2
+        let attributedString = NSMutableAttributedString(string: """
         \u{2022} Enter your M-PESA number above.
         \u{2022} Click the pay button
         \u{2022} Enter your M-PESA pin when prompted on your phone
         \u{2022} Confirm the details then complete the transaction
+        \n
         Once you receive a confirmation SMS from M-PESA, click on the confirm payment button below
-        """
+        """)
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+        textView.attributedText = attributedString
         textView.textAlignment = .justified
         textView.isSelectable = true
         textView.isEditable = false
@@ -345,6 +365,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.textColor = UIColor.gray
+    
         return textView
     }()
     lazy var  submitButton:UIButton = {
@@ -352,15 +373,17 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         var previousFrame = self.mobilePaymentInstructions.frame
         previousFrame.origin.y = previousFrame.maxY + margin
         previousFrame.size.width = UIScreen.main.bounds.width - 20
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         previousFrame.size.height = CGFloat(50)
         let submitButton = UIButton.init(type: .roundedRect)
         submitButton.frame = previousFrame
-        submitButton.setTitle("Pay KES \(Double(self.payment.amount)!/100)", for: .normal)
+        submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitMobilePayment(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
         submitButton.layer.cornerRadius = 10;
         submitButton.clipsToBounds = true;
+        submitButton.isEnabled = false
         return submitButton
     }()
     
@@ -376,7 +399,6 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     @objc func submitMobilePayment(_ : UIButton){
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
-
         if(self.selectedPaymentOption == "Express Checkout"){
             let mobile = Mobile(phone: self.phoneNumberField.text!)
             try!Mobpay.instance.makeMobileMoneyPayment(mobile: mobile, merchant: merchant, payment: payment, customer: customer, clientId: self.merchantConfig.clientId, clientSecret:self.merchantConfig.clientSecret){ (completion) in
@@ -399,7 +421,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         var previousFrame = self.submitButton.frame
         previousFrame.origin.y = self.submitButton.frame.maxY + 20
         previousFrame.size.width = self.submitButton.frame.size.width * 0.5
-        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         let cancelButton = UIButton.init(type: .roundedRect)
         cancelButton.frame = previousFrame
         cancelButton.setTitle("CANCEL", for: .normal)
@@ -424,17 +446,17 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     lazy var grayMpesa:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().grayMpesa))
         var previousFrame = self.cancelButton.frame
-        previousFrame.origin.x = (UIScreen.main.bounds.width * 0.333) - 25
         previousFrame.origin.y = self.cancelButton.frame.maxY + 50
         previousFrame.size.height = 30
         previousFrame.size.width = 50
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25 - 25
         imageView.frame = previousFrame
         return imageView
     }()
     lazy var grayEazzyPay:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().grayEazzyPay))
         var previousFrame = self.grayMpesa.frame
-        previousFrame.origin.x = self.grayMpesa.frame.maxX + UIScreen.main.bounds.width * 0.333 - 15
+        previousFrame.origin.x = UIScreen.main.bounds.width * 0.75 - 25
         previousFrame.origin.y = self.grayMpesa.frame.minY + 10
         previousFrame.size.width = 30
         previousFrame.size.height = 10
@@ -444,10 +466,10 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
     lazy var poweredByInterswitch:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().poweredByInterswitch))
         var previousFrame = self.cancelButton.frame
-        previousFrame.origin.x = UIScreen.main.bounds.width/2 - 50
+        previousFrame.origin.x = (UIScreen.main.bounds.width - 120)/2
         previousFrame.origin.y = self.grayMpesa.frame.maxY + 50
         previousFrame.size.height  = CGFloat(30)
-        previousFrame.size.width = CGFloat(90)
+        previousFrame.size.width = CGFloat(120)
         imageView.frame = previousFrame
         return imageView
     }()
@@ -458,10 +480,12 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         }
         let currentText = textField.text ?? ""
         let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        self.validPhoneNumberField = false
         if prospectiveText.count == 10 && checkIfStringHasDecimals(stringToTest: prospectiveText){
             submitButton.backgroundColor = UIColor(red: 0.0/255, green: 69.0/255, blue: 95.0/255, alpha: 1.0)
             submitButton.layoutMarginsDidChange()
             submitButton.layoutIfNeeded()
+            self.validPhoneNumberField = true
         }
         switch textField {
         case phoneNumberField:

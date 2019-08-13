@@ -38,32 +38,32 @@ open class InterSwitchPaymentUI : UIViewController {
     
     
     func createTabBarController() {
-        
-        let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
-        cardVC.title = "Card"
-        cardVC.tabBarItem = UITabBarItem.init(title: "Card", image: UIImage(named: "HomeTab"), tag: 0)
-        cardVC.CardPaymentUIDelegate = self
-        
-        let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
-        mobileVC.title = "Mobile"
-        mobileVC.view.backgroundColor =  UIColor.white
-        mobileVC.tabBarItem = UITabBarItem.init(title: "Mobile", image: UIImage(named: "Location"), tag: 1)
-        mobileVC.MobilePaymentUIDelegate = self
-        
-        let bankVC = UIViewController()
-        bankVC.title = "Bank"
-        bankVC.view.backgroundColor = UIColor.yellow
-        
-        let vervePaycodeVC = UIViewController()
-        vervePaycodeVC.title = "Verve Paycode"
-        vervePaycodeVC.view.backgroundColor = UIColor.blue
-        
-        
         var controllerArray:Array<UIViewController> = []
 
-        if self.merchantConfig.cardStatus == 1 {controllerArray.append(cardVC)}
-        if self.merchantConfig.paycodeStatus == 1 {controllerArray.append(vervePaycodeVC)}
-        if self.merchantConfig.airtelStatus == 1 || self.merchantConfig.mpesaStatus == 1 || self.merchantConfig.tkashStatus == 1 || self.merchantConfig.equitelStatus == 1 {controllerArray.append(mobileVC)}
+        if self.merchantConfig.cardStatus == 1 {
+            let cardVC = CardPaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
+            cardVC.title = "CARD"
+            cardVC.tabBarItem = UITabBarItem.init(title: "CARD", image: UIImage(named: "CARD"), tag: 0)
+            cardVC.CardPaymentUIDelegate = self
+            controllerArray.append(cardVC)
+        }
+        if self.merchantConfig.airtelStatus == 1 || self.merchantConfig.mpesaStatus == 1 || self.merchantConfig.tkashStatus == 1 || self.merchantConfig.equitelStatus == 1 {
+            let mobileVC = MobilePaymentUI(merchant: self.merchant, payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
+            mobileVC.title = "MOBILE"
+            mobileVC.view.backgroundColor =  UIColor.white
+            mobileVC.tabBarItem = UITabBarItem.init(title: "MOBILE", image: UIImage(named: "MOBILE"), tag: 1)
+            mobileVC.MobilePaymentUIDelegate = self
+            controllerArray.append(mobileVC)
+        }
+        if self.merchantConfig.paycodeStatus == 1 {
+            let vervePaycodeVC = UIViewController()
+            vervePaycodeVC.title = "VERVE PAYCODE"
+            vervePaycodeVC.view.backgroundColor = UIColor.blue
+            controllerArray.append(vervePaycodeVC)
+        }
+//        let bankVC = UIViewController()
+//        bankVC.title = "BANK"
+//        bankVC.view.backgroundColor = UIColor.yellow
         tabBarCnt.viewControllers = controllerArray.map{ UINavigationController.init(rootViewController: $0)}
         
         self.view.addSubview(tabBarCnt.view)
