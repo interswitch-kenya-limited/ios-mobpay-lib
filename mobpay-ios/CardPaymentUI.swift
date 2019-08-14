@@ -251,6 +251,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         textField.inputView = tokenPicker
         textField.text = self.cardTokens?[0].tokenizedCardPan
         textField.isHidden = !self.useCardTokenSection
+        textField.allowsEditingTextAttributes = false
         return textField
     }()
     lazy var useTokenOrCardSegmentedControl:UISegmentedControl = {
@@ -388,14 +389,6 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         section.addSubview(pciDss)
         return section
     }()
-    
-    lazy var actionButtons:UIView = {
-        let section = UIView()
-        section.addSubview(submitButton)
-        section.addSubview(cancelButton)
-        section.addSubview(poweredByInterswitch)
-        return section
-    }()
     //BUTTONS
     lazy var  submitButton:UIButton = {
         var previousFrame = self.cardNumberField.frame
@@ -468,14 +461,28 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         switch sender.selectedSegmentIndex{
         case 0:
             self.useCardTokenSection = true
+            tokenizeSwitchButton.isHidden = true
+            saveCardLabel.isHidden = true
+            refreshButtons()
             refreshTextFields()
         case 1:
             self.useCardTokenSection = false
             cardExpirationDateField.placeholder = "MM/YY"
+            tokenizeSwitchButton.isHidden = false
+            saveCardLabel.isHidden = false
+            tokenizeSwitchButton.layoutMarginsDidChange()
+            saveCardLabel.layoutMarginsDidChange()
+            refreshButtons()
             refreshTextFields()
         default:
             break
         }
+        if #available(iOS 11.0, *) {
+            self.viewLayoutMarginsDidChange()
+        } else {
+            // Fallback on earlier versions
+        }
+        self.view.setNeedsDisplay()
     }
     @objc func switchTokenize(_ sender:UISwitch){
         self.tokenize = sender.isOn
@@ -491,7 +498,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verveSafeToken))
         var previousFrame = self.tokenizeSwitchButton.frame
         previousFrame.origin.x = UIScreen.main.bounds.width * 0.1875
-        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.y = self.cancelButton.frame.maxY + 80
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.110
         imageView.frame = previousFrame
@@ -500,7 +507,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var verifiedByVisa:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().verifiedByVisa))
         var previousFrame = self.verveSafeTokenImage.frame
-        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.y = self.verveSafeTokenImage.frame.minY
         previousFrame.origin.x = self.verveSafeTokenImage.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
@@ -510,7 +517,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var mastercardSecureCode:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().masterCardSecureCode))
         var previousFrame = self.verveSafeTokenImage.frame
-        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.y = self.verveSafeTokenImage.frame.minY
         previousFrame.origin.x = self.verifiedByVisa.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
@@ -521,7 +528,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     lazy var pciDss:UIImageView = {
         let imageView = UIImageView(image: loadImageFromBase64(base64String: Base64Images().pciDss))
         var previousFrame = self.verveSafeTokenImage.frame
-        previousFrame.origin.y = self.cancelButton.frame.maxY + 30
+        previousFrame.origin.y = self.verveSafeTokenImage.frame.minY
         previousFrame.origin.x = self.mastercardSecureCode.frame.maxX + UIScreen.main.bounds.width * 0.0725
         previousFrame.size.height = CGFloat(20.0)
         previousFrame.size.width = UIScreen.main.bounds.width * 0.115
@@ -563,7 +570,6 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
         cardExpirationDateField.placeholder = self.cardTokens![self.cardTokenIndex].expiry
         cardTokenField.endEditing(true)
         refreshTextFields()
-        refreshButtons()
     }
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -576,7 +582,33 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
         cardExpirationDateField.setNeedsLayout()
         self.view.setNeedsDisplay()
     }
-    func refreshButtons(){}
+    
+    func refreshButtons(){
+        var previousFrame = self.cardNumberField.frame
+        if(self.useCardTokenSection){
+            previousFrame.origin.y = self.cvcField.frame.maxY + 20
+        }else{
+            previousFrame.origin.y = self.tokenizeSwitchButton.frame.maxY + 20
+        }
+        submitButton.frame = previousFrame
+
+        var cancelPreviousFrame = self.submitButton.frame
+        cancelPreviousFrame.origin.y = self.submitButton.frame.maxY + 20
+        cancelPreviousFrame.size.width = self.submitButton.frame.size.width * 0.5
+        cancelPreviousFrame.origin.x = (self.screenDimensions.maxX - cancelPreviousFrame.size.width)/2
+        cancelButton.frame = cancelPreviousFrame
+        
+        imageRowSection.setNeedsLayout()
+        imageRowSection.setNeedsDisplay()
+
+        
+        if #available(iOS 11.0, *) {
+            self.viewLayoutMarginsDidChange()
+        } else {
+            // Fallback on earlier versions
+        }
+        self.view.setNeedsDisplay()
+    }
 }
 
 extension CardPaymentUI:MobpayPaymentDelegate{

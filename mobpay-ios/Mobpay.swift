@@ -59,8 +59,7 @@ public class Mobpay:UIViewController {
     
     public func submitCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
         do {
-            //get merchant config from our servers
-//            try getMerchantConfigs(clientId: clientId, clientSecret: clientSecret){(merchantConfig)}
+            //[TODO] get merchant config from our servers
             let authData:String = try RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0", separator: "D" )
             let payload = CardPaymentStruct(
                 amount: payment.amount,
@@ -93,6 +92,41 @@ public class Mobpay:UIViewController {
         }
     }
     
+    public func submitTokenPayment(cardToken: CardToken,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
+        do {
+            //[TODO] get merchant config from our servers
+            let authData:String = try RSAUtil.getAuthDataMerchant(panOrToken: cardToken.token, cvv: cardToken.cvv, expiry: cardToken.expiry, tokenize: "true", separator: ",")
+            let payload = CardPaymentStruct(
+                amount: payment.amount,
+                orderId: payment.orderId,
+                transactionRef: payment.transactionRef,
+                terminalType: payment.terminalType,
+                terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
+                merchantId: merchant.merchantId,
+                authData: authData,
+                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
+                currency:payment.currency, country:customer.country,
+                city:customer.city,
+                narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
+            )
+            self.merchantId = merchant.merchantId
+            self.transactionRef = payment.transactionRef
+            let webCardinalURL = try generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
+            self.setUpMQTT()
+            let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
+            DispatchQueue.main.async {
+                previousUIViewController.navigationController?.pushViewController(threeDS, animated: true)
+            }
+            mqtt.didReceiveMessage = { mqtt, message, id in
+                mqtt.disconnect()
+                previousUIViewController.navigationController?.popViewController(animated: true)
+                completion(message.string!)
+            }
+        } catch {
+            throw error
+        }
+    }
+    
     
     func getMerchantConfigs(clientId: String, clientSecret: String,completion:@escaping(MerchantConfig)->())throws{
         do {
@@ -105,7 +139,6 @@ public class Mobpay:UIViewController {
                     do{
                         let responseAsJson:Dictionary<String,Any> = try self.convertToDictionary(message:dataString)!
                         let configs = responseAsJson["config"] as? Dictionary<String,Any>
-                        
                         let merchantConfig:MerchantConfig = try MerchantConfig(merchantId: configs!["merchantId"] as! String, merchantName: configs!["merchantName"] as! String, clientId: configs!["clientId"] as! String, clientSecret: configs!["clientSecret"] as! String, cardStatus: configs!["cardStatus"] as! Int, mpesaStatus: configs!["mpesaStatus"] as! Int, equitelStatus: configs!["equitelStatus"] as! Int, tkashStatus: configs!["tkashStatus"] as! Int, airtelStatus: configs!["airtelStatus"] as! Int, paycodeStatus: configs!["paycodeStatus"] as! Int, bnkStatus: configs!["bnkStatus"] as! Int, mpesaPaybill: configs!["mpesaPaybill"] as! String, equitelPaybill: configs!["equitelPaybill"] as! String, tokenizeStatus: configs!["tokenizeStatus"] as! Int, cardauthStatus: configs!["cardauthStatus"] as! Int, cardPreauth: configs!["cardPreauth"] as! Int, merchantDomain: configs!["domain"] as! String)
                         completion(merchantConfig)
                     } catch{
@@ -172,7 +205,6 @@ public class Mobpay:UIViewController {
                 city:customer.city,
                 narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
             )
-            
             let webCardinalURL = try generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
             return webCardinalURL
         } catch {

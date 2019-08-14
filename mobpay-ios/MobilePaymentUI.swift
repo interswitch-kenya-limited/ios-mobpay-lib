@@ -294,6 +294,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
             submitButton.setTitle("CONFIRM PAYMENT", for: .normal)
         }else if self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "MPESA"{
@@ -301,6 +302,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         }else if self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY"{
@@ -308,12 +310,14 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
             previousFrame.size.height = CGFloat(50)
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
         }else{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
@@ -321,7 +325,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         var previousFrame = self.submitButton.frame
         previousFrame.origin.y = self.submitButton.frame.maxY + 20
         previousFrame.size.width = self.submitButton.frame.size.width * 0.5
-        previousFrame.origin.x = UIScreen.main.bounds.width * 0.25
+        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
         cancelButton.frame = previousFrame
         self.view.setNeedsDisplay()
     }
@@ -481,6 +485,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         self.validPhoneNumberField = false
         if prospectiveText.count == 10 && checkIfStringHasDecimals(stringToTest: prospectiveText){
             submitButton.backgroundColor = UIColor(red: 0.0/255, green: 69.0/255, blue: 95.0/255, alpha: 1.0)
+            submitButton.isEnabled = true
             submitButton.layoutMarginsDidChange()
             submitButton.layoutIfNeeded()
             self.validPhoneNumberField = true
