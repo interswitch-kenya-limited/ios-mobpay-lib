@@ -40,7 +40,7 @@ let customer = Customer(customerId: "12", firstName: "Allan", secondName: "Maget
 let merchant = Merchant(merchantId: "your merchant id", domain: "your domain")             
 ```
 
-###Card Payment         
+### Card Payment         
 To make a card payment :
 ```swift
 try!Mobpay.instance.submitCardPayment(card: cardInput, merchant: merchantInput, payment: paymentInput, customer: customerInput, clientId: self.clientId,clientSecret: self.clientSecret,previousUIViewController: self){(completion) in
@@ -49,7 +49,7 @@ try!Mobpay.instance.submitCardPayment(card: cardInput, merchant: merchantInput, 
 ```
 where the previous view controller is the controller youre calling the function from
 
-###Card Token Payment
+### Card Token Payment
 To make a card token payment: 
 
 ```swift
@@ -59,7 +59,7 @@ try!Mobpay.instance.submitTokenPayment(cardToken: cardToken, merchant: merchantI
 }
 ```
 
-###Mobile Money Payment
+### Mobile Money Payment
 To make a mobile money payment:
 
 ```swift
@@ -69,7 +69,7 @@ try!Mobpay.instance.makeMobileMoneyPayment(mobile: mobileInput, merchant: mercha
 }
 ```
 
-###Confirm Mobile Money Payment
+### Confirm Mobile Money Payment
 To confirm if a mobile money payment was successful or not:
 
 ```swift
