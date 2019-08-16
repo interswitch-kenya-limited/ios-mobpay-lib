@@ -14,7 +14,7 @@ import FormTextField
 protocol CardPaymentUIDelegate {
     func didReceiveCardPayload(_ payload:String)
 }
-open class CardPaymentUI : UIViewController,WKUIDelegate {
+class CardPaymentUI : UIViewController,WKUIDelegate {
     
     let height = CGFloat(60)
     var initialY : CGFloat{
@@ -356,6 +356,7 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         textField.inputValidator = inputValidator
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.validBorderColor = UIColor.green
+        textField.isSecureTextEntry = true
         return textField
     }()
     lazy var tokenizeSwitchButton:UISwitch = {
@@ -431,12 +432,9 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
                 let expMonth = String(expDateArray[0]) + String(expDateArray[1])
                 let expYear = String(expDateArray[3]) + String(expDateArray[4])
                 let cardInput = Card(pan: self.cardNumberField.text!.replacingOccurrences(of: " ", with: ""), cvv: self.cvcField.text!, expiryYear: expYear, expiryMonth: expMonth, tokenize: self.tokenize)
-                let webCardinalURL = try!Mobpay.instance.generateCardWebQuery(card: cardInput, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret)
-                let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
-                self.navigationController?.pushViewController(threeDS,animated: true)
-                Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
-                    self.navigationController?.popViewController(animated: true)
-                    self.showResponse(message:payloadFromServer)
+                try!Mobpay.instance.submitCardPayment(card: cardInput, merchant: Merchant(merchantId: self.merchantConfig.merchantId, domain: self.merchantConfig.merchantDomain), payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret,previousUIViewController: self){(completion) in
+                    self.dismiss(animated: true)
+                    self.showResponse(message: completion)
                 }
             }else{
                 print("card number: \(cardNumberField.validate()) card expiration : \(cardExpirationDateField.validate()) cvv field: \(cvcField.validate())")
@@ -444,12 +442,10 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
         }else{
             if cvcField.validate(){
                 let token = CardToken(token: self.cardTokens![self.cardTokenIndex].token, expiry: cardTokens![0].expiry, cvv: self.cvcField.text!)
-                let webCardinalURL = try!Mobpay.instance.generateCardTokenWebQuery(cardToken: token, merchant: self.merchant, payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId, clientSecret: self.merchantConfig.clientSecret)
-                let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
-                self.navigationController?.pushViewController(threeDS,animated: true)
-                Mobpay.instance.getReturnPayload(merchantId: self.merchant.merchantId,transactionRef: self.payment.transactionRef){(payloadFromServer) in
-                    self.navigationController?.popViewController(animated: true)
-                    self.showResponse(message:payloadFromServer)
+                try!Mobpay.instance.submitTokenPayment(cardToken: token, merchant: Merchant(merchantId: self.merchantConfig.merchantId, domain: self.merchantConfig.merchantDomain), payment: self.payment, customer: self.customer, clientId: self.merchantConfig.clientId,clientSecret: self.merchantConfig.clientSecret,previousUIViewController: self){
+                    (completion) in
+                    self.dismiss(animated: true)
+                    self.showResponse(message: completion)
                 }
             }else{
                 print(cvcField.validate())
@@ -466,12 +462,14 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
             refreshButtons()
             refreshTextFields()
         case 1:
-            self.useCardTokenSection = false
             cardExpirationDateField.placeholder = "MM/YY"
-            tokenizeSwitchButton.isHidden = false
-            saveCardLabel.isHidden = false
-            tokenizeSwitchButton.layoutMarginsDidChange()
-            saveCardLabel.layoutMarginsDidChange()
+            if(merchantConfig.tokenizeStatus == 1){
+                self.useCardTokenSection = false
+                tokenizeSwitchButton.isHidden = false
+                saveCardLabel.isHidden = false
+                tokenizeSwitchButton.layoutMarginsDidChange()
+                saveCardLabel.layoutMarginsDidChange()
+            }
             refreshButtons()
             refreshTextFields()
         default:
@@ -555,15 +553,15 @@ open class CardPaymentUI : UIViewController,WKUIDelegate {
     }
 }
 extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
-    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+    internal func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         return self.cardTokens!.count
     }
     
-    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return self.cardTokens?[row].tokenizedCardPan
     }
     
-    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+    internal func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
         cardTokenField.text = self.cardTokens?[row].tokenizedCardPan
         self.cardTokenIndex = row
         self.cardToken = cardTokenField.text!
@@ -571,7 +569,7 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
         cardTokenField.endEditing(true)
         refreshTextFields()
     }
-    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    internal func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     

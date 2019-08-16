@@ -163,67 +163,6 @@ public class Mobpay:UIViewController {
         }
         return nil
     }
-
-    //THREE DS
-    //CARD PAYMENT
-    public func generateCardWebQuery(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String)->URL{
-        let authData:String = try!RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0", separator: "D" )
-        let payload = CardPaymentStruct(
-            amount: payment.amount,
-            orderId: payment.orderId,
-            transactionRef: payment.transactionRef,
-            terminalType: payment.terminalType,
-            terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
-            merchantId: merchant.merchantId,
-            authData: authData,
-            customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
-            currency:payment.currency, country:customer.country,
-            city:customer.city,
-            narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
-        )
-        
-        
-        let webCardinalURL = try!generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "CARD")
-        return webCardinalURL
-        
-    }
-    
-    //TOKEN PAYMENT
-    public func generateCardTokenWebQuery(cardToken: CardToken,merchant: Merchant, payment: Payment, customer: Customer,clientId:String,clientSecret:String)throws->URL{
-        do {
-            let authData:String = try RSAUtil.getAuthDataMerchant(panOrToken: cardToken.token, cvv: cardToken.cvv, expiry: cardToken.expiry, tokenize: "true", separator: ",")
-            let payload = CardPaymentStruct(
-                amount: payment.amount,
-                orderId: payment.orderId,
-                transactionRef: payment.transactionRef,
-                terminalType: payment.terminalType,
-                terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
-                merchantId: merchant.merchantId,
-                authData: authData,
-                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
-                currency:payment.currency, country:customer.country,
-                city:customer.city,
-                narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
-            )
-            let webCardinalURL = try generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
-            return webCardinalURL
-        } catch {
-            throw error
-        }
-    }
-    
-    public func getReturnPayload(merchantId:String,transactionRef:String, payloadFromServer:@escaping (String)->()){
-        self.merchantId = merchantId
-        self.transactionRef = transactionRef
-        
-        setUpMQTT()
-        mqtt.didReceiveMessage = { mqtt, message, id in
-            mqtt.disconnect()
-            payloadFromServer(message.string!)
-        }
-    }
-    
-    
     
     func setUpMQTT(){
         let clientID = "iOS-" + String(ProcessInfo().processIdentifier)

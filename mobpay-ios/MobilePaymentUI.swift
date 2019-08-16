@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
+class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
     
     var initialY : CGFloat{
         get{
@@ -188,9 +188,10 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         textField.frame = previousFrame
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.inputView = paymentMethodPicker
-        textField.text = paymentMethods[0]
+        textField.text = self.paymentMethods[0]
         return textField
     }()
+    
     lazy var chooseExpressCheckoutOrPaybill:UISegmentedControl = {
         let margin = CGFloat(20)
         let items = ["Express Checkout","Paybill"]
@@ -267,7 +268,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             Didn’t get the prompt on your phone?
             Choose paybill and follow the instructions
             """
-        }else{
+        }else if(self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY"){
             var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
             previousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + 20
             phoneNumberField.isHidden = false
@@ -283,6 +284,14 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
                     \n
                     Once you receive a confirmation SMS from EazzyPay, click on the confirm payment button below
                     """
+        }else{
+            var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
+            previousFrame.origin.y = self.chooseExpressCheckoutOrPaybill.frame.maxY + 20
+            phoneNumberField.isHidden = false
+            mobilePaymentInstructions.frame = previousFrame
+            self.mobilePaymentInstructions.text = """
+            The payment method is not yet available
+            """
         }
         phoneNumberField.frame = phonePreviousFrame
         mobilePaymentInstructions.sizeToFit()
@@ -313,7 +322,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
-        }else{
+        }else if self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "EAZZYPAY"{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
             previousFrame.size.width = UIScreen.main.bounds.width - 20
@@ -321,6 +330,22 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
             submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+        }else if self.selectedPaymentOption == "Express Checkout"{
+            var previousFrame = self.mobilePaymentInstructions.frame
+            previousFrame.origin.y = previousFrame.maxY + 20
+            previousFrame.size.width = UIScreen.main.bounds.width - 20
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
+            previousFrame.size.height = CGFloat(50)
+            submitButton.frame = previousFrame
+            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+        }else{
+            var previousFrame = self.mobilePaymentInstructions.frame
+            previousFrame.origin.y = previousFrame.maxY + 20
+            previousFrame.size.width = UIScreen.main.bounds.width - 20
+            previousFrame.size.height = CGFloat(50)
+            previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
+            submitButton.frame = previousFrame
+            submitButton.setTitle("CONFIRM PAYMENT", for: .normal)
         }
         var previousFrame = self.submitButton.frame
         previousFrame.origin.y = self.submitButton.frame.maxY + 20
@@ -329,6 +354,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         cancelButton.frame = previousFrame
         self.view.setNeedsDisplay()
     }
+    
     lazy var phoneNumberField:UITextField = {
         let margin = CGFloat(20)
         var previousFrame = self.chooseExpressCheckoutOrPaybill.frame
@@ -476,7 +502,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         return imageView
     }()
     //validation
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string.count == 0{
             return true
         }
@@ -499,7 +525,7 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         
     }
     
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true;
     }
@@ -508,26 +534,31 @@ open class MobilePaymentUI : UIViewController,UITextFieldDelegate {
         let numbersRange = stringToTest.rangeOfCharacter(from: .decimalDigits)
         return numbersRange != nil
     }
-    
-}
-extension MobilePaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
-    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
-        return paymentMethods.count
+    internal func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return self.paymentMethods.count
+    }
+
+    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.paymentMethods[row]
     }
     
-    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return paymentMethods[row]
-    }
-    
-    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
-        selectPaymentMethod.text = paymentMethods[row]
+    internal func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        selectPaymentMethod.text = self.paymentMethods[row]
         self.paymentMethod = selectPaymentMethod.text!
-        selectPaymentMethod.endEditing(true)
+//        var previousFrame = self.selectMobilePaymentOptionLabel.frame
+//        previousFrame.origin.y = self.selectMobilePaymentOptionLabel.frame.maxY + 30
+//        previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
+//        previousFrame.size.width = previousFrame.size.width
+//        previousFrame.size.height = CGFloat(50)
+//        selectPaymentMethod.frame = previousFrame
+//        selectPaymentMethod.layoutMarginsDidChange()
+//        selectPaymentMethod.layoutIfNeeded()
         refreshTextViews()
         refreshButtons()
-        self.dismiss(animated: true)
+        self.selectPaymentMethod.endEditing(true)
     }
-    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
 }

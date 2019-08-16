@@ -17,7 +17,7 @@ func generateLink(transactionRef:String,merchantId: String, payload: CardPayment
         let transactionType:String = transactionType
         let key:String = generateKey(length: 16)
         // 16 bytes for AES128
-        let iv:String = "drowssapdrowssap"
+        let iv:String = generateKey(length: 16)
         let encryptedKey:String = try RSAUtil.encryptBrowserPayload(payload: key)
         let encryptedIv:String = try RSAUtil.encryptBrowserPayload(payload: iv)
         let aes = try AES(key: key, iv: iv) // aes128

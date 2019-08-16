@@ -48,7 +48,6 @@ open class InterSwitchPaymentUI : UIViewController {
         if self.merchantConfig.airtelStatus == 1 || self.merchantConfig.mpesaStatus == 1 || self.merchantConfig.tkashStatus == 1 || self.merchantConfig.equitelStatus == 1 {
             let mobileVC = MobilePaymentUI(payment: self.payment, customer: self.customer, merchantConfig: self.merchantConfig)
             mobileVC.title = "MOBILE"
-            mobileVC.view.backgroundColor =  UIColor.white
             mobileVC.tabBarItem = UITabBarItem.init(title: "MOBILE", image: UIImage(named: "MOBILE"), tag: 1)
             mobileVC.MobilePaymentUIDelegate = self
             controllerArray.append(mobileVC)
@@ -59,9 +58,13 @@ open class InterSwitchPaymentUI : UIViewController {
             vervePaycodeVC.view.backgroundColor = UIColor.blue
             controllerArray.append(vervePaycodeVC)
         }
-//        let bankVC = UIViewController()
-//        bankVC.title = "BANK"
-//        bankVC.view.backgroundColor = UIColor.yellow
+        if self.merchantConfig.bnkStatus == 1 {
+            let bankVC = UIViewController()
+            bankVC.title = "BANK"
+            bankVC.view.backgroundColor = UIColor.yellow
+            controllerArray.append(bankVC)
+        }
+        
         tabBarCnt.viewControllers = controllerArray.map{ UINavigationController.init(rootViewController: $0)}
         
         self.view.addSubview(tabBarCnt.view)

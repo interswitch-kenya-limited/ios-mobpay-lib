@@ -1,6 +1,6 @@
 PODS:
   - CocoaAsyncSocket (7.6.3)
-  - CocoaMQTT (1.2.4):
+  - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
   - CryptoSwift (1.0.0)
   - FormTextField (3.0.0)
@@ -27,7 +27,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  CocoaMQTT: 56f7a757a65c65bbb4df17c6f06aeea79fb2969c
+  CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   FormTextField: fd5dc441ad40ba12d08ef66aeb0453ee9bf55e6d
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
