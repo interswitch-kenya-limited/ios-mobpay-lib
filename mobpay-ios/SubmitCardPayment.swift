@@ -7,38 +7,48 @@
 //
 
 import Foundation
-
-func submitPayment(clientId:String, clientSecret:String,httpRequest: String,payload: CardPaymentStruct, completion:@escaping (String)->()) {
-    
-    var request = generateHeaders(clientId: clientId, clientSecret: clientSecret, httpRequest: httpRequest, path: "/api/v1/merchant/transact/cards")
-
-
+import CryptoSwift
+import PercentEncoder
+func generateLink(transactionRef:String,merchantId: String, payload: CardPaymentStruct,transactionType:String)throws->URL{
     let encoder = JSONEncoder()
     do {
         let jsonData = try encoder.encode(payload)
-        // ... and set our request's HTTP body
-        request.httpBody = jsonData
+        let payload = String(data: jsonData, encoding: .utf8)
+        let transactionType:String = transactionType
+        let key:String = generateKey(length: 16)
+        // 16 bytes for AES128
+        let iv:String = generateKey(length: 16)
+        let encryptedKey:String = try RSAUtil.encryptBrowserPayload(payload: key)
+        let encryptedIv:String = try RSAUtil.encryptBrowserPayload(payload: iv)
+        let aes = try AES(key: key, iv: iv) // aes128
+        let ciphertext = try aes.encrypt(Array(payload!.utf8))
+        let cryptedMessage = ciphertext.toBase64()
+        let encodedCryptedMessage = PercentEncoding.encodeURIComponent.evaluate(string: cryptedMessage!)
+        let encodedEncryptedKey = PercentEncoding.encodeURIComponent.evaluate(string: encryptedKey)
+        let encodedEncrytpedIv = PercentEncoding.encodeURIComponent.evaluate(string: encryptedIv)
+        let webCardinalURL = URL(string: "https://testmerchant.interswitch-ke.com/sdkcardinal?transactionType=\(transactionType)&key=\(encodedEncryptedKey)&iv=\(encodedEncrytpedIv)&payload=\(encodedCryptedMessage)")!
+        return webCardinalURL
     } catch {
-//        completion(String(error))
+        throw error
     }
     
-    // Create and run a URLSession data task with our JSON encoded POST request
-    let config = URLSessionConfiguration.default
-    let session = URLSession(configuration: config)
+    //rsa encrypt the payload
     
-    let task = session.dataTask(with: request) { (responseData, response, responseError) in
-        guard responseError == nil else {
-            return
-        }
-        // APIs usually respond with the data you just sent in your POST request
-        if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
-            
-            print("response: ", utf8Representation)
-            
-            completion(utf8Representation)
-        } else {
-            completion("No readable data received in response")
-        }
+    
+    
+}
+
+
+func generateKey(length: Int) -> String {
+    let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    let allowedCharsCount = UInt32(allowedChars.count)
+    var key = ""
+    
+    for _ in 0..<length {
+        let randomNum = Int(arc4random_uniform(allowedCharsCount))
+        let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
+        let newCharacter = allowedChars[randomIndex]
+        key += String(newCharacter)
     }
-    task.resume()
+    return key
 }

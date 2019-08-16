@@ -25,6 +25,9 @@ struct CardPaymentStruct: Codable {
     let city: String
     let narration: String
     let domain: String
+    let preauth:String
+    let fee: String
+    let paca: String
 }
 
 
@@ -45,4 +48,25 @@ struct MobilePaymentStruct: Codable {
     let narration: String
     let domain: String
     let phone:String
+}
+
+
+public struct MerchantConfig{
+    let merchantId:String
+    let merchantName:String
+    let clientId:String
+    let clientSecret:String
+    let cardStatus:Int
+    let mpesaStatus:Int
+    let equitelStatus:Int
+    let tkashStatus:Int
+    let airtelStatus:Int
+    let paycodeStatus:Int
+    let bnkStatus:Int
+    let mpesaPaybill:String
+    let equitelPaybill:String
+    let tokenizeStatus:Int
+    let cardauthStatus:Int
+    let cardPreauth:Int
+    let merchantDomain:String
 }
