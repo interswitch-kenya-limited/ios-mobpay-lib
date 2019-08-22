@@ -7,22 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D76EE841E00B188297F1FAE /* Pods_mobpay_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F6C699601A5D605DCA14079 /* Pods_mobpay_iosTests.framework */; };
+		3B1BE8AB22C37DBE0078CF50 /* MobilePaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */; };
+		3B1BE8AD22C37DDB0078CF50 /* CardPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */; };
+		3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */; };
+		3B4087D922F437A40034CE56 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4087D822F437A40034CE56 /* ActivityIndicator.swift */; };
+		3B498A5B22C6010300137324 /* HeaderGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B498A5A22C6010300137324 /* HeaderGeneration.swift */; };
+		3B59629E22F1963700A92195 /* CommonUIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59629D22F1963700A92195 /* CommonUIElements.swift */; };
 		3B6E660A229D52C20076822B /* Mobpay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6609229D52C20076822B /* Mobpay.swift */; };
 		3B6E660C229D530E0076822B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660B229D530E0076822B /* Card.swift */; };
 		3B6E660E229D53310076822B /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660D229D53310076822B /* Customer.swift */; };
 		3B6E6610229D53540076822B /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E660F229D53540076822B /* Merchant.swift */; };
 		3B6E6612229D53770076822B /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E6611229D53770076822B /* Payment.swift */; };
+		3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97B68122BB5A1300703BDC /* ConfirmMobilePayment.swift */; };
+		3B97B68422BB674200703BDC /* InterSwitchPaymentUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */; };
 		3B982CF2229D4AFE00BA2457 /* mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B982CE8229D4AFE00BA2457 /* mobpay_ios.framework */; };
 		3B982CF7229D4AFE00BA2457 /* mobpay_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B982CF6229D4AFE00BA2457 /* mobpay_iosTests.swift */; };
 		3B982CF9229D4AFE00BA2457 /* mobpay_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3BB84660229FB3BF001C80AD /* TransactionPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */; };
-		3BB84662229FB9C4001C80AD /* CardPaymentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */; };
-		3BB84664229FBC28001C80AD /* MobilePaymentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */; };
+		3B9F4ADC22B8C2BE00E96384 /* Pods_mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47ED8EFCD6897591D58DFAF7 /* Pods_mobpay_ios.framework */; };
+		3B9F4AE422B8D1DA00E96384 /* submitMobilePayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */; };
+		3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */; };
+		3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE722BA023E00E96384 /* Payloads.swift */; };
+		3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */; };
 		3BB84666229FBC85001C80AD /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84665229FBC85001C80AD /* Mobile.swift */; };
 		3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84667229FCB53001C80AD /* RSAUtil.swift */; };
 		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
-		5ECCAC5668742BA94312F6A6 /* Pods_mobpay_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */; };
-		B44BDFD6F62233063ACC35B6 /* Pods_mobpay_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */; };
+		3BC52FA722DF401500D549B8 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC52FA622DF401500D549B8 /* Images.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,27 +48,40 @@
 /* Begin PBXFileReference section */
 		1F1D28852EAB8886F6DC6758 /* Pods-mobpay-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-ios.release.xcconfig"; path = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios.release.xcconfig"; sourceTree = "<group>"; };
 		2D39E0B4C29A4573663675DD /* Pods-mobpay-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.release.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.release.xcconfig"; sourceTree = "<group>"; };
+		3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilePaymentUI.swift; sourceTree = "<group>"; };
+		3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPaymentUI.swift; sourceTree = "<group>"; };
+		3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankPaymentUI.swift; sourceTree = "<group>"; };
+		3B4087D822F437A40034CE56 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		3B498A5A22C6010300137324 /* HeaderGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderGeneration.swift; sourceTree = "<group>"; };
+		3B59629D22F1963700A92195 /* CommonUIElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUIElements.swift; sourceTree = "<group>"; };
 		3B6E6609229D52C20076822B /* Mobpay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobpay.swift; sourceTree = "<group>"; };
 		3B6E660B229D530E0076822B /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		3B6E660D229D53310076822B /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
 		3B6E660F229D53540076822B /* Merchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
 		3B6E6611229D53770076822B /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
+		3B97B68122BB5A1300703BDC /* ConfirmMobilePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMobilePayment.swift; sourceTree = "<group>"; };
+		3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterSwitchPaymentUI.swift; sourceTree = "<group>"; };
 		3B982CE8229D4AFE00BA2457 /* mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobpay_ios.h; sourceTree = "<group>"; };
 		3B982CEC229D4AFE00BA2457 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B982CF1229D4AFE00BA2457 /* mobpay-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mobpay-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B982CF6229D4AFE00BA2457 /* mobpay_iosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mobpay_iosTests.swift; sourceTree = "<group>"; };
 		3B982CF8229D4AFE00BA2457 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPayload.swift; sourceTree = "<group>"; };
-		3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPaymentPayload.swift; sourceTree = "<group>"; };
-		3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilePaymentPayload.swift; sourceTree = "<group>"; };
+		3B9F4AD222B8BFA400E96384 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B9F4AD422B8BFAA00E96384 /* PercentEncoder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PercentEncoder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B9F4AD622B8BFAE00E96384 /* SwiftyRSA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyRSA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = submitMobilePayment.swift; sourceTree = "<group>"; };
+		3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitCardPayment.swift; sourceTree = "<group>"; };
+		3B9F4AE722BA023E00E96384 /* Payloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payloads.swift; sourceTree = "<group>"; };
+		3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDSWebView.swift; sourceTree = "<group>"; };
 		3BB84665229FBC85001C80AD /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
 		3BB84667229FCB53001C80AD /* RSAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtil.swift; sourceTree = "<group>"; };
 		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
-		9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BC52FA622DF401500D549B8 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		47ED8EFCD6897591D58DFAF7 /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F6C699601A5D605DCA14079 /* Pods_mobpay_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B139FE955CA6594D537D31EC /* Pods-mobpay-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-iosTests/Pods-mobpay-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D1B304F4916A35EF2E4F96A7 /* Pods-mobpay-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobpay-ios.debug.xcconfig"; path = "Target Support Files/Pods-mobpay-ios/Pods-mobpay-ios.debug.xcconfig"; sourceTree = "<group>"; };
-		EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mobpay_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5ECCAC5668742BA94312F6A6 /* Pods_mobpay_ios.framework in Frameworks */,
+				3B9F4ADC22B8C2BE00E96384 /* Pods_mobpay_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B982CF2229D4AFE00BA2457 /* mobpay_ios.framework in Frameworks */,
-				B44BDFD6F62233063ACC35B6 /* Pods_mobpay_iosTests.framework in Frameworks */,
+				1D76EE841E00B188297F1FAE /* Pods_mobpay_iosTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +114,45 @@
 				2D39E0B4C29A4573663675DD /* Pods-mobpay-iosTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		3B6B7B1922F07FE70001989B /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				3B9F4AE722BA023E00E96384 /* Payloads.swift */,
+				3B6E660B229D530E0076822B /* Card.swift */,
+				3B6E660D229D53310076822B /* Customer.swift */,
+				3B6E660F229D53540076822B /* Merchant.swift */,
+				3B6E6611229D53770076822B /* Payment.swift */,
+				3BB84665229FBC85001C80AD /* Mobile.swift */,
+				3BB8466922A0343E001C80AD /* CardToken.swift */,
+			);
+			name = Structures;
+			sourceTree = "<group>";
+		};
+		3B97B67D22BB534C00703BDC /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */,
+				3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */,
+				3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */,
+				3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */,
+				3B59629D22F1963700A92195 /* CommonUIElements.swift */,
+				3B4087D822F437A40034CE56 /* ActivityIndicator.swift */,
+				3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		3B97B68022BB59AB00703BDC /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				3B97B68122BB5A1300703BDC /* ConfirmMobilePayment.swift */,
+				3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */,
+				3B9F4AE322B8D1DA00E96384 /* submitMobilePayment.swift */,
+				3B498A5A22C6010300137324 /* HeaderGeneration.swift */,
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 		3B982CDE229D4AFE00BA2457 = {
@@ -116,19 +178,14 @@
 		3B982CEA229D4AFE00BA2457 /* mobpay-ios */ = {
 			isa = PBXGroup;
 			children = (
+				3B6B7B1922F07FE70001989B /* Structures */,
+				3B97B68022BB59AB00703BDC /* Networking */,
+				3B97B67D22BB534C00703BDC /* UI */,
 				3B982CEB229D4AFE00BA2457 /* mobpay_ios.h */,
 				3B982CEC229D4AFE00BA2457 /* Info.plist */,
 				3B6E6609229D52C20076822B /* Mobpay.swift */,
-				3BB84663229FBC28001C80AD /* MobilePaymentPayload.swift */,
-				3B6E660B229D530E0076822B /* Card.swift */,
-				3B6E660D229D53310076822B /* Customer.swift */,
-				3B6E660F229D53540076822B /* Merchant.swift */,
-				3B6E6611229D53770076822B /* Payment.swift */,
-				3BB8465F229FB3BF001C80AD /* TransactionPayload.swift */,
-				3BB84661229FB9C4001C80AD /* CardPaymentPayload.swift */,
-				3BB84665229FBC85001C80AD /* Mobile.swift */,
 				3BB84667229FCB53001C80AD /* RSAUtil.swift */,
-				3BB8466922A0343E001C80AD /* CardToken.swift */,
+				3BC52FA622DF401500D549B8 /* Images.swift */,
 			);
 			path = "mobpay-ios";
 			sourceTree = "<group>";
@@ -145,8 +202,11 @@
 		647351F4EA599B59D260DF39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EA79D6F77F7DE8C0CB741A76 /* Pods_mobpay_ios.framework */,
-				9A235CAD4616BABD59896B8E /* Pods_mobpay_iosTests.framework */,
+				3B9F4AD622B8BFAE00E96384 /* SwiftyRSA.framework */,
+				3B9F4AD422B8BFAA00E96384 /* PercentEncoder.framework */,
+				3B9F4AD222B8BFA400E96384 /* CryptoSwift.framework */,
+				47ED8EFCD6897591D58DFAF7 /* Pods_mobpay_ios.framework */,
+				5F6C699601A5D605DCA14079 /* Pods_mobpay_iosTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -311,14 +371,24 @@
 			files = (
 				3B6E660E229D53310076822B /* Customer.swift in Sources */,
 				3B6E660A229D52C20076822B /* Mobpay.swift in Sources */,
+				3B1BE8AB22C37DBE0078CF50 /* MobilePaymentUI.swift in Sources */,
+				3B9F4AE422B8D1DA00E96384 /* submitMobilePayment.swift in Sources */,
 				3B6E660C229D530E0076822B /* Card.swift in Sources */,
-				3BB84660229FB3BF001C80AD /* TransactionPayload.swift in Sources */,
+				3B1BE8AD22C37DDB0078CF50 /* CardPaymentUI.swift in Sources */,
+				3B97B68422BB674200703BDC /* InterSwitchPaymentUI.swift in Sources */,
+				3B498A5B22C6010300137324 /* HeaderGeneration.swift in Sources */,
+				3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */,
+				3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */,
 				3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */,
 				3B6E6610229D53540076822B /* Merchant.swift in Sources */,
 				3BB84666229FBC85001C80AD /* Mobile.swift in Sources */,
 				3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */,
-				3BB84662229FB9C4001C80AD /* CardPaymentPayload.swift in Sources */,
-				3BB84664229FBC28001C80AD /* MobilePaymentPayload.swift in Sources */,
+				3B59629E22F1963700A92195 /* CommonUIElements.swift in Sources */,
+				3BC52FA722DF401500D549B8 /* Images.swift in Sources */,
+				3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */,
+				3B4087D922F437A40034CE56 /* ActivityIndicator.swift in Sources */,
+				3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */,
+				3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */,
 				3B6E6612229D53770076822B /* Payment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

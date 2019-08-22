@@ -1,0 +1,13 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/magetoa/Desktop/Framework/mobpay-ios/build/Release-iphoneos/mobpay_ios.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/magetoa/Desktop/Framework/mobpay-ios/build/mobpay-ios.build/Release-iphoneos/mobpay-ios.build/unextended-module.modulemap",
+    }]
+  }]
+}
