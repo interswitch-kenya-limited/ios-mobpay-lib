@@ -23,7 +23,7 @@ func generateHeaders(clientId:String,clientSecret:String,httpRequest: String,pat
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "testids.interswitch.co.ke"
-        urlComponents.port = 9080
+        urlComponents.port = 18082
         urlComponents.path = path
         guard let url = urlComponents.url else {
             throw fatalError("Unable to create url from the given components")
