@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 spec.name         = "MobpayiOS"
-spec.version      = "0.2.2"
+spec.version      = "0.2.3"
 spec.summary      = "MobpayiOS - An iOS library for integrating card and mobile payments through Interswitch"
 # spec.description  = <<-DESC
 #  This SDK library enables you to integrate Interswitch payments to your mobile app
