@@ -61,7 +61,7 @@ public struct Mobile {
         var provider:String;
         var pattern:NSRegularExpression;
         let range = NSMakeRange(0, phone.count)
-        let mpesaRegex = try! NSRegularExpression(pattern: "^(\\+?254|0)[7]([0-2][0-9]|[9][0-3])[0-9]{0,6}$")
+        let mpesaRegex = try! NSRegularExpression(pattern: "^(\\+?254|0)[7]([0-2][0-9]|[9][0-9]|[4]([0-3]|[6]|[8]))[0-9]{0,6}$")
         let eazzyPayRegex = try! NSRegularExpression(pattern: "^4[0-9]{1,12}(?:[0-9]{6})?$")
         
         func mpesaChecker(phone : String)-> Bool{
@@ -73,10 +73,12 @@ public struct Mobile {
         switch true {
         case mpesaChecker(phone: phone):
             provider = "703"
-            pattern = try!NSRegularExpression(pattern: "^(\\+?254|0)[7]([0-2][0-9]|[9][0-3])[0-9]{0,6}$")
+            //use the mpesa regex
+            pattern = try!NSRegularExpression(pattern: "^(\\+?254|0)[7]([0-2][0-9]|[9][0-9]|[4]([0-3]|[6]|[8]))[0-9]{0,6}$")
             return (provider,pattern)
         case eazzyPayChecker(phone: phone):
             provider = "708"
+            //use the eazzy pay regex
             pattern = try!NSRegularExpression(pattern: "^4[0-9]{1,12}(?:[0-9]{6})?$")
             return (provider,pattern)
         default:

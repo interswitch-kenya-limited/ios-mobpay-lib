@@ -11,7 +11,6 @@ spec.license      = "MIT"
 spec.author       = { "Allan Mageto" => "alan.mageto@interswitchgroup.com" }
 spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobpay-ios-lib.git", :tag => spec.version}
 spec.source_files  = "mobpay-ios/*.swift"
-spec.resources = "mobpay-ios/*.xcassets"
 
 # spec.exclude_files = "Classes/Exclude"
 spec.platform     = :ios, "10.0"
