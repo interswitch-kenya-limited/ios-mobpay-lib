@@ -14,7 +14,7 @@ func submitConfirmMobilePayment(clientId:String, clientSecret:String,httpRequest
     
     let task = try URLSession.shared.dataTask(with: request) { (data, response, error) in
         if error != nil {
-            completion(error!.localizedDescription)
+            completion("{\"error\":true,\"message\":\(error!.localizedDescription)}")
         }
         if let data = data, let dataString = String(data: data, encoding: .utf8) {
             completion(dataString)

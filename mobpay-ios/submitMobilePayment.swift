@@ -17,7 +17,7 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
         let jsonData = try encoder.encode(payload)
         request.httpBody = jsonData
     } catch {
-        completion(error.localizedDescription)
+        completion("{\"error\":true,\"message\":\(error.localizedDescription)}")
     }
     
     let config = URLSessionConfiguration.default
@@ -25,12 +25,12 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
     
     let task = session.dataTask(with: request) { (responseData, response, responseError) in
         if responseError != nil {
-            completion(responseError!.localizedDescription)
+            completion("{\"error\":true,\"message\":\(responseError!.localizedDescription)}")
         }
         if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
             completion(utf8Representation)
         } else {
-            completion("no readable data received in response")
+            completion("{\"error\":true,\"message\":\"No readable data received in response\"}")
         }
     }
     task.resume()

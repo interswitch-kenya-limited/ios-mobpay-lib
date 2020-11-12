@@ -142,7 +142,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
     lazy var amountLabel:UILabel = {
         let margin = CGFloat(5)
         let label = UILabel.init(frame: CGRect(x: margin, y: initialY + 5, width: self.view.frame.width - (margin * 2.0), height: 30))
-        label.text = "KES \(self.shownPaymentAmount!)"
+        label.text = "\(self.payment.currency)  \(self.shownPaymentAmount!)"
         label.textAlignment = .right
         return label
     }()
@@ -313,7 +313,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
             previousFrame.size.height = CGFloat(50)
             previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+            submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         }else if self.selectedPaymentOption == "Paybill" && self.paymentMethod == "EAZZYPAY"{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
@@ -321,7 +321,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
             previousFrame.size.height = CGFloat(50)
             previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+            submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         }else if self.selectedPaymentOption == "Express Checkout" && self.paymentMethod == "EAZZYPAY"{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
@@ -329,7 +329,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
             previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+            submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         }else if self.selectedPaymentOption == "Express Checkout"{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
@@ -337,7 +337,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
             previousFrame.origin.x = (self.screenDimensions.maxX - previousFrame.size.width)/2
             previousFrame.size.height = CGFloat(50)
             submitButton.frame = previousFrame
-            submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+            submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         }else{
             var previousFrame = self.mobilePaymentInstructions.frame
             previousFrame.origin.y = previousFrame.maxY + 20
@@ -405,7 +405,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
         previousFrame.size.height = CGFloat(50)
         let submitButton = UIButton.init(type: .roundedRect)
         submitButton.frame = previousFrame
-        submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+        submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitMobilePayment(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
@@ -461,7 +461,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
     }()
     
     @objc func cancelTransaction(_ : UIButton){
-        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("Transaction failed: User quit before finishing the transaction")
+        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("{\"error\":true,\"message\":\"Transaction failed: User quit before finishing the transaction\"}")
     }
     
     

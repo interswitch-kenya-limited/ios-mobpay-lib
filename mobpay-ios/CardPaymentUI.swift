@@ -9,7 +9,6 @@
 
 import UIKit
 import WebKit
-import FormTextField
 
 protocol CardPaymentUIDelegate {
     func didReceiveCardPayload(_ payload:String)
@@ -82,7 +81,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
             let paymentMessage:String = "Please try again ot select an alternative payment option"
             let alert = UIAlertController(title: "Payment Failed", message: paymentMessage, preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "Quit", style: .destructive) { (action:UIAlertAction!) in
-                self.CardPaymentUIDelegate?.didReceiveCardPayload("Transaction failed: User quit before finishing the transaction")
+                self.CardPaymentUIDelegate?.didReceiveCardPayload(responseAsString)
             })
             alert.addAction(UIAlertAction(title: "Try Again", style: .default) { (action:UIAlertAction!) in
                 print("Cancelled")
@@ -165,7 +164,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
         let margin = CGFloat(5)
         let label = UILabel.init(frame: CGRect(x: margin, y: 0, width: self.view.frame.width - (margin * 2.0), height: 30))
         debugPrint(label.frame.size.width)
-        label.text = "KES \(self.shownPaymentAmount!)"
+        label.text = "\(self.payment.currency) \(self.shownPaymentAmount!)"
         label.textAlignment = .right
         return label
     }()
@@ -224,6 +223,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
         var validation = Validation()
         validation.maximumLength = 19
         validation.minimumLength = 19
+        validation.format = "^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$"
         let characterSet = NSMutableCharacterSet.decimalDigit()
         characterSet.addCharacters(in: " ")
         validation.characterSet = characterSet as CharacterSet
@@ -349,8 +349,8 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
         textField.inputType = .integer
         textField.placeholder = "CVC"
         var validation = Validation()
-        validation.maximumLength = "CVC".count
-        validation.minimumLength = "CVC".count
+        validation.maximumLength = 3
+        validation.minimumLength = 3
         validation.characterSet = NSCharacterSet.decimalDigits
         let inputValidator = InputValidator(validation: validation)
         textField.inputValidator = inputValidator
@@ -400,7 +400,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
         }
         let submitButton = UIButton.init(type: .roundedRect)
         submitButton.frame = previousFrame
-        submitButton.setTitle("Pay KES \(self.shownPaymentAmount!)", for: .normal)
+        submitButton.setTitle("Pay \(self.payment.currency) \(self.shownPaymentAmount!)", for: .normal)
         submitButton.addTarget(self, action: #selector(submitButtonAction(_ :)), for: .touchDown)
         submitButton.backgroundColor = UIColor(red: 124.0/255, green: 160.0/255, blue: 172.0/255, alpha: 1.0)
         submitButton.setTitleColor(UIColor.white, for: .normal)
@@ -487,7 +487,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.CardPaymentUIDelegate?.didReceiveCardPayload("Transaction failed: User quit before finishing the transaction")
+        self.CardPaymentUIDelegate?.didReceiveCardPayload("{\"error\":true,\"message\":\"Transaction failed: User quit before finishing the transaction\"}")
     }
     
     //LOAD IMAGES

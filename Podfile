@@ -8,7 +8,6 @@ target 'mobpay-ios' do
    pod 'CryptoSwift'
    pod 'PercentEncoder'
    pod 'CocoaMQTT'
-   pod 'FormTextField'
 
   # Pods for mobpay-ios
 

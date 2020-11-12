@@ -29,6 +29,18 @@
 		3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */; };
 		3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9F4AE722BA023E00E96384 /* Payloads.swift */; };
 		3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */; };
+		3BB5C76A255D4CAB00D0AC3A /* CardNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C769255D4CAB00D0AC3A /* CardNumberFormatter.swift */; };
+		3BB5C76B255D4CAB00D0AC3A /* Formattable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C768255D4CAB00D0AC3A /* Formattable.swift */; };
+		3BB5C76C255D4CAB00D0AC3A /* CardExpirationDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C767255D4CAB00D0AC3A /* CardExpirationDateFormatter.swift */; };
+		3BB5C774255D4CDA00D0AC3A /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C773255D4CDA00D0AC3A /* FormTextField.swift */; };
+		3BB5C775255D4CDA00D0AC3A /* FormTextFieldClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C770255D4CD900D0AC3A /* FormTextFieldClearButton.swift */; };
+		3BB5C776255D4CDA00D0AC3A /* FormTextFieldTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C771255D4CDA00D0AC3A /* FormTextFieldTypeManager.swift */; };
+		3BB5C77F255D4CF400D0AC3A /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C77A255D4CF400D0AC3A /* InputValidator.swift */; };
+		3BB5C780255D4CF400D0AC3A /* DecimalInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C77B255D4CF400D0AC3A /* DecimalInputValidator.swift */; };
+		3BB5C781255D4CF400D0AC3A /* RequiredInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C77C255D4CF400D0AC3A /* RequiredInputValidator.swift */; };
+		3BB5C782255D4CF400D0AC3A /* InputValidatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C77D255D4CF400D0AC3A /* InputValidatable.swift */; };
+		3BB5C783255D4CF400D0AC3A /* CardExpirationDateInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C77E255D4CF400D0AC3A /* CardExpirationDateInputValidator.swift */; };
+		3BB5C789255D4D2A00D0AC3A /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5C788255D4D2A00D0AC3A /* Validation.swift */; };
 		3BB84666229FBC85001C80AD /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84665229FBC85001C80AD /* Mobile.swift */; };
 		3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB84667229FCB53001C80AD /* RSAUtil.swift */; };
 		3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8466922A0343E001C80AD /* CardToken.swift */; };
@@ -74,6 +86,19 @@
 		3B9F4AE522B8D28A00E96384 /* SubmitCardPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitCardPayment.swift; sourceTree = "<group>"; };
 		3B9F4AE722BA023E00E96384 /* Payloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payloads.swift; sourceTree = "<group>"; };
 		3BB20EB0230297AD0088C5DD /* ThreeDSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDSWebView.swift; sourceTree = "<group>"; };
+		3BB5C767255D4CAB00D0AC3A /* CardExpirationDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardExpirationDateFormatter.swift; sourceTree = "<group>"; };
+		3BB5C768255D4CAB00D0AC3A /* Formattable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formattable.swift; sourceTree = "<group>"; };
+		3BB5C769255D4CAB00D0AC3A /* CardNumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNumberFormatter.swift; sourceTree = "<group>"; };
+		3BB5C770255D4CD900D0AC3A /* FormTextFieldClearButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextFieldClearButton.swift; sourceTree = "<group>"; };
+		3BB5C771255D4CDA00D0AC3A /* FormTextFieldTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextFieldTypeManager.swift; sourceTree = "<group>"; };
+		3BB5C772255D4CDA00D0AC3A /* FormTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormTextField.h; sourceTree = "<group>"; };
+		3BB5C773255D4CDA00D0AC3A /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
+		3BB5C77A255D4CF400D0AC3A /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
+		3BB5C77B255D4CF400D0AC3A /* DecimalInputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalInputValidator.swift; sourceTree = "<group>"; };
+		3BB5C77C255D4CF400D0AC3A /* RequiredInputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequiredInputValidator.swift; sourceTree = "<group>"; };
+		3BB5C77D255D4CF400D0AC3A /* InputValidatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidatable.swift; sourceTree = "<group>"; };
+		3BB5C77E255D4CF400D0AC3A /* CardExpirationDateInputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardExpirationDateInputValidator.swift; sourceTree = "<group>"; };
+		3BB5C788255D4D2A00D0AC3A /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		3BB84665229FBC85001C80AD /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
 		3BB84667229FCB53001C80AD /* RSAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtil.swift; sourceTree = "<group>"; };
 		3BB8466922A0343E001C80AD /* CardToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardToken.swift; sourceTree = "<group>"; };
@@ -134,6 +159,9 @@
 			isa = PBXGroup;
 			children = (
 				3B97B68322BB674200703BDC /* InterSwitchPaymentUI.swift */,
+				3BB5C767255D4CAB00D0AC3A /* CardExpirationDateFormatter.swift */,
+				3BB5C769255D4CAB00D0AC3A /* CardNumberFormatter.swift */,
+				3BB5C768255D4CAB00D0AC3A /* Formattable.swift */,
 				3B1BE8AA22C37DBE0078CF50 /* MobilePaymentUI.swift */,
 				3B1BE8AC22C37DDB0078CF50 /* CardPaymentUI.swift */,
 				3B1BE8AE22C37F380078CF50 /* BankPaymentUI.swift */,
@@ -178,6 +206,7 @@
 		3B982CEA229D4AFE00BA2457 /* mobpay-ios */ = {
 			isa = PBXGroup;
 			children = (
+				3BB5C76F255D4CBD00D0AC3A /* CardForm */,
 				3B6B7B1922F07FE70001989B /* Structures */,
 				3B97B68022BB59AB00703BDC /* Networking */,
 				3B97B67D22BB534C00703BDC /* UI */,
@@ -197,6 +226,47 @@
 				3B982CF8229D4AFE00BA2457 /* Info.plist */,
 			);
 			path = "mobpay-iosTests";
+			sourceTree = "<group>";
+		};
+		3BB5C76F255D4CBD00D0AC3A /* CardForm */ = {
+			isa = PBXGroup;
+			children = (
+				3BB5C787255D4D2200D0AC3A /* Validation */,
+				3BB5C786255D4CFD00D0AC3A /* Formatter */,
+				3BB5C779255D4CE500D0AC3A /* InputValidator */,
+			);
+			name = CardForm;
+			sourceTree = "<group>";
+		};
+		3BB5C779255D4CE500D0AC3A /* InputValidator */ = {
+			isa = PBXGroup;
+			children = (
+				3BB5C77E255D4CF400D0AC3A /* CardExpirationDateInputValidator.swift */,
+				3BB5C77B255D4CF400D0AC3A /* DecimalInputValidator.swift */,
+				3BB5C77D255D4CF400D0AC3A /* InputValidatable.swift */,
+				3BB5C77A255D4CF400D0AC3A /* InputValidator.swift */,
+				3BB5C77C255D4CF400D0AC3A /* RequiredInputValidator.swift */,
+			);
+			name = InputValidator;
+			sourceTree = "<group>";
+		};
+		3BB5C786255D4CFD00D0AC3A /* Formatter */ = {
+			isa = PBXGroup;
+			children = (
+				3BB5C772255D4CDA00D0AC3A /* FormTextField.h */,
+				3BB5C773255D4CDA00D0AC3A /* FormTextField.swift */,
+				3BB5C770255D4CD900D0AC3A /* FormTextFieldClearButton.swift */,
+				3BB5C771255D4CDA00D0AC3A /* FormTextFieldTypeManager.swift */,
+			);
+			name = Formatter;
+			sourceTree = "<group>";
+		};
+		3BB5C787255D4D2200D0AC3A /* Validation */ = {
+			isa = PBXGroup;
+			children = (
+				3BB5C788255D4D2A00D0AC3A /* Validation.swift */,
+			);
+			name = Validation;
 			sourceTree = "<group>";
 		};
 		647351F4EA599B59D260DF39 /* Frameworks */ = {
@@ -375,19 +445,31 @@
 				3B9F4AE422B8D1DA00E96384 /* submitMobilePayment.swift in Sources */,
 				3B6E660C229D530E0076822B /* Card.swift in Sources */,
 				3B1BE8AD22C37DDB0078CF50 /* CardPaymentUI.swift in Sources */,
+				3BB5C76B255D4CAB00D0AC3A /* Formattable.swift in Sources */,
 				3B97B68422BB674200703BDC /* InterSwitchPaymentUI.swift in Sources */,
+				3BB5C781255D4CF400D0AC3A /* RequiredInputValidator.swift in Sources */,
+				3BB5C782255D4CF400D0AC3A /* InputValidatable.swift in Sources */,
 				3B498A5B22C6010300137324 /* HeaderGeneration.swift in Sources */,
+				3BB5C76C255D4CAB00D0AC3A /* CardExpirationDateFormatter.swift in Sources */,
 				3B9F4AE822BA023E00E96384 /* Payloads.swift in Sources */,
+				3BB5C789255D4D2A00D0AC3A /* Validation.swift in Sources */,
 				3BB20EB1230297AD0088C5DD /* ThreeDSWebView.swift in Sources */,
 				3BB84668229FCB53001C80AD /* RSAUtil.swift in Sources */,
 				3B6E6610229D53540076822B /* Merchant.swift in Sources */,
 				3BB84666229FBC85001C80AD /* Mobile.swift in Sources */,
 				3BB8466A22A0343E001C80AD /* CardToken.swift in Sources */,
+				3BB5C783255D4CF400D0AC3A /* CardExpirationDateInputValidator.swift in Sources */,
 				3B59629E22F1963700A92195 /* CommonUIElements.swift in Sources */,
+				3BB5C76A255D4CAB00D0AC3A /* CardNumberFormatter.swift in Sources */,
 				3BC52FA722DF401500D549B8 /* Images.swift in Sources */,
+				3BB5C775255D4CDA00D0AC3A /* FormTextFieldClearButton.swift in Sources */,
 				3B97B68222BB5A1300703BDC /* ConfirmMobilePayment.swift in Sources */,
+				3BB5C780255D4CF400D0AC3A /* DecimalInputValidator.swift in Sources */,
 				3B4087D922F437A40034CE56 /* ActivityIndicator.swift in Sources */,
+				3BB5C774255D4CDA00D0AC3A /* FormTextField.swift in Sources */,
 				3B1BE8AF22C37F380078CF50 /* BankPaymentUI.swift in Sources */,
+				3BB5C776255D4CDA00D0AC3A /* FormTextFieldTypeManager.swift in Sources */,
+				3BB5C77F255D4CF400D0AC3A /* InputValidator.swift in Sources */,
 				3B9F4AE622B8D28A00E96384 /* SubmitCardPayment.swift in Sources */,
 				3B6E6612229D53770076822B /* Payment.swift in Sources */,
 			);

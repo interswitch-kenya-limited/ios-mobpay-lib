@@ -52,8 +52,8 @@ public struct Validation {
         if valid && complete {
             if let format = self.format {
                 let regex = try! NSRegularExpression(pattern: format, options: .caseInsensitive)
-                let range = regex.rangeOfFirstMatch(in: string, options: .reportProgress, range: NSRange(location: 0, length: string.count))
-                valid = (range.location == 0 && range.length == string.count)
+                let range = regex.rangeOfFirstMatch(in: string.replacingOccurrences(of: " ", with: ""), options: .reportProgress, range: NSRange(location: 0, length: string.replacingOccurrences(of: " ", with: "").count))
+                valid = (range.location == 0 && range.length == string.replacingOccurrences(of: " ", with: "").count)
             }
         }
 

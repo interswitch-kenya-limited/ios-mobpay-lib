@@ -3,7 +3,6 @@ PODS:
   - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
   - CryptoSwift (1.0.0)
-  - FormTextField (3.0.0)
   - PercentEncoder (1.2.1)
   - SwiftyRSA (1.5.0):
     - SwiftyRSA/ObjC (= 1.5.0)
@@ -12,16 +11,14 @@ PODS:
 DEPENDENCIES:
   - CocoaMQTT
   - CryptoSwift
-  - FormTextField
   - PercentEncoder
   - SwiftyRSA
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - CocoaAsyncSocket
     - CocoaMQTT
     - CryptoSwift
-    - FormTextField
     - PercentEncoder
     - SwiftyRSA
 
@@ -29,10 +26,9 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  FormTextField: fd5dc441ad40ba12d08ef66aeb0453ee9bf55e6d
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: d4d8f3984233f818e640195f2977fcdd9f6e040c
+PODFILE CHECKSUM: 55363b2f6cd0c7593e551db39c20f48910c7abdb
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.10.0
