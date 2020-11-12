@@ -487,7 +487,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.CardPaymentUIDelegate?.didReceiveCardPayload("{\"error\":true,\"message\":\"Transaction failed: User quit before finishing the transaction\"}")
+        self.CardPaymentUIDelegate?.didReceiveCardPayload("{\"error\":{\"code\":2,\"message\":\"User quit before finishing the transaction\"}}")
     }
     
     //LOAD IMAGES

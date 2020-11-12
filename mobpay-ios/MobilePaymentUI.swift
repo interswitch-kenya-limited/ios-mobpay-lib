@@ -63,7 +63,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
             let paymentMessage:String = "Please try again ot select an alternative payment option"
             let alert = UIAlertController(title: "Payment Failed", message: paymentMessage, preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "Quit", style: .destructive) { (action:UIAlertAction!) in
-               self.MobilePaymentUIDelegate?.didReceiveMobilePayload("Transaction failed: User quit before finishing the transaction")
+               self.MobilePaymentUIDelegate?.didReceiveMobilePayload(responseAsString)
             })
             alert.addAction(UIAlertAction(title: "Try Again", style: .default) { (action:UIAlertAction!) in
                 print("Cancelled")
@@ -461,7 +461,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
     }()
     
     @objc func cancelTransaction(_ : UIButton){
-        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("{\"error\":true,\"message\":\"Transaction failed: User quit before finishing the transaction\"}")
+        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("{\"error\":{\"code\":2,\"message\":\"User quit before finishing the transaction\"}}")
     }
     
     
