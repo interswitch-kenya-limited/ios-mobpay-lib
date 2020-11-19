@@ -4,10 +4,10 @@ platform :ios, '9.0'
 target 'mobpay-ios' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-   pod 'SwiftyRSA'
-   pod 'CryptoSwift'
-   pod 'PercentEncoder'
-   pod 'CocoaMQTT'
+   pod 'SwiftyRSA', '1.5.0'
+   pod 'CryptoSwift', '1.0.0'
+   pod 'PercentEncoder','1.2.1'
+   pod 'CocoaMQTT','1.2.5'
 
   # Pods for mobpay-ios
 

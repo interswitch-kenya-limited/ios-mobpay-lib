@@ -9,10 +9,10 @@ PODS:
   - SwiftyRSA/ObjC (1.5.0)
 
 DEPENDENCIES:
-  - CocoaMQTT
-  - CryptoSwift
-  - PercentEncoder
-  - SwiftyRSA
+  - CocoaMQTT (= 1.2.5)
+  - CryptoSwift (= 1.0.0)
+  - PercentEncoder (= 1.2.1)
+  - SwiftyRSA (= 1.5.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -29,6 +29,6 @@ SPEC CHECKSUMS:
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: 55363b2f6cd0c7593e551db39c20f48910c7abdb
+PODFILE CHECKSUM: 56aa2d700ee9ae77b74887ca659616879619de19
 
 COCOAPODS: 1.10.0
