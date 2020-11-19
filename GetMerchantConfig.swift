@@ -12,6 +12,7 @@ func convertToDictionary(message: String) -> [String: Any]? {
         do {
             return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         } catch {
+            throw error
             print(error.localizedDescription)
         }
     }
