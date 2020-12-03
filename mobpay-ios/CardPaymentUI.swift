@@ -436,8 +436,6 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
                     self.dismiss(animated: true)
                     self.showResponse(message: completion)
                 }
-            }else{
-                print("card number: \(cardNumberField.validate()) card expiration : \(cardExpirationDateField.validate()) cvv field: \(cvcField.validate())")
             }
         }else{
             if cvcField.validate(){
@@ -447,8 +445,6 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
                     self.dismiss(animated: true)
                     self.showResponse(message: completion)
                 }
-            }else{
-                print(cvcField.validate())
             }
         }
        
@@ -487,7 +483,7 @@ class CardPaymentUI : UIViewController,WKUIDelegate {
     }
     
     @objc func cancelTransaction(_ : UIButton){
-        self.CardPaymentUIDelegate?.didReceiveCardPayload("{\"error\":{\"code\":2,\"message\":\"User quit before finishing the transaction\"}}")
+        self.CardPaymentUIDelegate?.didReceiveCardPayload("{\"error\":{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"User quit before finishing the transaction\",\"statusCode\":\"89\"},\"errors\":[{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"User quit before finishing the transaction\",\"statusCode\":\"89\"}]}")
     }
     
     //LOAD IMAGES
@@ -574,8 +570,9 @@ extension CardPaymentUI:UIPickerViewDelegate,UIPickerViewDataSource{
     }
     
     func refreshTextFields(){
-        cardTokenField.isHidden = !self.useCardTokenSection
-        cardNumberField.isHidden = self.useCardTokenSection
+        cardTokenField.isHidden = self.useCardTokenSection
+        cardNumberField.isHidden = !self.useCardTokenSection
+        cardNumberField.reset()
         cardExpirationDateField.isEnabled = true
         cardExpirationDateField.setNeedsLayout()
         self.view.setNeedsDisplay()

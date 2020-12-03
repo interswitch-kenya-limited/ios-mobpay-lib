@@ -461,7 +461,7 @@ class MobilePaymentUI : UIViewController,UITextFieldDelegate,UIPickerViewDelegat
     }()
     
     @objc func cancelTransaction(_ : UIButton){
-        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("{\"error\":{\"code\":2,\"message\":\"User quit before finishing the transaction\"}}")
+        self.MobilePaymentUIDelegate?.didReceiveMobilePayload("{\"error\":{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"User quit before finishing the transaction\",\"statusCode\":\"89\"},\"errors\":[{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"User quit before finishing the transaction\",\"statusCode\":\"89\"}]}")
     }
     
     

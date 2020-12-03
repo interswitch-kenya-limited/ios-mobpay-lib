@@ -17,7 +17,7 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
         let jsonData = try encoder.encode(payload)
         request.httpBody = jsonData
     } catch {
-        completion("{\"error\":true,\"message\":\(error.localizedDescription)}")
+        completion("{\"error\":{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"\(error.localizedDescription)\",\"statusCode\":\"89\"},\"errors\":[{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"\(error.localizedDescription)\",\"statusCode\":\"89\"}]}")
     }
     
     let config = URLSessionConfiguration.default
@@ -25,12 +25,12 @@ func submitMobilePayment(clientId:String, clientSecret:String,httpRequest: Strin
     
     let task = session.dataTask(with: request) { (responseData, response, responseError) in
         if responseError != nil {
-            completion("{\"error\":true,\"message\":\(responseError!.localizedDescription)}")
+            completion("{\"error\":{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"\(responseError!.localizedDescription)\",\"statusCode\":\"89\"},\"errors\":[{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"\(responseError!.localizedDescription)\",\"statusCode\":\"89\"}]}")
         }
         if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
             completion(utf8Representation)
         } else {
-            completion("{\"error\":true,\"message\":\"No readable data received in response\"}")
+            completion("{\"error\":{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"No readable data reacived in response\",\"statusCode\":\"89\"},\"errors\":[{\"code\":\"1\",\"message\":\"Failed\",\"statusMessage\":\"No readable data reacived in response\",\"statusCode\":\"89\"}]}")
         }
     }
     task.resume()
