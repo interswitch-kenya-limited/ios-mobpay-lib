@@ -26,6 +26,7 @@ public class Mobpay:UIViewController {
     
     //MOBILE MONEY
     //make mobile money payment
+    @available(*, deprecated, message: "Method deprectaed")
     public func makeMobileMoneyPayment(mobile:Mobile , merchant:Merchant ,payment: Payment ,customer: Customer,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
         let mobilePayload = MobilePaymentStruct(amount: payment.amount, orderId: payment.orderId, transactionRef: payment.transactionRef, terminalType: payment.terminalType, terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: mobile.provider, merchantId: merchant.merchantId,
                                                 customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
@@ -38,6 +39,7 @@ public class Mobpay:UIViewController {
     }
     
     //confirm mobile money payment
+    @available(*, deprecated, message: "Method deprectaed")
     public func confirmMobileMoneyPayment(orderId:String,clientId:String,clientSecret:String,completion:@escaping (String)->())throws{
         submitConfirmMobilePayment(clientId: clientId, clientSecret: clientSecret, httpRequest: "GET", transactionRef: orderId) { (urlResponse) in completion(urlResponse)}
     }
@@ -57,6 +59,7 @@ public class Mobpay:UIViewController {
         }
     }
     
+    @available(*, deprecated, message: "Method deprectaed")
     public func submitCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
         do {
             //[TODO] get merchant config from our servers
@@ -92,6 +95,7 @@ public class Mobpay:UIViewController {
         }
     }
     
+    @available(*, deprecated, message: "Method deprectaed")
     public func submitTokenPayment(cardToken: CardToken,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
         do {
             //[TODO] get merchant config from our servers

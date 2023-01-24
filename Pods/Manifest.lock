@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.9.1)
   - CocoaAsyncSocket (7.6.3)
   - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
@@ -9,13 +10,15 @@ PODS:
   - SwiftyRSA/ObjC (1.5.0)
 
 DEPENDENCIES:
+  - Alamofire
   - CocoaMQTT (= 1.2.5)
   - CryptoSwift (= 1.0.0)
   - PercentEncoder (= 1.2.1)
   - SwiftyRSA (= 1.5.0)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
+    - Alamofire
     - CocoaAsyncSocket
     - CocoaMQTT
     - CryptoSwift
@@ -23,12 +26,13 @@ SPEC REPOS:
     - SwiftyRSA
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: 56aa2d700ee9ae77b74887ca659616879619de19
+PODFILE CHECKSUM: 6a4eaa1658117251385c864c666f037376c5202a
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.3
