@@ -10,9 +10,10 @@ open class InterSwitchPaymentUI : UIViewController {
     var merchantConfig:MerchantConfig!
     var clientId:String!
     var clientSecret:String!
+    var checkoutData: CheckoutData!
     var cardTokens:Array<CardToken>? = nil
     
-    public convenience init(payment: Payment, customer: Customer,clientId:String,clientSecret:String,merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil) {
+    public convenience init(payment: Payment, customer: Customer,checkoutData: CheckoutData, clientId:String,clientSecret:String,merchantConfig:MerchantConfig,cardTokens:Array<CardToken>? = nil) {
         self.init()
         self.payment = payment;
         self.customer = customer;
@@ -20,6 +21,7 @@ open class InterSwitchPaymentUI : UIViewController {
         self.clientSecret = clientSecret
         self.merchantConfig = merchantConfig
         self.cardTokens = cardTokens
+        self.checkoutData = checkoutData
         //TODO add token details
     }
     
@@ -39,7 +41,7 @@ open class InterSwitchPaymentUI : UIViewController {
         var controllerArray:Array<UIViewController> = []
 
         if self.merchantConfig.cardStatus == 1 {
-            let cardVC = CardPaymentUI(payment: self.payment, customer: self.customer,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
+            let cardVC = CardPaymentUI(payment: self.payment, customer: self.customer, checkoutData: self.checkoutData,merchantConfig: self.merchantConfig, cardTokens: self.cardTokens)
             cardVC.title = "CARD"
             cardVC.tabBarItem = UITabBarItem.init(title: "CARD", image: UIImage(named: "CARD"), tag: 0)
             cardVC.CardPaymentUIDelegate = self

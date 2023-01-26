@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '9.0'
+platform :ios, '13.0'
 
 target 'mobpay-ios' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -8,6 +8,7 @@ target 'mobpay-ios' do
    pod 'CryptoSwift', '1.0.0'
    pod 'PercentEncoder','1.2.1'
    pod 'CocoaMQTT','1.2.5'
+   pod 'Alamofire','5.0.5'
 
   # Pods for mobpay-ios
 

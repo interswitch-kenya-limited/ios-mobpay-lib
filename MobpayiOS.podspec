@@ -13,13 +13,14 @@ spec.source       = { :git => "https://github.com/interswitch-kenya-limited/mobp
 spec.source_files  = "mobpay-ios/*swift"
 
 # spec.exclude_files = "Classes/Exclude"
-spec.platform     = :ios, "10.0"
+spec.platform     = :ios, "13.0"
 spec.exclude_files = "Classes/Exclude"
 spec.swift_version = '5.0'
 spec.dependency 'CryptoSwift', '~> 1.0'
 spec.dependency 'SwiftyRSA', '~> 1.5'
 spec.dependency 'PercentEncoder', '~> 1.2'
 spec.dependency 'CocoaMQTT', '~> 1.2'
+spec.dependency 'Alamofire', '~> 5.0.5'  
 
 
 end
