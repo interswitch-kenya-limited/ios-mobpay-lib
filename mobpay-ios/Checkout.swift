@@ -8,7 +8,30 @@
 
 import Foundation
 
-class CheckoutData {
+public struct CheckoutData : Encodable{
+    
+    public init(merchantCode: String = "", domain: String = "", transactionReference: String = "", orderId: String = "", expiryTime: String = "", currencyCode: String = "", amount: Int = 0, narration: String = "", redirectUrl: String = "", iconUrl: String = "", merchantName: String = "", providerIconUrl: String = "", reqId: String = "", dateOfPayment: String = "", terminalId: String = "", terminalType: String = "", channel: String = "", fee: Int = 0, preauth: String = "") {
+        self.merchantCode = merchantCode
+        self.domain = domain
+        self.transactionReference = transactionReference
+        self.orderId = orderId
+        self.expiryTime = expiryTime
+        self.currencyCode = currencyCode
+        self.amount = amount
+        self.narration = narration
+        self.redirectUrl = redirectUrl
+        self.iconUrl = iconUrl
+        self.merchantName = merchantName
+        self.providerIconUrl = providerIconUrl
+        self.reqId = reqId
+        self.dateOfPayment = dateOfPayment
+        self.terminalId = terminalId
+        self.terminalType = terminalType
+        self.channel = channel
+        self.fee = fee
+        self.preauth = preauth
+    }
+    
     var merchantCode: String = ""
     var domain: String = ""
     var transactionReference: String = ""
@@ -21,9 +44,7 @@ class CheckoutData {
     var iconUrl: String = ""
     var merchantName: String = ""
     var providerIconUrl: String = ""
-    var cardTokensJson: [[String: String]] = []
     var reqId: String = ""
-    var field1: [String: String] = [:]
     var dateOfPayment: String = ""
     var terminalId: String = ""
     var terminalType: String = ""
@@ -31,9 +52,7 @@ class CheckoutData {
     var fee: Int = 0
     var preauth: String = ""
     
+
     
-    func toDictionary() -> [String: Any] {
-        return ["merchantCode": merchantCode,"domain": domain,"transactionReference": transactionReference,        "orderId": orderId,        "expiryTime": expiryTime,        "currencyCode": currencyCode,        "amount": amount,        "narration": narration,        "redirectUrl": redirectUrl,        "iconUrl": iconUrl,        "merchantName": merchantName,        "providerIconUrl": providerIconUrl,        "cardTokensJson": cardTokensJson,        "reqId": reqId,        "field1": field1,        "dateOfPayment": dateOfPayment,        "terminalId": terminalId,        "terminalType": terminalType,        "channel": channel,        "fee": fee,        "preauth": preauth    ]
-    }
     
 }

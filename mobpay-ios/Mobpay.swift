@@ -12,6 +12,7 @@ import CryptoSwift
 import SwiftyRSA
 import SafariServices
 import CocoaMQTT
+import Alamofire
 
 public class Mobpay:UIViewController {
 
@@ -46,11 +47,11 @@ public class Mobpay:UIViewController {
     
     
     //launch ui
-    public func launchUI(merchant:Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,cardTokens:Array<CardToken>? = nil,launchUI:@escaping (UIViewController)->())throws{
+    public func launchUI(merchant:Merchant, checkoutData: CheckoutData, payment:Payment,customer:Customer,clientId:String,clientSecret:String,cardTokens:Array<CardToken>? = nil,launchUI:@escaping (UIViewController)->())throws{
         do {
             try getMerchantConfigs(clientId: clientId, clientSecret: clientSecret){
                 (merchantConfig) in
-                let UserInterfaceController = InterSwitchPaymentUI(payment: payment, customer: customer,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig,cardTokens:cardTokens)
+                let UserInterfaceController = InterSwitchPaymentUI(payment: payment, customer: customer, checkoutData: checkoutData,clientId: clientId,clientSecret: clientSecret,merchantConfig: merchantConfig,cardTokens:cardTokens)
                 UserInterfaceController.InterSwitchPaymentUIDelegate = self
                 launchUI(UserInterfaceController)
             }
@@ -59,44 +60,41 @@ public class Mobpay:UIViewController {
         }
     }
     
-    @available(*, deprecated, message: "Method deprectaed")
-    public func submitCardPayment(card: Card,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
+   
+    public func submitPayment(checkout:CheckoutData, previousUIViewController:UIViewController,completion:@escaping(String)->())async throws{
         do {
             //[TODO] get merchant config from our servers
-            let authData:String = try RSAUtil.getAuthDataMerchant(panOrToken: card.pan, cvv: card.cvv, expiry: card.expiryYear + card.expiryMonth, tokenize: card.tokenize ? "1" : "0", separator: "D" )
-            let payload = CardPaymentStruct(
-                amount: payment.amount,
-                orderId: payment.orderId,
-                transactionRef: payment.transactionRef,
-                terminalType: payment.terminalType,
-                terminalId: payment.terminalId, paymentItem: payment.paymentItem, provider: "VSI",
-                merchantId: merchant.merchantId,
-                authData: authData,
-                customerInfor: customer.customerId+"|"+customer.firstName+"|"+customer.secondName+"|"+customer.email+"|"+customer.mobile+"|"+customer.city+"|"+customer.country+"|"+customer.postalCode+"|"+customer.street+"|"+customer.state,
-                currency:payment.currency, country:customer.country,
-                city:customer.city,
-                narration: payment.narration, domain: merchant.domain,preauth: "0",fee: "0",paca: "1"
-            )
-            self.merchantId = merchant.merchantId
-            self.transactionRef = payment.transactionRef
-            let webCardinalURL = try generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "CARD")
-            self.setUpMQTT()
-            let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
-            DispatchQueue.main.async {
-                previousUIViewController.navigationController?.pushViewController(threeDS, animated: true)
-            }
-            mqtt.didReceiveMessage = { mqtt, message, id in
-                mqtt.disconnect()
-                previousUIViewController.navigationController?.popViewController(animated: true)
-                completion(message.string!)
-            }
+            let headers: HTTPHeaders = [
+                    "Content-Type" : "application/x-www-form-urlencoded",
+                    "Device" : "iOS"
+                ]
+            self.merchantId = checkout.merchantCode
+            self.transactionRef = checkout.transactionReference
+            
+        AF.request("https://gatewaybackend-uat.quickteller.co.ke/ipg-backend/api/checkout",
+                        method: .post,
+                        parameters: checkout,
+                        encoder: URLEncodedFormParameterEncoder.default, headers: headers)
+                .response { response in
+                    debugPrint(response)
+                    self.setUpMQTT()
+                    let threeDS = ThreeDSWebView(webCardinalURL: (response.response?.url)!)
+                    DispatchQueue.main.async {
+                        previousUIViewController.navigationController?.pushViewController(threeDS, animated: true)
+                    }
+                    self.mqtt.didReceiveMessage = { mqtt, message, id in
+                        mqtt.disconnect()
+                        previousUIViewController.navigationController?.popViewController(animated: true)
+                        completion(message.string!)
+                    }
+                }
         } catch {
             throw error
         }
     }
     
     @available(*, deprecated, message: "Method deprectaed")
-    public func submitTokenPayment(cardToken: CardToken,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())throws{
+    public func submitTokenPayment(cardToken: CardToken,merchant: Merchant,payment:Payment,customer:Customer,clientId:String,clientSecret:String,previousUIViewController:UIViewController,completion:@escaping(String)->())async throws{
         do {
             //[TODO] get merchant config from our servers
             let authData:String = try RSAUtil.getAuthDataMerchant(panOrToken: cardToken.token, cvv: cardToken.cvv, expiry: cardToken.expiry, tokenize: "true", separator: ",")
@@ -115,7 +113,7 @@ public class Mobpay:UIViewController {
             )
             self.merchantId = merchant.merchantId
             self.transactionRef = payment.transactionRef
-            let webCardinalURL = try generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
+            let webCardinalURL = try await generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
             self.setUpMQTT()
             let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
             DispatchQueue.main.async {
