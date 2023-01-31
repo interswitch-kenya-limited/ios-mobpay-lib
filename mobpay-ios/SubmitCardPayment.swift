@@ -11,36 +11,9 @@ import CryptoSwift
 import PercentEncoder
 import Alamofire
 
-func generateLink(transactionRef:String,merchantId: String, payload: CardPaymentStruct,transactionType:String)async throws->URL {
-    do {
-
-        let checkoutData = CheckoutData(
-            merchantCode: "ISWKEN0001", domain: "ISWKE", transactionReference: "DeChRef_202006112216_fKk", orderId: "DeChOid_202006112216_htr", expiryTime: "", currencyCode: "KES", amount: 100, narration: "Test from new gateway", redirectUrl: "https://uat.quickteller.co.ke/", iconUrl: "", merchantName: "", providerIconUrl: "", reqId: "", dateOfPayment: "2016-09-05T10:20:26", terminalId: "3TLP0001", terminalType: "What?", channel: "WEB", fee: 0, preauth: ""
-        )
-
-        let headers: HTTPHeaders = [
-                "Content-Type" : "application/x-www-form-urlencoded",
-                "Device" : "iOS"
-            ]
-        
-        var redirectURL: URL?
-
-       let resp =  await AF.request("https://gatewaybackend-uat.quickteller.co.ke/ipg-backend/api/checkout",
-                   method: .post,
-                   parameters: checkoutData,
-                   encoder: JSONParameterEncoder.default, headers: headers)
-        
-        
-        let webCardinalURL = URL(string:"https://google.com")!
-        
-        return (resp.response?.url)!
-    } catch {
-        throw error
-    }
-    
-    //rsa encrypt the payload
-    
-    
+//TODO: delete method.
+func generateLink(transactionRef:String,merchantId: String, payload: CardPaymentStruct,transactionType:String)async throws->String {
+    return ""
     
 }
 

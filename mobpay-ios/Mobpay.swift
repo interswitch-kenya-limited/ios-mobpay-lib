@@ -115,7 +115,7 @@ public class Mobpay:UIViewController {
             self.transactionRef = payment.transactionRef
             let webCardinalURL = try await generateLink(transactionRef: payment.transactionRef, merchantId: merchant.merchantId, payload: payload,transactionType: "TOKEN")
             self.setUpMQTT()
-            let threeDS = ThreeDSWebView(webCardinalURL: webCardinalURL)
+            let threeDS = ThreeDSWebView(webCardinalURL: URL(string: "google.com")!)
             DispatchQueue.main.async {
                 previousUIViewController.navigationController?.pushViewController(threeDS, animated: true)
             }
