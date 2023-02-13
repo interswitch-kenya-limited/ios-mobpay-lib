@@ -27,9 +27,13 @@ public class Mobpay:UIViewController {
     public var MobpayDelegate:MobpayPaymentDelegate?
     
     
-    public func submitPayment(checkout:CheckoutData, previousUIViewController:UIViewController,completion:@escaping(String)->())async throws{
+    public func submitPayment(checkout:CheckoutData, isLive:Bool ,previousUIViewController:UIViewController,completion:@escaping(String)->())async throws{
         do {
-            //[TODO] get merchant config from our servers
+            if(isLive){
+                self.baseURL = "https://gatewaybackend.quickteller.co.ke"
+                self.mqttHostURL = "merchant.interswitch-ke.com"
+            }
+
             let headers: HTTPHeaders = [
                     "Content-Type" : "application/x-www-form-urlencoded",
                     "Device" : "iOS"
