@@ -68,7 +68,7 @@ public class Mobpay:UIViewController {
         mqtt = CocoaMQTT(clientID: clientID, host: self.mqttHostURL, port: 1883)
         mqtt.username = ""
         mqtt.password = ""
-        mqtt.willMessage = CocoaMQTTWill(topic: "/will", message: "dieout")
+        mqtt.willMessage = CocoaMQTTMessage(topic: "/will", string: "dieout")
         mqtt.keepAlive = 60
         mqtt.connect()
         mqtt.delegate = self
@@ -82,22 +82,22 @@ extension Mobpay:CocoaMQTTDelegate{
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        debugPrint(message.string!)
+        
     }
     
-    public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+    public func mqtt(_ mqtt:CocoaMQTT, didPublishAck id: UInt16) {
         
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        debugPrint("mqt RECEIVED MESSAGE::\(message)")
+    }
+    
+    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
         
     }
     
-    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
-        debugPrint(topics)
-    }
-    
-    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
+    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
         
     }
     
@@ -112,6 +112,8 @@ extension Mobpay:CocoaMQTTDelegate{
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         debugPrint("mqtt disconnected")
     }
+    
+
 }
 
 public protocol MobpayPaymentDelegate {
