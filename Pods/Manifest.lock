@@ -1,9 +1,11 @@
 PODS:
   - Alamofire (5.0.5)
-  - CocoaAsyncSocket (7.6.3)
-  - CocoaMQTT (1.2.5):
-    - CocoaAsyncSocket (~> 7.6.3)
+  - CocoaMQTT (2.1.0):
+    - CocoaMQTT/Core (= 2.1.0)
+  - CocoaMQTT/Core (2.1.0):
+    - MqttCocoaAsyncSocket (~> 1.0.8)
   - CryptoSwift (1.0.0)
+  - MqttCocoaAsyncSocket (1.0.8)
   - PercentEncoder (1.2.1)
   - SwiftyRSA (1.5.0):
     - SwiftyRSA/ObjC (= 1.5.0)
@@ -11,7 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (= 5.0.5)
-  - CocoaMQTT (= 1.2.5)
+  - CocoaMQTT (= 2.1.0)
   - CryptoSwift (= 1.0.0)
   - PercentEncoder (= 1.2.1)
   - SwiftyRSA (= 1.5.0)
@@ -19,20 +21,20 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - CocoaAsyncSocket
     - CocoaMQTT
     - CryptoSwift
+    - MqttCocoaAsyncSocket
     - PercentEncoder
     - SwiftyRSA
 
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
-  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
+  CocoaMQTT: 43666585403f664bb55361189c03c54897060324
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  MqttCocoaAsyncSocket: 77d3b74f76228dd5a05d1f9526eab101d415b30c
   PercentEncoder: 40a4d727ebeda2a6ec77bf34fa620cc4b5845488
   SwiftyRSA: 6e528fb1b1a87d5111c48081083b141d6d65f1cf
 
-PODFILE CHECKSUM: 4ec006aab414367767245e938def712961bfbc13
+PODFILE CHECKSUM: 6d28f44de36291c4f00adabfe318e52ec007d3b3
 
 COCOAPODS: 1.11.3

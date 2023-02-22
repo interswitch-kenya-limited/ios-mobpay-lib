@@ -7,7 +7,7 @@ target 'mobpay-ios' do
    pod 'SwiftyRSA', '1.5.0'
    pod 'CryptoSwift', '1.0.0'
    pod 'PercentEncoder','1.2.1'
-   pod 'CocoaMQTT','1.2.5'
+   pod 'CocoaMQTT','2.1.0'
    pod 'Alamofire','5.0.5'
 
   # Pods for mobpay-ios
