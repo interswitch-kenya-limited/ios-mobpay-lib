@@ -46,6 +46,7 @@ public struct CheckoutData : Codable{
         self.displayPrivacyPolicy = customization.displayPrivacyPolicy
         self.applyOffer = customization.applyOffer
         self.redirectMerchantName = customization.redirectMerchantName
+        self.primaryAccentColor = customization.primaryAccentColor
     }
     
     var merchantCode: String = ""
