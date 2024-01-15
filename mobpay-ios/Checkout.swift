@@ -39,7 +39,7 @@ public struct CheckoutData : Codable{
         self.customerState = customer.state
         
         //CUSTOMIZATION
-        self.redirectUrl = "https://uat.quickteller.co.ke/"
+        self.redirectUrl = customization.redirectUrl
         self.iconUrl = customization.iconUrl
         self.merchantName = customization.merchantName
         self.providerIconUrl = customization.providerIconUrl
